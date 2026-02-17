@@ -444,7 +444,7 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="max-w-6xl mx-auto px-4 py-8 md:py-12 lg:py-16">
+      {/* <section className="max-w-6xl mx-auto px-4 py-8 md:py-12 lg:py-16">
         <p className="text-sm font-semibold uppercase tracking-wider text-indigo-600 text-center mb-2">Get started</p>
         <h2 className="text-3xl md:text-4xl font-bold text-gray-900 text-center mb-2 md:mb-3 lg:mb-4">
           How It Works
@@ -601,7 +601,7 @@ export default function Home() {
             </div>
           </div>
         </div>
-      </section>
+      </section> */}
     </div>
   );
 }
