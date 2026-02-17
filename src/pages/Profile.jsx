@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router";
 import { getCurrentUser } from "../services/authService";
+import { getMyProducts } from "../services/productService";
 
 export default function Profile() {
   const navigate = useNavigate();
@@ -8,6 +9,8 @@ export default function Profile() {
   const [student, setStudent] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [showWelcomeAlert, setShowWelcomeAlert] = useState(true);
+  const [postCount, setPostCount] = useState(null);
+  const [isLoadingPosts, setIsLoadingPosts] = useState(true);
 
   // Load user data
   useEffect(() => {
@@ -23,10 +26,18 @@ export default function Profile() {
 
         const dismissed = localStorage.getItem("welcomeAlertDismissed");
         setShowWelcomeAlert(!dismissed);
+
+        const postsResult = await getMyProducts();
+        if (postsResult.success) {
+          setPostCount((postsResult.data || []).length);
+        } else {
+          setPostCount(null);
+        }
       } catch {
         navigate("/login");
       } finally {
         setIsLoading(false);
+        setIsLoadingPosts(false);
       }
     };
     loadUser();
@@ -127,35 +138,37 @@ export default function Profile() {
         )}
 
         {/* ===== NO ACTIVITY SECTION ===== */}
-        <div className="bg-white rounded-xl shadow p-10 text-center">
-          <div className="flex justify-center mb-4">
-            <svg
-              className="w-12 h-12 text-gray-400"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
+        {!isLoadingPosts && postCount === 0 && (
+          <div className="bg-white rounded-xl shadow p-10 text-center">
+            <div className="flex justify-center mb-4">
+              <svg
+                className="w-12 h-12 text-gray-400"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M9 17v-2a4 4 0 00-4-4H3m18 6v-2a4 4 0 00-4-4h-2M7 7a4 4 0 118 0M12 21v-6"
+                />
+              </svg>
+            </div>
+
+            <h3 className="text-lg font-semibold">No activity yet</h3>
+            <p className="text-sm text-gray-500 mt-1">
+              Start by creating your first post to see activity here.
+            </p>
+
+            <button
+              onClick={() => navigate("/create-post")}
+              className="mt-6 inline-flex items-center gap-2 px-6 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 font-medium"
             >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M9 17v-2a4 4 0 00-4-4H3m18 6v-2a4 4 0 00-4-4h-2M7 7a4 4 0 118 0M12 21v-6"
-              />
-            </svg>
+              + Create Post
+            </button>
           </div>
-
-          <h3 className="text-lg font-semibold">No activity yet</h3>
-          <p className="text-sm text-gray-500 mt-1">
-            Start by creating your first post to see activity here.
-          </p>
-
-          <button
-            onClick={() => navigate("/create-post")}
-            className="mt-6 inline-flex items-center gap-2 px-6 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 font-medium"
-          >
-            + Create Post
-          </button>
-        </div>
+        )}
 
       </div>
     </div>

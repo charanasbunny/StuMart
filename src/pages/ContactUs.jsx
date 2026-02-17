@@ -22,7 +22,7 @@ const SOCIAL_LINKS = [
 function IconPhone() {
   return (
     <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
     </svg>
   );
 }
@@ -30,16 +30,16 @@ function IconPhone() {
 function IconMail() {
   return (
     <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
     </svg>
   );
 }
 
 function IconLocation() {
   return (
-    <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+    <svg className="w-5 h-5 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
     </svg>
   );
 }
@@ -47,7 +47,7 @@ function IconLocation() {
 function IconExternal() {
   return (
     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
     </svg>
   );
 }
@@ -79,7 +79,7 @@ export default function ContactUs() {
               href={PHONE_LINK}
               className="group flex items-center gap-4 bg-white rounded-xl border border-gray-100 p-5 shadow-sm hover:shadow-md hover:border-indigo-100 transition-all"
             >
-              <span className="flex-shrink-0 w-11 h-11 rounded-lg bg-indigo-50 text-indigo-600 flex items-center justify-center group-hover:bg-indigo-600 group-hover:text-white transition-colors">
+              <span className="flex-shrink-0 w-11 h-11 rounded-lg bg-gradient-to-br from-indigo-500 to-indigo-400 text-white shadow-md flex items-center justify-center">
                 <IconPhone />
               </span>
               <div className="min-w-0">
@@ -91,7 +91,7 @@ export default function ContactUs() {
               href={EMAIL_LINK}
               className="group flex items-center gap-4 bg-white rounded-xl border border-gray-100 p-5 shadow-sm hover:shadow-md hover:border-indigo-100 transition-all"
             >
-              <span className="flex-shrink-0 w-11 h-11 rounded-lg bg-indigo-50 text-indigo-600 flex items-center justify-center group-hover:bg-indigo-600 group-hover:text-white transition-colors">
+              <span className="flex-shrink-0 w-11 h-11 rounded-lg bg-gradient-to-br from-purple-500 to-fuchsia-500 text-white shadow-md flex items-center justify-center">
                 <IconMail />
               </span>
               <div className="min-w-0">
@@ -107,7 +107,17 @@ export default function ContactUs() {
           <h2 className="text-sm font-semibold uppercase tracking-wider text-gray-500 mb-4">
             College address
           </h2>
-          <div className="bg-white rounded-xl border border-gray-100 shadow-sm p-6 flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
+          <div
+            className="bg-white rounded-xl border border-gray-100 shadow-sm p-6 flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4 cursor-pointer hover:border-indigo-100 hover:shadow-md transition-all"
+            role="link"
+            tabIndex={0}
+            onClick={() => window.open(COLLEGE_ADDRESS.mapUrl, "_blank", "noopener,noreferrer")}
+            onKeyDown={(event) => {
+              if (event.key === "Enter" || event.key === " ") {
+                window.open(COLLEGE_ADDRESS.mapUrl, "_blank", "noopener,noreferrer");
+              }
+            }}
+          >
             <div className="flex gap-4">
               <span className="flex-shrink-0 text-gray-300 mt-0.5">
                 <IconLocation />
@@ -136,33 +146,52 @@ export default function ContactUs() {
           <h2 className="text-sm font-semibold uppercase tracking-wider text-gray-500 mb-4">
             Connect with us
           </h2>
-          <div className="flex flex-wrap gap-3">
-            {SOCIAL_LINKS.map((item) => (
-              <a
-                key={item.name}
-                href={item.href}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 px-4 py-2.5 rounded-lg bg-white border border-gray-100 shadow-sm text-gray-700 font-medium hover:border-indigo-100 hover:text-indigo-700 transition-colors"
-              >
-                {item.icon === "linkedin" && (
-                  <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
-                  </svg>
-                )}
-                {item.icon === "instagram" && (
-                  <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.919 0 3.274-.012 4.58-.069 4.919-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.85-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.919 0-3.273.012-4.58.069-4.919.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z" />
-                  </svg>
-                )}
-                {item.icon === "website" && (
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9" />
-                  </svg>
-                )}
-                {item.name}
-              </a>
-            ))}
+          <div className="bg-white/90 border border-slate-100 rounded-2xl p-5 sm:p-6 shadow-sm">
+            <div className="grid sm:grid-cols-3 gap-4">
+              {SOCIAL_LINKS.map((item) => (
+                <a
+                  key={item.name}
+                  href={item.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="group rounded-2xl bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 p-[1px] transition-transform hover:-translate-y-0.5"
+                >
+                  <div className="h-full rounded-2xl bg-white px-4 py-4 flex items-center gap-3 shadow-sm">
+                    <span
+                      className={`w-10 h-10 rounded-xl flex items-center justify-center transition-colors ${
+                        item.icon === "instagram"
+                          ? "bg-white border border-slate-200 text-rose-600"
+                          : "bg-indigo-50 text-indigo-700 group-hover:bg-indigo-600 group-hover:text-white"
+                      }`}
+                    >
+                      {item.icon === "linkedin" && (
+                        <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                          <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
+                        </svg>
+                      )}
+                      {item.icon === "instagram" && (
+                        <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                          <path d="M7.5 3h9A4.5 4.5 0 0121 7.5v9a4.5 4.5 0 01-4.5 4.5h-9A4.5 4.5 0 013 16.5v-9A4.5 4.5 0 017.5 3zm0 1.5A3 3 0 004.5 7.5v9A3 3 0 007.5 19.5h9a3 3 0 003-3v-9a3 3 0 00-3-3h-9zm4.5 3A4.5 4.5 0 1112 16.5a4.5 4.5 0 010-9zm0 1.5A3 3 0 1012 15a3 3 0 000-6zm4.65-2.55a.9.9 0 11-.9.9.9.9 0 01.9-.9z" />
+                        </svg>
+                      )}
+                      {item.icon === "website" && (
+                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9" />
+                        </svg>
+                      )}
+                    </span>
+                    <div>
+                      <p className="text-sm font-semibold text-gray-900">{item.name}</p>
+                      <p className="text-xs text-gray-500">
+                        {item.icon === "website" && "Visit the campus site"}
+                        {item.icon === "linkedin" && "Connect with the institute"}
+                        {item.icon === "instagram" && "See campus moments"}
+                      </p>
+                    </div>
+                  </div>
+                </a>
+              ))}
+            </div>
           </div>
         </section>
 

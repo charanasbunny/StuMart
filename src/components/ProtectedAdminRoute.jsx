@@ -52,7 +52,7 @@ export default function ProtectedAdminRoute({ children }) {
 
   // Redirect to admin login if not authenticated
   if (!isAuthenticated) {
-    return <Navigate to="/admin/login" replace />;
+    return <Navigate to="/login?type=admin" replace />;
   }
 
   // Render protected content

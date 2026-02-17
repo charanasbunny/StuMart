@@ -54,7 +54,7 @@ export default function AdminPINManagement() {
 
   // Branch options
   const branchOptions = [
-    { value: 'CME', label: 'CME (Computer Science)' },
+    { value: 'CM', label: 'CM (Computer Science)' },
     { value: 'CE', label: 'CE (Civil)' },
     { value: 'M', label: 'M (Mechanical)' },
     { value: 'ECE', label: 'ECE' },
@@ -83,7 +83,7 @@ export default function AdminPINManagement() {
     const checkAdmin = async () => {
       const { admin, error } = await getCurrentAdmin();
       if (error || !admin) {
-        navigate('/admin/login');
+        navigate('/login?type=admin');
       } else {
         setIsLoading(false);
         loadStatistics();
@@ -409,17 +409,17 @@ export default function AdminPINManagement() {
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
       <div className="bg-white shadow">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 sm:py-4">
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-3xl font-bold text-gray-900">PIN Management</h1>
-              <p className="mt-1 text-sm text-gray-500">
+              <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">PIN Management</h1>
+              <p className="mt-1 text-xs sm:text-sm text-gray-500">
                 Create and manage student PIN numbers
               </p>
             </div>
             <button
               onClick={() => navigate('/admin/dashboard')}
-              className="px-4 py-2 bg-gray-600 text-white rounded-md hover:bg-gray-700"
+              className="px-3 py-2 text-sm bg-gray-600 text-white rounded-md hover:bg-gray-700"
             >
               Back to Dashboard
             </button>
@@ -428,27 +428,27 @@ export default function AdminPINManagement() {
       </div>
 
       {/* Statistics */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-        <div className="grid grid-cols-2 gap-4 sm:grid-cols-5 mb-6">
-          <div className="bg-white rounded-lg p-4 shadow">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6">
+        <div className="grid grid-cols-2 gap-3 sm:gap-4 sm:grid-cols-5 mb-4 sm:mb-6">
+          <div className="bg-white rounded-lg p-3 sm:p-4 shadow">
             <p className="text-sm text-gray-600">Total PINs</p>
-            <p className="text-2xl font-bold text-gray-900">{stats.totalPINs}</p>
+            <p className="text-xl sm:text-2xl font-bold text-gray-900">{stats.totalPINs}</p>
           </div>
-          <div className="bg-white rounded-lg p-4 shadow">
+          <div className="bg-white rounded-lg p-3 sm:p-4 shadow">
             <p className="text-sm text-gray-600">Available</p>
-            <p className="text-2xl font-bold text-green-600">{stats.availablePINs}</p>
+            <p className="text-xl sm:text-2xl font-bold text-green-600">{stats.availablePINs}</p>
           </div>
-          <div className="bg-white rounded-lg p-4 shadow">
+          <div className="bg-white rounded-lg p-3 sm:p-4 shadow">
             <p className="text-sm text-gray-600">Registered</p>
-            <p className="text-2xl font-bold text-blue-600">{stats.registeredPINs}</p>
+            <p className="text-xl sm:text-2xl font-bold text-blue-600">{stats.registeredPINs}</p>
           </div>
-          <div className="bg-white rounded-lg p-4 shadow">
+          <div className="bg-white rounded-lg p-3 sm:p-4 shadow">
             <p className="text-sm text-gray-600">Branches</p>
-            <p className="text-2xl font-bold text-purple-600">{stats.branchesCount}</p>
+            <p className="text-xl sm:text-2xl font-bold text-purple-600">{stats.branchesCount}</p>
           </div>
-          <div className="bg-white rounded-lg p-4 shadow">
+          <div className="bg-white rounded-lg p-3 sm:p-4 shadow">
             <p className="text-sm text-gray-600">Sections</p>
-            <p className="text-2xl font-bold text-orange-600">{stats.sectionsCount}</p>
+            <p className="text-xl sm:text-2xl font-bold text-orange-600">{stats.sectionsCount}</p>
           </div>
         </div>
 
@@ -458,7 +458,7 @@ export default function AdminPINManagement() {
             <nav className="flex -mb-px">
               <button
                 onClick={() => setActiveTab('create')}
-                className={`px-6 py-4 text-sm font-medium border-b-2 ${
+                className={`px-3 sm:px-6 py-3 sm:py-4 text-sm font-medium border-b-2 ${
                   activeTab === 'create'
                     ? 'border-indigo-500 text-indigo-600'
                     : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
@@ -471,7 +471,7 @@ export default function AdminPINManagement() {
                   setActiveTab('manage');
                   loadPINs();
                 }}
-                className={`px-6 py-4 text-sm font-medium border-b-2 ${
+                className={`px-3 sm:px-6 py-3 sm:py-4 text-sm font-medium border-b-2 ${
                   activeTab === 'manage'
                     ? 'border-indigo-500 text-indigo-600'
                     : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
@@ -485,12 +485,12 @@ export default function AdminPINManagement() {
 
         {/* Create PIN Tab */}
         {activeTab === 'create' && (
-          <div className="bg-white shadow rounded-lg p-6 md:p-8">
-            <h2 className="text-2xl font-semibold text-gray-900 mb-6">
+          <div className="bg-white shadow rounded-lg p-4 sm:p-6 md:p-8">
+            <h2 className="text-xl sm:text-2xl font-semibold text-gray-900 mb-4 sm:mb-6">
               Create PIN Numbers
             </h2>
 
-            <form onSubmit={handleSubmit} className="space-y-6">
+            <form onSubmit={handleSubmit} className="space-y-5 sm:space-y-6">
               {/* Joining Year Selection */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -504,14 +504,14 @@ export default function AdminPINManagement() {
                   placeholder="e.g., 2023"
                   min="2000"
                   max="2100"
-                  className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 ${
+                  className={`w-full px-3 sm:px-4 py-2 border rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 ${
                     errors.joiningYear ? 'border-red-500' : 'border-gray-300'
                   }`}
                 />
                 {errors.joiningYear && (
                   <p className="mt-1 text-sm text-red-600">{errors.joiningYear}</p>
                 )}
-                <p className="mt-1 text-sm text-gray-500">
+                <p className="mt-1 text-xs sm:text-sm text-gray-500">
                   Enter the year students joined (e.g., 2025). PIN format will be: YY030-BRANCH-NUMBER
                 </p>
               </div>
@@ -525,7 +525,7 @@ export default function AdminPINManagement() {
                   name="branch"
                   value={formData.branch}
                   onChange={handleChange}
-                  className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 ${
+                  className={`w-full px-3 sm:px-4 py-2 border rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 ${
                     errors.branch ? 'border-red-500' : 'border-gray-300'
                   }`}
                 >
@@ -550,7 +550,7 @@ export default function AdminPINManagement() {
                   name="year"
                   value={formData.year}
                   onChange={handleChange}
-                  className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 ${
+                  className={`w-full px-3 sm:px-4 py-2 border rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 ${
                     errors.year ? 'border-red-500' : 'border-gray-300'
                   }`}
                 >
@@ -578,14 +578,14 @@ export default function AdminPINManagement() {
                   onChange={handleChange}
                   placeholder="e.g., A, B, C"
                   maxLength={10}
-                  className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 ${
+                  className={`w-full px-3 sm:px-4 py-2 border rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 ${
                     errors.section ? 'border-red-500' : 'border-gray-300'
                   }`}
                 />
                 {errors.section && (
                   <p className="mt-1 text-sm text-red-600">{errors.section}</p>
                 )}
-                <p className="mt-1 text-sm text-gray-500">
+                <p className="mt-1 text-xs sm:text-sm text-gray-500">
                   Enter section letter(s) (e.g., A, B, C, or A1, B2)
                 </p>
               </div>
@@ -595,7 +595,7 @@ export default function AdminPINManagement() {
                 <label className="block text-sm font-medium text-gray-700 mb-2">
                   PIN Entry Method <span className="text-red-500">*</span>
                 </label>
-                <div className="flex gap-4">
+                <div className="flex flex-col sm:flex-row gap-2 sm:gap-4">
                   <label className="flex items-center">
                     <input
                       type="radio"
@@ -623,7 +623,7 @@ export default function AdminPINManagement() {
 
               {/* Range Entry */}
               {formData.entryMethod === 'range' && (
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
                       From <span className="text-red-500">*</span>
@@ -635,7 +635,7 @@ export default function AdminPINManagement() {
                       onChange={handleChange}
                       placeholder="1"
                       min="1"
-                      className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 ${
+                      className={`w-full px-3 sm:px-4 py-2 border rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 ${
                         errors.startSequence ? 'border-red-500' : 'border-gray-300'
                       }`}
                     />
@@ -656,7 +656,7 @@ export default function AdminPINManagement() {
                       onChange={handleChange}
                       placeholder="60"
                       min="1"
-                      className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 ${
+                      className={`w-full px-3 sm:px-4 py-2 border rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 ${
                         errors.endSequence ? 'border-red-500' : 'border-gray-300'
                       }`}
                     />
@@ -681,7 +681,7 @@ export default function AdminPINManagement() {
                     onChange={handleChange}
                     placeholder="1, 5, 10, 15, 20"
                     rows={4}
-                    className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 ${
+                    className={`w-full px-3 sm:px-4 py-2 border rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 ${
                       errors.individualPINs ? 'border-red-500' : 'border-gray-300'
                     }`}
                   />
@@ -690,7 +690,7 @@ export default function AdminPINManagement() {
                       {errors.individualPINs}
                     </p>
                   )}
-                  <p className="mt-1 text-sm text-gray-500">
+                  <p className="mt-1 text-xs sm:text-sm text-gray-500">
                     Enter PIN numbers separated by commas (e.g., 1, 5, 10, 15)
                   </p>
                 </div>
@@ -698,7 +698,7 @@ export default function AdminPINManagement() {
 
               {/* Preview */}
               {formData.branch && formData.year && formData.section && (
-                <div className="bg-gray-50 border border-gray-200 rounded-lg p-4">
+                <div className="bg-gray-50 border border-gray-200 rounded-lg p-3 sm:p-4">
                   <h3 className="text-sm font-medium text-gray-700 mb-2">
                     Preview (PINs that will be created):
                   </h3>
@@ -714,31 +714,31 @@ export default function AdminPINManagement() {
 
               {/* Error Message */}
               {errors.submit && (
-                <div className="bg-red-50 border border-red-200 rounded-lg p-4">
+                <div className="bg-red-50 border border-red-200 rounded-lg p-3 sm:p-4">
                   <p className="text-sm text-red-800">{errors.submit}</p>
                 </div>
               )}
 
               {/* Success Message */}
               {successMessage && (
-                <div className="bg-green-50 border border-green-200 rounded-lg p-4">
+                <div className="bg-green-50 border border-green-200 rounded-lg p-3 sm:p-4">
                   <p className="text-sm text-green-800">{successMessage}</p>
                 </div>
               )}
 
               {/* Submit Button */}
-              <div className="flex justify-end gap-4">
+              <div className="flex flex-col sm:flex-row sm:justify-end gap-3">
                 <button
                   type="button"
                   onClick={() => navigate('/admin/dashboard')}
-                  className="px-6 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50"
+                  className="w-full sm:w-auto px-4 sm:px-6 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="px-6 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="w-full sm:w-auto px-4 sm:px-6 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   {isSubmitting ? 'Creating PINs...' : 'Create PINs'}
                 </button>
@@ -749,15 +749,15 @@ export default function AdminPINManagement() {
 
         {/* Manage PINs Tab */}
         {activeTab === 'manage' && (
-          <div className="bg-white shadow rounded-lg p-6">
-            <div className="flex items-center justify-between mb-6">
-              <h2 className="text-2xl font-semibold text-gray-900">
+          <div className="bg-white shadow rounded-lg p-4 sm:p-6">
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-4 sm:mb-6">
+              <h2 className="text-xl sm:text-2xl font-semibold text-gray-900">
                 Manage PIN Numbers
               </h2>
               {selectedPINs.length > 0 && (
                 <button
                   onClick={handleBulkDelete}
-                  className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700"
+                  className="w-full sm:w-auto px-4 py-2 text-sm bg-red-600 text-white rounded-lg hover:bg-red-700"
                 >
                   Delete Selected ({selectedPINs.length})
                 </button>
@@ -765,7 +765,7 @@ export default function AdminPINManagement() {
             </div>
 
             {/* Filters */}
-            <div className="grid grid-cols-1 md:grid-cols-5 gap-4 mb-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3 sm:gap-4 mb-4 sm:mb-6">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
                   Joining Year
@@ -778,7 +778,7 @@ export default function AdminPINManagement() {
                   placeholder="e.g., 2025"
                   min="2000"
                   max="2100"
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500"
+                  className="w-full px-3 sm:px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500"
                 />
               </div>
               <div>
@@ -789,7 +789,7 @@ export default function AdminPINManagement() {
                   name="branch"
                   value={filters.branch}
                   onChange={handleFilterChange}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500"
+                  className="w-full px-3 sm:px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500"
                 >
                   <option value="">All Branches</option>
                   {branchOptions.map((option) => (
@@ -807,7 +807,7 @@ export default function AdminPINManagement() {
                   name="year"
                   value={filters.year}
                   onChange={handleFilterChange}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500"
+                  className="w-full px-3 sm:px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500"
                 >
                   <option value="">All Years</option>
                   {yearOptions.map((option) => (
@@ -827,7 +827,7 @@ export default function AdminPINManagement() {
                   value={filters.section}
                   onChange={handleFilterChange}
                   placeholder="Filter by section"
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500"
+                  className="w-full px-3 sm:px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500"
                 />
               </div>
               <div>
@@ -838,7 +838,7 @@ export default function AdminPINManagement() {
                   name="status"
                   value={filters.status}
                   onChange={handleFilterChange}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500"
+                  className="w-full px-3 sm:px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500"
                 >
                   {statusOptions.map((option) => (
                     <option key={option.value} value={option.value}>
@@ -851,20 +851,20 @@ export default function AdminPINManagement() {
 
             {/* PINs Table */}
             {loadingPINs ? (
-              <div className="text-center py-12">
+              <div className="text-center py-8 sm:py-12">
                 <div className="inline-block animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-indigo-600"></div>
                 <p className="mt-4 text-gray-600">Loading PINs...</p>
               </div>
             ) : allPINs.length === 0 ? (
-              <div className="text-center py-12">
+              <div className="text-center py-8 sm:py-12">
                 <p className="text-gray-500">No PINs found matching your filters.</p>
               </div>
             ) : (
               <div className="overflow-x-auto">
-                <table className="min-w-full divide-y divide-gray-200">
+                <table className="min-w-full divide-y divide-gray-200 text-xs sm:text-sm">
                   <thead className="bg-gray-50">
                     <tr>
-                      <th className="px-4 py-3 text-left">
+                      <th className="px-3 py-2 sm:px-4 sm:py-3 text-left">
                         <input
                           type="checkbox"
                           checked={selectedPINs.length === allPINs.length && allPINs.length > 0}
@@ -872,25 +872,25 @@ export default function AdminPINManagement() {
                           className="rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
                         />
                       </th>
-                      <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      <th className="px-3 py-2 sm:px-4 sm:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                         PIN Number
                       </th>
-                      <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      <th className="px-3 py-2 sm:px-4 sm:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                         Branch
                       </th>
-                      <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      <th className="px-3 py-2 sm:px-4 sm:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                         Year
                       </th>
-                      <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      <th className="px-3 py-2 sm:px-4 sm:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                         Section
                       </th>
-                      <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      <th className="px-3 py-2 sm:px-4 sm:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                         Status
                       </th>
-                      <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      <th className="px-3 py-2 sm:px-4 sm:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                         Created
                       </th>
-                      <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      <th className="px-3 py-2 sm:px-4 sm:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                         Actions
                       </th>
                     </tr>
@@ -898,7 +898,7 @@ export default function AdminPINManagement() {
                   <tbody className="bg-white divide-y divide-gray-200">
                     {allPINs.map((pin) => (
                       <tr key={pin.pin_number} className="hover:bg-gray-50">
-                        <td className="px-4 py-4 whitespace-nowrap">
+                        <td className="px-3 py-2 sm:px-4 sm:py-4 whitespace-nowrap">
                           <input
                             type="checkbox"
                             checked={selectedPINs.includes(pin.pin_number)}
@@ -906,21 +906,21 @@ export default function AdminPINManagement() {
                             className="rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
                           />
                         </td>
-                        <td className="px-4 py-4 whitespace-nowrap">
-                          <div className="text-sm font-medium text-gray-900 font-mono">
+                        <td className="px-3 py-2 sm:px-4 sm:py-4 whitespace-nowrap">
+                          <div className="text-xs sm:text-sm font-medium text-gray-900 font-mono">
                             {pin.pin_number}
                           </div>
                         </td>
-                        <td className="px-4 py-4 whitespace-nowrap">
-                          <div className="text-sm text-gray-900">{pin.branch}</div>
+                        <td className="px-3 py-2 sm:px-4 sm:py-4 whitespace-nowrap">
+                          <div className="text-xs sm:text-sm text-gray-900">{pin.branch}</div>
                         </td>
-                        <td className="px-4 py-4 whitespace-nowrap">
-                          <div className="text-sm text-gray-900">{pin.year}</div>
+                        <td className="px-3 py-2 sm:px-4 sm:py-4 whitespace-nowrap">
+                          <div className="text-xs sm:text-sm text-gray-900">{pin.year}</div>
                         </td>
-                        <td className="px-4 py-4 whitespace-nowrap">
-                          <div className="text-sm text-gray-900">{pin.section}</div>
+                        <td className="px-3 py-2 sm:px-4 sm:py-4 whitespace-nowrap">
+                          <div className="text-xs sm:text-sm text-gray-900">{pin.section}</div>
                         </td>
-                        <td className="px-4 py-4 whitespace-nowrap">
+                        <td className="px-3 py-2 sm:px-4 sm:py-4 whitespace-nowrap">
                           <span
                             className={`px-2 py-1 text-xs font-semibold rounded-full ${getStatusBadgeColor(
                               pin.status
@@ -929,10 +929,10 @@ export default function AdminPINManagement() {
                             {pin.status}
                           </span>
                         </td>
-                        <td className="px-4 py-4 whitespace-nowrap text-sm text-gray-500">
+                        <td className="px-3 py-2 sm:px-4 sm:py-4 whitespace-nowrap text-xs sm:text-sm text-gray-500">
                           {new Date(pin.created_at).toLocaleDateString()}
                         </td>
-                        <td className="px-4 py-4 whitespace-nowrap text-sm">
+                        <td className="px-3 py-2 sm:px-4 sm:py-4 whitespace-nowrap text-xs sm:text-sm">
                           <button
                             onClick={() => handleDeletePIN(pin.pin_number)}
                             className="text-red-600 hover:text-red-900 font-medium"
@@ -961,7 +961,7 @@ export default function AdminPINManagement() {
 
             {/* Results Count */}
             {!loadingPINs && (
-              <div className="mt-4 text-sm text-gray-600">
+              <div className="mt-4 text-xs sm:text-sm text-gray-600">
                 Showing {allPINs.length} PIN(s)
                 {selectedPINs.length > 0 && ` (${selectedPINs.length} selected)`}
               </div>

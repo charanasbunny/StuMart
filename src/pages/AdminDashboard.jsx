@@ -30,7 +30,7 @@ export default function AdminDashboard() {
         
         if (error || !adminData) {
           // If admin is not authenticated, redirect to admin login
-          navigate('/admin/login');
+          navigate('/login?type=admin');
           return;
         }
 
@@ -52,7 +52,7 @@ export default function AdminDashboard() {
         setPinStatsLoading(false);
       } catch (error) {
         console.error('Error loading admin data:', error);
-        navigate('/admin/login');
+        navigate('/login?type=admin');
       } finally {
         setIsLoading(false);
       }
@@ -69,15 +69,15 @@ export default function AdminDashboard() {
     try {
       const result = await adminSignOut();
       if (result.success) {
-        navigate('/admin/login');
+        navigate('/login?type=admin');
       } else {
         console.error('Logout error:', result.error);
         // Still redirect to login even if logout has an error
-        navigate('/admin/login');
+        navigate('/login?type=admin');
       }
     } catch (error) {
       console.error('Logout error:', error);
-      navigate('/admin/login');
+      navigate('/login?type=admin');
     } finally {
       setIsLoggingOut(false);
     }
@@ -104,20 +104,20 @@ export default function AdminDashboard() {
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
       <div className="bg-white shadow">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 sm:py-4">
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-3xl font-bold text-gray-900">
+              <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">
                 Admin Dashboard
               </h1>
-              <p className="mt-1 text-sm text-gray-500">
+              <p className="mt-1 text-xs sm:text-sm text-gray-500">
                 StuMart - AANM VVRSR Polytechnic Gudlavalleru
               </p>
             </div>
             <button
               onClick={handleLogout}
               disabled={isLoggingOut}
-              className="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="px-3 py-2 text-sm bg-red-600 text-white rounded-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {isLoggingOut ? 'Logging out...' : 'Logout'}
             </button>
@@ -126,45 +126,45 @@ export default function AdminDashboard() {
       </div>
 
       {/* Main Content */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
         {/* Welcome Card */}
-        <div className="bg-white shadow rounded-lg p-6 mb-6">
-          <h2 className="text-xl font-semibold text-gray-900 mb-4">
+        <div className="bg-white shadow rounded-lg p-4 sm:p-6 mb-4 sm:mb-6">
+          <h2 className="text-lg sm:text-xl font-semibold text-gray-900 mb-3 sm:mb-4">
             Welcome, Admin!
           </h2>
-          <p className="text-gray-600">
+          <p className="text-sm sm:text-base text-gray-600">
             This is your admin dashboard. Here you can manage student accounts, 
             view registrations, and control the platform.
           </p>
         </div>
 
         {/* PIN Statistics Section */}
-        <div className="bg-white shadow rounded-lg p-6 mb-6">
-          <h2 className="text-xl font-semibold text-gray-900 mb-4">
+        <div className="bg-white shadow rounded-lg p-4 sm:p-6 mb-4 sm:mb-6">
+          <h2 className="text-lg sm:text-xl font-semibold text-gray-900 mb-3 sm:mb-4">
             PIN Management Statistics
           </h2>
-          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-5">
-            <div className="bg-indigo-50 rounded-lg p-4">
+          <div className="grid grid-cols-1 gap-4 sm:gap-6 sm:grid-cols-2 lg:grid-cols-5">
+            <div className="bg-indigo-50 rounded-lg p-3 sm:p-4">
               <p className="text-sm font-medium text-indigo-600">Total PINs</p>
-              <p className="text-3xl font-bold text-indigo-900 mt-2">
+              <p className="text-2xl sm:text-3xl font-bold text-indigo-900 mt-2">
                 {pinStatsLoading ? '...' : pinStats.totalPINs}
               </p>
             </div>
-            <div className="bg-green-50 rounded-lg p-4">
+            <div className="bg-green-50 rounded-lg p-3 sm:p-4">
               <p className="text-sm font-medium text-green-600">Available</p>
-              <p className="text-3xl font-bold text-green-900 mt-2">
+              <p className="text-2xl sm:text-3xl font-bold text-green-900 mt-2">
                 {pinStatsLoading ? '...' : pinStats.availablePINs}
               </p>
             </div>
-            <div className="bg-blue-50 rounded-lg p-4">
+            <div className="bg-blue-50 rounded-lg p-3 sm:p-4">
               <p className="text-sm font-medium text-blue-600">Registered</p>
-              <p className="text-3xl font-bold text-blue-900 mt-2">
+              <p className="text-2xl sm:text-3xl font-bold text-blue-900 mt-2">
                 {pinStatsLoading ? '...' : pinStats.registeredPINs}
               </p>
             </div>
-            <div className="bg-purple-50 rounded-lg p-4">
+            <div className="bg-purple-50 rounded-lg p-3 sm:p-4">
               <p className="text-sm font-medium text-purple-600">Branches</p>
-              <p className="text-3xl font-bold text-purple-900 mt-2">
+              <p className="text-2xl sm:text-3xl font-bold text-purple-900 mt-2">
                 {pinStatsLoading ? '...' : pinStats.branchesCount}
               </p>
               {!pinStatsLoading && pinStats.branches.length > 0 && (
@@ -173,9 +173,9 @@ export default function AdminDashboard() {
                 </p>
               )}
             </div>
-            <div className="bg-orange-50 rounded-lg p-4">
+            <div className="bg-orange-50 rounded-lg p-3 sm:p-4">
               <p className="text-sm font-medium text-orange-600">Sections</p>
-              <p className="text-3xl font-bold text-orange-900 mt-2">
+              <p className="text-2xl sm:text-3xl font-bold text-orange-900 mt-2">
                 {pinStatsLoading ? '...' : pinStats.sectionsCount}
               </p>
               {!pinStatsLoading && pinStats.sections.length > 0 && (
@@ -189,25 +189,33 @@ export default function AdminDashboard() {
         </div>
 
         {/* Quick Actions */}
-        <div className="bg-white shadow rounded-lg p-6">
-          <h2 className="text-xl font-semibold text-gray-900 mb-4">
+        <div className="bg-white shadow rounded-lg p-4 sm:p-6">
+          <h2 className="text-lg sm:text-xl font-semibold text-gray-900 mb-3 sm:mb-4">
             Quick Actions
           </h2>
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="grid grid-cols-1 gap-3 sm:gap-4 sm:grid-cols-2 lg:grid-cols-3">
             <button 
               onClick={() => navigate('/admin/pin-management')}
-              className="p-4 border-2 border-dashed border-gray-300 rounded-lg hover:border-indigo-500 hover:bg-indigo-50 transition-colors text-left"
+              className="p-3 sm:p-4 border-2 border-dashed border-gray-300 rounded-lg hover:border-indigo-500 hover:bg-indigo-50 transition-colors text-left"
             >
               <h3 className="font-medium text-gray-900">Manage PIN Numbers</h3>
-              <p className="text-sm text-gray-500 mt-1">Create and manage student PIN numbers</p>
+              <p className="text-xs sm:text-sm text-gray-500 mt-1">Create and manage student PIN numbers</p>
             </button>
            
             <button
               onClick={() => navigate('/admin/products')}
-              className="p-4 border-2 border-dashed border-gray-300 rounded-lg hover:border-indigo-500 hover:bg-indigo-50 transition-colors text-left"
+              className="p-3 sm:p-4 border-2 border-dashed border-gray-300 rounded-lg hover:border-indigo-500 hover:bg-indigo-50 transition-colors text-left"
             >
               <h3 className="font-medium text-gray-900">View Products</h3>
-              <p className="text-sm text-gray-500 mt-1">Monitor and moderate product listings</p>
+              <p className="text-xs sm:text-sm text-gray-500 mt-1">Monitor and moderate product listings</p>
+            </button>
+
+            <button
+              onClick={() => navigate('/admin/feedbacks')}
+              className="p-3 sm:p-4 border-2 border-dashed border-gray-300 rounded-lg hover:border-indigo-500 hover:bg-indigo-50 transition-colors text-left"
+            >
+              <h3 className="font-medium text-gray-900">Student Feedback</h3>
+              <p className="text-xs sm:text-sm text-gray-500 mt-1">Review submitted issues and suggestions</p>
             </button>
           </div>
         </div>
