@@ -3,7 +3,7 @@ import React from 'react'
 export default function HowItWorks() {
   return (
     <section className="max-w-6xl mx-auto px-4 py-8 md:py-12 lg:py-16">
-        <h2 className="text-3xl md:text-4xl font-bold text-gray-900 text-center mb-2 md:mb-3 lg:mb-4">
+        {/* <h2 className="text-3xl md:text-4xl font-bold text-gray-900 text-center mb-2 md:mb-3 lg:mb-4">
           How It Works
         </h2>
         <p className="text-center text-gray-600 mb-6 md:mb-8 lg:mb-12 max-w-2xl mx-auto">
@@ -77,7 +77,7 @@ export default function HowItWorks() {
               </p>
             </div>
           </div>
-        </div>
+        </div> */}
       </section>
   )
 }
