@@ -197,7 +197,7 @@ export default function Home() {
             >
               <div className="animate-bounce">
                 <svg
-                  className="w-6 h-6 sm:w-7 sm:h-7 text-indigo-600"
+                  className="w-6 h-6 sm:w-7 sm:h-7 text-indigo-500"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -205,7 +205,7 @@ export default function Home() {
                   <path
                     strokeLinecap="round"
                     strokeLinejoin="round"
-                    strokeWidth={2}
+                    strokeWidth={2.4}
                     d="M19 14l-7 7m0 0l-7-7m7 7V3"
                   />
                 </svg>
@@ -229,7 +229,7 @@ export default function Home() {
               aria-label="Browse all products"
             >
               <svg className="w-4 h-4 sm:w-5 sm:h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.4} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
               </svg>
               <span className="hidden sm:inline">Browse Products</span>
               <span className="sm:hidden">Browse</span>
@@ -240,7 +240,7 @@ export default function Home() {
               aria-label="Sell an item"
             >
               <svg className="w-4 h-4 sm:w-5 sm:h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.4} d="M12 4v16m8-8H4" />
               </svg>
               <span className="hidden sm:inline">Sell an item</span>
               <span className="sm:hidden">Sell</span>
@@ -266,7 +266,7 @@ export default function Home() {
           >
             View All
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.4} d="M9 5l7 7-7 7" />
             </svg>
           </Link>
         </div>
@@ -291,7 +291,7 @@ export default function Home() {
             >
               List an item
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.4} d="M17 8l4 4m0 0l-4 4m4-4H3" />
               </svg>
             </Link>
           </div>
@@ -310,8 +310,8 @@ export default function Home() {
                 className="absolute left-4 top-1/2 transform -translate-y-1/2 z-20 bg-white/80 hover:bg-white rounded-full p-3 shadow-lg transition-all duration-300 flex items-center justify-center"
                 aria-label="Previous product"
               >
-                <svg className="w-6 h-6 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                <svg className="w-6 h-6 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.4} d="M15 19l-7-7 7-7" />
                 </svg>
               </button>
               <div
@@ -331,8 +331,8 @@ export default function Home() {
                 className="absolute right-4 top-1/2 transform -translate-y-1/2 z-20 bg-white/80 hover:bg-white rounded-full p-3 shadow-lg transition-all duration-300 flex items-center justify-center"
                 aria-label="Next product"
               >
-                <svg className="w-6 h-6 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                <svg className="w-6 h-6 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.4} d="M9 5l7 7-7 7" />
                 </svg>
               </button>
             </div>
@@ -353,30 +353,7 @@ export default function Home() {
         )}
       </section>
 
-      <section className="bg-white/50 md:bg-white/50 backdrop-blur-0 md:backdrop-blur-sm py-8 md:py-12 lg:py-16">
-        <div className="max-w-6xl mx-auto px-4">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-8 text-center">
-            <div className="transform hover:scale-105 transition-transform">
-              <div className="text-4xl md:text-5xl font-bold text-indigo-600 mb-2">100%</div>
-              <div className="text-gray-600 font-medium">PIN-verified students</div>
-            </div>
-            <div className="transform hover:scale-105 transition-transform">
-              <div className="text-4xl md:text-5xl font-bold text-purple-600 mb-2">₹0</div>
-              <div className="text-gray-600 font-medium">Listing fees</div>
-            </div>
-            <div className="transform hover:scale-105 transition-transform">
-              <div className="text-4xl md:text-5xl font-bold text-green-600 mb-2">Campus</div>
-              <div className="text-gray-600 font-medium">In-person exchange</div>
-            </div>
-            <div className="transform hover:scale-105 transition-transform">
-              <div className="text-4xl md:text-5xl font-bold text-pink-600 mb-2">Safe</div>
-              <div className="text-gray-600 font-medium">Campus-only network</div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section className="max-w-6xl mx-auto px-4 py-8 md:py-12 lg:py-16">
+      <section className="hidden md:block max-w-6xl mx-auto px-4 py-8 md:py-12 lg:py-16">
         <p className="text-sm font-semibold uppercase tracking-wider text-indigo-600 text-center mb-2">Why us</p>
         <h2 className="text-3xl md:text-4xl font-bold text-gray-900 text-center mb-2 md:mb-3 lg:mb-4">
           Why Choose StuMart?
@@ -386,8 +363,8 @@ export default function Home() {
         </p>
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 md:gap-8">
           <div className="bg-white rounded-xl shadow-lg p-4 md:p-8 hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
-            <div className="w-10 h-10 md:w-14 md:h-14 bg-indigo-100 rounded-xl flex items-center justify-center mb-3 md:mb-4 mx-auto">
-              <svg className="w-5 h-5 md:w-7 md:h-7 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <div className="w-10 h-10 md:w-14 md:h-14 rounded-xl bg-gradient-to-br from-indigo-500 to-indigo-400 shadow-md flex items-center justify-center mb-3 md:mb-4 mx-auto">
+              <svg className="w-5 h-5 md:w-7 md:h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
               </svg>
             </div>
@@ -397,8 +374,8 @@ export default function Home() {
             </p>
           </div>
           <div className="bg-white rounded-xl shadow-lg p-4 md:p-8 hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
-            <div className="w-10 h-10 md:w-14 md:h-14 bg-purple-100 rounded-xl flex items-center justify-center mb-3 md:mb-4 mx-auto">
-              <svg className="w-5 h-5 md:w-7 md:h-7 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <div className="w-10 h-10 md:w-14 md:h-14 rounded-xl bg-gradient-to-br from-purple-500 to-fuchsia-500 shadow-md flex items-center justify-center mb-3 md:mb-4 mx-auto">
+              <svg className="w-5 h-5 md:w-7 md:h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
               </svg>
@@ -409,8 +386,8 @@ export default function Home() {
             </p>
           </div>
           <div className="bg-white rounded-xl shadow-lg p-4 md:p-8 hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
-            <div className="w-10 h-10 md:w-14 md:h-14 bg-green-100 rounded-xl flex items-center justify-center mb-3 md:mb-4 mx-auto">
-              <svg className="w-5 h-5 md:w-7 md:h-7 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <div className="w-10 h-10 md:w-14 md:h-14 rounded-xl bg-gradient-to-br from-emerald-500 to-green-400 shadow-md flex items-center justify-center mb-3 md:mb-4 mx-auto">
+              <svg className="w-5 h-5 md:w-7 md:h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
             </div>
@@ -423,22 +400,82 @@ export default function Home() {
       </section>
 
       {/* Browse by category */}
-      <section className="max-w-6xl mx-auto px-4 py-8 md:py-12">
-        <p className="text-sm font-semibold uppercase tracking-wider text-indigo-600 text-center mb-2">Browse</p>
-        <h2 className="text-2xl md:text-3xl font-bold text-gray-900 text-center mb-6">Shop by category</h2>
-        <div className="flex flex-wrap justify-center gap-3">
+      <section className="max-w-6xl mx-auto px-4 py-10 md:py-14">
+        <div className="text-center mb-8">
+          <p className="text-xs font-semibold uppercase tracking-[0.3em] text-indigo-600 mb-2">Browse</p>
+          <h2 className="text-2xl md:text-3xl font-bold text-gray-900">Shop by category</h2>
+          <p className="text-sm md:text-base text-gray-600 mt-2">
+            Find what you need fast, curated for campus life.
+          </p>
+        </div>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           {[
-            { value: "books", label: "Books" },
-            { value: "stationary", label: "Stationary" },
-            { value: "electronics", label: "Electronics" },
-            { value: "others", label: "Others" },
+            {
+              value: "books",
+              label: "Books",
+              detail: "Notes, guides, manuals",
+              tone: "from-indigo-500 to-indigo-400",
+              icon: (
+                <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 5a2 2 0 012-2h10a2 2 0 012 2v15a1 1 0 01-1.447.894L12 18.118l-4.553 2.776A1 1 0 016 20V5a2 2 0 00-2-2z" />
+                </svg>
+              ),
+            },
+            {
+              value: "stationary",
+              label: "Stationery",
+              detail: "Essentials & supplies",
+              tone: "from-purple-500 to-fuchsia-500",
+              icon: (
+                <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7l-1-4H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V9a2 2 0 00-2-2h-1z" />
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 13h6m-6 4h6" />
+                </svg>
+              ),
+            },
+            {
+              value: "electronics",
+              label: "Electronics",
+              detail: "Gadgets & accessories",
+              tone: "from-emerald-500 to-green-400",
+              icon: (
+                <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.75 3h4.5a1.5 1.5 0 011.5 1.5v15a1.5 1.5 0 01-1.5 1.5h-4.5a1.5 1.5 0 01-1.5-1.5v-15A1.5 1.5 0 019.75 3z" />
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 18h.01" />
+                </svg>
+              ),
+            },
+            {
+              value: "others",
+              label: "Others",
+              detail: "Everything else",
+              tone: "from-rose-500 to-pink-500",
+              icon: (
+                <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v12m6-6H6" />
+                </svg>
+              ),
+            },
           ].map((cat) => (
             <Link
               key={cat.value}
               to={`/products?category=${cat.value}`}
-              className="px-5 py-2.5 rounded-xl bg-white border border-slate-200 text-gray-700 font-medium shadow-sm hover:border-indigo-200 hover:text-indigo-600 hover:shadow transition-all"
+              className="group rounded-2xl border border-slate-200 bg-white/90 px-4 py-5 shadow-sm transition-all hover:-translate-y-0.5 hover:border-indigo-200 hover:shadow-lg"
             >
-              {cat.label}
+              <div className="flex items-center justify-between">
+                <div className={`w-10 h-10 rounded-xl bg-gradient-to-br ${cat.tone} flex items-center justify-center shadow-sm`}>
+                  {cat.icon}
+                </div>
+                <svg className="w-4 h-4 text-slate-300 group-hover:text-indigo-500 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.4} d="M9 5l7 7-7 7" />
+                </svg>
+              </div>
+              <div className="mt-4">
+                <p className="text-sm md:text-base font-semibold text-gray-900">
+                  {cat.label}
+                </p>
+                <p className="text-xs md:text-sm text-gray-500 mt-1">{cat.detail}</p>
+              </div>
             </Link>
           ))}
         </div>
@@ -463,9 +500,9 @@ export default function Home() {
               </span>
             </div>
             <div className="relative z-10">
-              <div className="w-12 h-12 md:w-16 md:h-16 bg-indigo-100 rounded-full flex items-center justify-center mx-auto mb-3 md:mb-4">
+              <div className="w-12 h-12 md:w-16 md:h-16 rounded-full bg-gradient-to-br from-indigo-500 to-indigo-400 shadow-md flex items-center justify-center mx-auto mb-3 md:mb-4">
                 <svg
-                  className="w-6 h-6 md:w-8 md:h-8 text-indigo-600"
+                  className="w-6 h-6 md:w-8 md:h-8 text-white"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -500,9 +537,9 @@ export default function Home() {
               </span>
             </div>
             <div className="relative z-10">
-              <div className="w-12 h-12 md:w-16 md:h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-3 md:mb-4">
+              <div className="w-12 h-12 md:w-16 md:h-16 rounded-full bg-gradient-to-br from-purple-500 to-fuchsia-500 shadow-md flex items-center justify-center mx-auto mb-3 md:mb-4">
                 <svg
-                  className="w-6 h-6 md:w-8 md:h-8 text-purple-600"
+                  className="w-6 h-6 md:w-8 md:h-8 text-white"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -537,9 +574,9 @@ export default function Home() {
               </span>
             </div>
             <div className="relative z-10">
-              <div className="w-12 h-12 md:w-16 md:h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-3 md:mb-4">
+              <div className="w-12 h-12 md:w-16 md:h-16 rounded-full bg-gradient-to-br from-emerald-500 to-green-400 shadow-md flex items-center justify-center mx-auto mb-3 md:mb-4">
                 <svg
-                  className="w-6 h-6 md:w-8 md:h-8 text-green-600"
+                  className="w-6 h-6 md:w-8 md:h-8 text-white"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -574,9 +611,9 @@ export default function Home() {
               </span>
             </div>
             <div className="relative z-10">
-              <div className="w-12 h-12 md:w-16 md:h-16 bg-pink-100 rounded-full flex items-center justify-center mx-auto mb-3 md:mb-4">
+              <div className="w-12 h-12 md:w-16 md:h-16 rounded-full bg-gradient-to-br from-rose-500 to-pink-500 shadow-md flex items-center justify-center mx-auto mb-3 md:mb-4">
                 <svg
-                  className="w-6 h-6 md:w-8 md:h-8 text-pink-600"
+                  className="w-6 h-6 md:w-8 md:h-8 text-white"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"

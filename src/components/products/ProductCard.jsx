@@ -30,19 +30,21 @@ export default function ProductCard({ product, isLiked, onToggleLike, onClick })
         <button
           onClick={(e) => onToggleLike(e, product)}
           className={`absolute top-2 right-2 p-2 rounded-full transition ${
-            isLiked ? 'bg-pink-500 scale-110' : 'bg-white'
+            isLiked
+              ? 'bg-gradient-to-br from-pink-500 to-rose-500 scale-110 shadow-md'
+              : 'bg-white/90 shadow-sm'
           }`}
         >
           <svg
-            className={`w-5 h-5 ${isLiked ? 'text-white' : 'text-pink-600'}`}
-            fill={isLiked ? 'currentColor' : 'none'}
+            className={`w-5 h-5 ${isLiked ? 'text-white' : 'text-pink-500/70'}`}
+            fill="currentColor"
             stroke="currentColor"
             viewBox="0 0 24 24"
           >
             <path 
               strokeLinecap="round" 
               strokeLinejoin="round" 
-              strokeWidth={2} 
+              strokeWidth={1.8} 
               d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" 
             />
           </svg>

@@ -92,7 +92,7 @@ export const getAvailableBranches = async (joiningYear) => {
 /**
  * Get available academic years for a joining year and branch
  * @param {number} joiningYear - Joining year (e.g., 2025)
- * @param {string} branch - Branch code (e.g., CME, CM)
+ * @param {string} branch - Branch code (e.g., CM)
  * @returns {Promise<{success: boolean, data: Array, error: string|null}>}
  */
 export const getAvailableYears = async (joiningYear, branch) => {
@@ -141,7 +141,7 @@ export const getAvailableYears = async (joiningYear, branch) => {
 /**
  * Get available sections for a joining year, branch and academic year
  * @param {number} joiningYear - Joining year (e.g., 2025)
- * @param {string} branch - Branch code (e.g., CME, CM)
+ * @param {string} branch - Branch code (e.g., CM)
  * @param {number} year - Academic year (1, 2, or 3)
  * @returns {Promise<{success: boolean, data: Array, error: string|null}>}
  */
@@ -192,7 +192,7 @@ export const getAvailableSections = async (joiningYear, branch, year) => {
 /**
  * Get available PINs filtered by joining year, branch, year, section
  * @param {number} joiningYear - Joining year (e.g., 2025)
- * @param {string} branch - Branch code (e.g., CME, CM)
+ * @param {string} branch - Branch code (e.g., CM)
  * @param {number} year - Academic year (1, 2, or 3)
  * @param {string} section - Section (A, B, C, etc.)
  * @returns {Promise<{success: boolean, data: Array, error: string|null}>}

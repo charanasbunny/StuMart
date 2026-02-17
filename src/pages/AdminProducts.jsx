@@ -23,13 +23,13 @@ export default function AdminProducts() {
   /* ---------------- OPTIONS ---------------- */
   const categoryOptions = [
     { value: "books", label: "Books" },
-    { value: "stationary", label: "Stationary" },
+    { value: "stationary", label: "Stationery" },
     { value: "electronics", label: "Electronics" },
     { value: "others", label: "Others" },
   ];
 
   const branchOptions = [
-    { value: "CME", label: "CME (Computer Science)" },
+    { value: "CM", label: "CM (Computer Science)" },
     { value: "CE", label: "CE (Civil)" },
     { value: "M", label: "M (Mechanical)" },
     { value: "ECE", label: "ECE" },
@@ -52,7 +52,7 @@ export default function AdminProducts() {
     const load = async () => {
       const { admin } = await getCurrentAdmin();
       if (!admin) {
-        navigate("/admin/login");
+        navigate("/login?type=admin");
         return;
       }
 
@@ -237,10 +237,10 @@ export default function AdminProducts() {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* SEARCH */}
-      <div className="bg-white p-4 flex gap-3 items-center sticky top-0 z-10">
+      <div className="bg-white p-3 sm:p-4 flex gap-2 sm:gap-3 items-center sticky top-0 z-10">
         <button
           onClick={() => navigate("/admin/dashboard")}
-          className="inline-flex items-center justify-center w-10 h-10 rounded-full bg-gray-100 text-gray-700 hover:bg-gray-200"
+          className="inline-flex items-center justify-center w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-gray-100 text-gray-700 hover:bg-gray-200"
           aria-label="Back to dashboard"
         >
           <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -251,23 +251,23 @@ export default function AdminProducts() {
           value={searchQuery}
           onChange={e => setSearchQuery(e.target.value)}
           placeholder="Search products…"
-          className="flex-1 border rounded px-3 py-2"
+          className="flex-1 border rounded px-3 py-2 text-sm sm:text-base"
         />
         <button
           onClick={() => setIsFilterOpen(true)}
-          className="lg:hidden border px-3 py-2 rounded"
+          className="lg:hidden border px-3 py-2 rounded text-sm"
         >
           Filters {activeFilterCount > 0 && `(${activeFilterCount})`}
         </button>
       </div>
 
-      <div className="flex gap-6 p-4">
+      <div className="flex gap-4 p-3 sm:p-4">
         <div className="hidden lg:block">
           <FilterSidebar />
         </div>
 
         {/* PRODUCTS GRID */}
-        <div className="flex-1 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+        <div className="flex-1 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4">
           {filteredProducts.map(p => (
             <div
               key={p.id}
@@ -281,15 +281,15 @@ export default function AdminProducts() {
                 />
               </div>
 
-              <div className="p-3 lg:p-2 flex flex-col flex-1 space-y-2">
+              <div className="p-2 sm:p-3 lg:p-2 flex flex-col flex-1 space-y-2">
                 <Link
                   to={`/admin/products/${p.id}`}
-                  className="font-semibold hover:text-indigo-600 text-sm lg:text-[13px]"
+                  className="font-semibold hover:text-indigo-600 text-xs sm:text-sm lg:text-[13px]"
                 >
                   {p.title}
                 </Link>
 
-                <p className="text-sm text-gray-600 lg:text-xs">
+                <p className="text-xs sm:text-sm text-gray-600 lg:text-xs">
                   {parseInt(p.price, 10) === 0 ? "FREE" : `₹ ${parseInt(p.price, 10)}`}
                 </p>
 
@@ -297,7 +297,7 @@ export default function AdminProducts() {
                 <div className="grid grid-cols-2 gap-2 mt-auto">
                   <Link
                     to={`/admin/products/${p.id}`}
-                    className="h-9 lg:h-8 flex items-center justify-center bg-indigo-600 text-white text-sm lg:text-xs rounded"
+                    className="h-8 sm:h-9 lg:h-8 flex items-center justify-center bg-indigo-600 text-white text-xs sm:text-sm lg:text-xs rounded"
                   >
                     View
                   </Link>
@@ -305,7 +305,7 @@ export default function AdminProducts() {
                   <button
                     onClick={() => handleDelete(p.id)}
                     disabled={deletingId === p.id}
-                    className="h-9 lg:h-8 flex items-center justify-center bg-red-600 text-white text-sm lg:text-xs rounded disabled:opacity-60"
+                    className="h-8 sm:h-9 lg:h-8 flex items-center justify-center bg-red-600 text-white text-xs sm:text-sm lg:text-xs rounded disabled:opacity-60"
                   >
                     Delete
                   </button>

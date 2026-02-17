@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { signIn, resendVerificationEmail } from '../services/authService';
 import { adminSignIn } from '../services/adminService';
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate, Link, useSearchParams } from "react-router-dom";
 
 
 
@@ -9,7 +9,12 @@ import { useNavigate, Link } from "react-router-dom";
 
 export default function Login() {
   const navigate = useNavigate();
-  const [loginType, setLoginType] = useState('student');
+  const [searchParams] = useSearchParams();
+  const getLoginTypeFromParams = () => {
+    const type = searchParams.get('type');
+    return type === 'admin' ? 'admin' : 'student';
+  };
+  const [loginType, setLoginType] = useState(getLoginTypeFromParams());
   const [formData, setFormData] = useState({
     email: '',
     password: '',
@@ -19,6 +24,13 @@ export default function Login() {
   const [showResendEmail, setShowResendEmail] = useState(false);
   const [resendLoading, setResendLoading] = useState(false);
   const [resendMessage, setResendMessage] = useState('');
+
+  useEffect(() => {
+    const type = searchParams.get('type');
+    if ((type === 'admin' || type === 'student') && type !== loginType) {
+      setLoginType(type);
+    }
+  }, [loginType, searchParams]);
 
   /**
    * Validate email format
@@ -300,7 +312,7 @@ export default function Login() {
           fill="none"
           viewBox="0 0 24 24"
           stroke="currentColor"
-          strokeWidth={2}
+          strokeWidth={2.4}
         >
           <path
             strokeLinecap="round"
@@ -317,7 +329,7 @@ export default function Login() {
           fill="none"
           viewBox="0 0 24 24"
           stroke="currentColor"
-          strokeWidth={2}
+          strokeWidth={2.4}
         >
           <path
             strokeLinecap="round"

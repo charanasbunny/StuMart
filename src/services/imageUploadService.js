@@ -6,6 +6,7 @@ import { supabase } from './supabaseClient';
  */
 
 const BUCKET_NAME = 'product-images';
+const FEEDBACK_BUCKET_NAME = 'feedback-images';
 const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB in bytes
 const ALLOWED_TYPES = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'];
 
@@ -92,6 +93,68 @@ export const uploadImage = async (file, userId) => {
     // Get public URL for the uploaded image
     const { data: urlData } = supabase.storage
       .from(BUCKET_NAME)
+      .getPublicUrl(data.path);
+
+    if (!urlData?.publicUrl) {
+      return {
+        success: false,
+        url: null,
+        error: 'Failed to get image URL',
+      };
+    }
+
+    return {
+      success: true,
+      url: urlData.publicUrl,
+      error: null,
+    };
+  } catch (error) {
+    console.error('Unexpected error during image upload:', error);
+    return {
+      success: false,
+      url: null,
+      error: error.message || 'An unexpected error occurred',
+    };
+  }
+};
+
+/**
+ * Upload a feedback image to Supabase Storage
+ * @param {File} file - Image file to upload
+ * @param {string} userId - User ID (auth.uid())
+ * @returns {Promise<{success: boolean, url: string|null, error: string|null}>}
+ */
+export const uploadFeedbackImage = async (file, userId) => {
+  try {
+    const validation = validateImageFile(file);
+    if (!validation.valid) {
+      return {
+        success: false,
+        url: null,
+        error: validation.error,
+      };
+    }
+
+    const fileName = generateFileName(userId, file.name);
+
+    const { data, error } = await supabase.storage
+      .from(FEEDBACK_BUCKET_NAME)
+      .upload(fileName, file, {
+        cacheControl: '3600',
+        upsert: false,
+      });
+
+    if (error) {
+      console.error('Upload error:', error);
+      return {
+        success: false,
+        url: null,
+        error: error.message || 'Failed to upload image',
+      };
+    }
+
+    const { data: urlData } = supabase.storage
+      .from(FEEDBACK_BUCKET_NAME)
       .getPublicUrl(data.path);
 
     if (!urlData?.publicUrl) {

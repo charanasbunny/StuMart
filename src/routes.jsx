@@ -4,7 +4,6 @@ import Register from "./pages/Register";
 import CreatePost from "./pages/CreatePost";
 import Products from "./pages/Products";
 import ProductDetail from "./pages/ProductDetail";
-import AdminLogin from "./pages/AdminLogin";
 import AdminDashboard from "./pages/AdminDashboard";
 import ProtectedRoute from "./components/ProtectedRoute";
 import ProtectedAdminRoute from "./components/ProtectedAdminRoute";
@@ -12,14 +11,16 @@ import ForgotPassword from "./pages/ForgotPassword";
 import Profile from "./pages/Profile";
 import MyPosts from "./pages/MyPosts";
 import CustomerFeedback from "./pages/CustomerFeedback";
+import AdminFeedbacks from "./pages/AdminFeedbacks";
 import AdminPINManagement from "./pages/AdminPINManagement";
 import AdminProducts from "./pages/AdminProducts";
 import AdminProductDetail from "./pages/AdminProductDetail";
 import LikedPost from "./pages/Likedpost";
 import AboutUs from "./pages/AboutUs";
 import ContactUs from "./pages/ContactUs";
+import { Navigate } from "react-router-dom";
 
-export const routes = [
+export const publicRoutes = [
   { path: "/", element: <Home /> },
 
   { path: "/about", element: <AboutUs /> },
@@ -67,7 +68,21 @@ export const routes = [
     ),
   },
 
-  { path: "/admin/login", element: <AdminLogin /> },
+
+  { path: "/forgot-password", element: <ForgotPassword /> },
+  {
+    path: "/customer-feedback",
+    element: (
+      <ProtectedRoute>
+        <CustomerFeedback />
+      </ProtectedRoute>
+    ),
+  },
+
+];
+
+export const adminRoutes = [
+  { path: "/admin/login", element: <Navigate to="/login?type=admin" replace /> },
 
   {
     path: "/admin/dashboard",
@@ -105,6 +120,12 @@ export const routes = [
     ),
   },
 
-  { path: "/forgot-password", element: <ForgotPassword /> },
-  { path: "/customer-feedback", element: <CustomerFeedback /> },
+  {
+    path: "/admin/feedbacks",
+    element: (
+      <ProtectedAdminRoute>
+        <AdminFeedbacks />
+      </ProtectedAdminRoute>
+    ),
+  },
 ];

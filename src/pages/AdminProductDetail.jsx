@@ -19,7 +19,7 @@ export default function AdminProductDetail() {
       try {
         const { admin: adminData, error: adminError } = await getCurrentAdmin();
         if (adminError || !adminData) {
-          navigate('/admin/login');
+          navigate('/login?type=admin');
           return;
         }
         setAdmin(adminData);
@@ -67,7 +67,7 @@ export default function AdminProductDetail() {
         <div className="max-w-6xl mx-auto px-4 py-3 sm:py-4 flex items-center gap-3">
           <button
             onClick={() => navigate('/admin/products')}
-            className="inline-flex items-center justify-center w-10 h-10 rounded-full bg-gray-100 text-gray-700 hover:bg-gray-200 shadow-sm"
+            className="inline-flex items-center justify-center w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-gray-100 text-gray-700 hover:bg-gray-200 shadow-sm"
             aria-label="Back to products"
           >
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -81,8 +81,8 @@ export default function AdminProductDetail() {
       </div>
 
       {/* Content */}
-      <div className="max-w-6xl mx-auto px-4 py-8">
-        <div className="bg-white rounded-xl shadow p-6 grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <div className="max-w-6xl mx-auto px-4 py-6 sm:py-8">
+        <div className="bg-white rounded-xl shadow p-4 sm:p-6 grid grid-cols-1 lg:grid-cols-3 gap-6">
 
           {/* Image */}
           <div className="lg:col-span-1">
@@ -142,7 +142,7 @@ export default function AdminProductDetail() {
         </div>
 
         {/* Description */}
-        <div className="bg-white rounded-xl shadow p-6 mt-6">
+        <div className="bg-white rounded-xl shadow p-4 sm:p-6 mt-4 sm:mt-6">
           <h3 className="text-lg font-semibold text-gray-900 mb-2">
             Description
           </h3>

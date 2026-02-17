@@ -1,12 +1,12 @@
 export const categoryOptions = [
   { value: "books", label: "Books" },
-  { value: "stationary", label: "Stationary" },
+  { value: "stationary", label: "Stationery" },
   { value: "electronics", label: "Electronics" },
   { value: "others", label: "Others" },
 ];
 
 export const branchOptions = [
-  { value: "CME", label: "CME (Computer Science)" },
+  { value: "CM", label: "CM (Computer Science)" },
   { value: "CE", label: "CE (Civil)" },
   { value: "M", label: "M (Mechanical)" },
   { value: "ECE", label: "ECE" },

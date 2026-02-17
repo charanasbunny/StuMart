@@ -81,6 +81,7 @@ Run these SQL files in Supabase SQL Editor (in order):
 1. **`supabase-schema.sql`** - Creates `students` table
 2. **`supabase-products-schema.sql`** - Creates `products` table
 3. **`supabase-storage-policies.sql`** - Sets up storage bucket policies
+4. **`supabase-student-feedback.sql`** - Creates feedback table, policies, and storage bucket
 
 ### 2. Create Storage Bucket
 

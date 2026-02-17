@@ -210,6 +210,26 @@ CREATE POLICY "Students can update their own record"
   FOR UPDATE
   USING (auth.uid() = auth_user_id);
 
+-- Authenticated users can view basic student info (used for product seller details)
+DROP POLICY IF EXISTS "Authenticated users can view student info" ON students;
+CREATE POLICY "Authenticated users can view student info"
+  ON students
+  FOR SELECT
+  USING (auth.role() = 'authenticated');
+
+-- Admins can view all student records
+DROP POLICY IF EXISTS "Admins can view all student records" ON students;
+CREATE POLICY "Admins can view all student records"
+  ON students
+  FOR SELECT
+  USING (
+    EXISTS (
+      SELECT 1
+      FROM admin_users
+      WHERE admin_users.auth_user_id = auth.uid()
+    )
+  );
+
 -- Allow authenticated users to delete student records (admin check handled in frontend)
 CREATE POLICY "Authenticated users can delete student records"
   ON students
