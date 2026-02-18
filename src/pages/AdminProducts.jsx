@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { getCurrentAdmin } from "../services/adminService";
 import { getAllProductsForAdmin, adminDeleteProduct } from "../services/productService";
+import { normalizeBranchCode } from "../utils/branchCodes";
 
 export default function AdminProducts() {
   const navigate = useNavigate();
@@ -30,12 +31,12 @@ export default function AdminProducts() {
 
   const branchOptions = [
     { value: "CM", label: "CM (Computer Science)" },
-    { value: "CE", label: "CE (Civil)" },
+    { value: "C", label: "C (Civil)" },
     { value: "M", label: "M (Mechanical)" },
-    { value: "ECE", label: "ECE" },
-    { value: "EEE", label: "EEE" },
+    { value: "EC", label: "EC" },
+    { value: "EE", label: "EE" },
     { value: "CIOT", label: "CIOT" },
-    { value: "AIML", label: "AIML" },
+    { value: "AIM", label: "AIM" },
   ];
 
   const priceOptions = [
@@ -84,7 +85,9 @@ export default function AdminProducts() {
     }
 
     if (selectedBranches.length) {
-      list = list.filter(p => selectedBranches.includes(p.branch));
+      list = list.filter(p =>
+        p.branch ? selectedBranches.includes(normalizeBranchCode(p.branch)) : false
+      );
     }
 
     if (showFreeOnly) {

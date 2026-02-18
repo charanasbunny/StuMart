@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router';
 import { getProductById } from '../services/productService';
+import { normalizeBranchCode } from '../utils/branchCodes';
 
 export default function ProductDetail() {
   const { id } = useParams();
@@ -89,7 +90,7 @@ export default function ProductDetail() {
   // Format branch name
   const formatBranch = (branch) => {
     if (!branch) return 'All Branches';
-    return branch;
+    return normalizeBranchCode(branch);
   };
 
   // Loading state

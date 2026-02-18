@@ -5,6 +5,7 @@ import { getCurrentUser } from "../services/authService";
 import FilterSidebar from "../components/products/FilterSidebar";
 import ProductCard from "../components/products/ProductCard";
 import { useLocalStorage } from "../hooks/useLocalStorage";
+import { normalizeBranchCode } from "../utils/branchCodes";
 import {
   categoryOptions,
   branchOptions,
@@ -100,9 +101,10 @@ export default function Products() {
     }
 
     if (selectedBranches.length > 0) {
-      filtered = filtered.filter(
-        (product) =>
-          !product.branch || selectedBranches.includes(product.branch),
+      filtered = filtered.filter((product) =>
+        !product.branch
+          ? true
+          : selectedBranches.includes(normalizeBranchCode(product.branch)),
       );
     }
 

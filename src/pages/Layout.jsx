@@ -1,10 +1,16 @@
 import { useEffect } from "react";
-import { Outlet } from "react-router";
+import { Outlet, useLocation } from "react-router";
 import Navbar from "../components/layout/Navbar";
 import Footer from "../components/layout/Footer";
 import { supabase } from "../services/supabaseClient";
 
 export default function Layout() {
+  const location = useLocation();
+
+  useEffect(() => {
+    window.scrollTo({ top: 0, left: 0, behavior: "auto" });
+  }, [location.pathname]);
+
   useEffect(() => {
     // Optimize: Only listen for specific events, not all auth state changes
     // This reduces unnecessary database queries

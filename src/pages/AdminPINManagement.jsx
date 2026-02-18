@@ -9,6 +9,7 @@ import {
   updatePINStatus,
   getPINStatistics 
 } from '../services/pinService';
+import { formatPinNumber, normalizeBranchCode } from '../utils/branchCodes';
 
 export default function AdminPINManagement() {
   const navigate = useNavigate();
@@ -55,12 +56,12 @@ export default function AdminPINManagement() {
   // Branch options
   const branchOptions = [
     { value: 'CM', label: 'CM (Computer Science)' },
-    { value: 'CE', label: 'CE (Civil)' },
+    { value: 'C', label: 'C (Civil)' },
     { value: 'M', label: 'M (Mechanical)' },
-    { value: 'ECE', label: 'ECE' },
-    { value: 'EEE', label: 'EEE' },
+    { value: 'EC', label: 'EC' },
+    { value: 'EE', label: 'EE' },
     { value: 'CIOT', label: 'CIOT' },
-    { value: 'AIML', label: 'AIML' },
+    { value: 'AIM', label: 'AIM' },
   ];
 
   // Year options
@@ -908,11 +909,13 @@ export default function AdminPINManagement() {
                         </td>
                         <td className="px-3 py-2 sm:px-4 sm:py-4 whitespace-nowrap">
                           <div className="text-xs sm:text-sm font-medium text-gray-900 font-mono">
-                            {pin.pin_number}
+                            {formatPinNumber(pin.pin_number)}
                           </div>
                         </td>
                         <td className="px-3 py-2 sm:px-4 sm:py-4 whitespace-nowrap">
-                          <div className="text-xs sm:text-sm text-gray-900">{pin.branch}</div>
+                          <div className="text-xs sm:text-sm text-gray-900">
+                            {normalizeBranchCode(pin.branch)}
+                          </div>
                         </td>
                         <td className="px-3 py-2 sm:px-4 sm:py-4 whitespace-nowrap">
                           <div className="text-xs sm:text-sm text-gray-900">{pin.year}</div>
