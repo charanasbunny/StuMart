@@ -273,8 +273,8 @@ export default function Products() {
       {/* Search Bar */}
       <div className="bg-white border-b border-gray-200 sticky top-0 z-10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-          <div className="flex flex-col sm:flex-row gap-4">
-            <div className="relative flex-1">
+          <div className="flex items-center gap-2 flex-nowrap">
+            <div className="relative flex-1 min-w-0">
               <input
                 type="text"
                 value={searchQuery}
@@ -319,9 +319,17 @@ export default function Products() {
             {isAuthenticated && (
               <button
                 onClick={() => navigate("/liked-post")}
-                className="px-4 py-2 bg-pink-600 text-white rounded-lg hover:bg-pink-700 whitespace-nowrap"
+                className="inline-flex items-center justify-center gap-1.5 px-2.5 py-2 bg-white text-sm rounded-md border border-gray-200 hover:border-red-200 shadow-sm hover:shadow-md transition"
               >
-                ❤️ Liked Posts
+                <svg
+                  className="w-4 h-4 text-red-500"
+                  fill="currentColor"
+                  viewBox="0 0 24 24"
+                  aria-hidden="true"
+                >
+                  <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 6 4 4 6.5 4c1.74 0 3.41.81 4.5 2.09C12.09 4.81 13.76 4 15.5 4 18 4 20 6 20 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
+                </svg>
+                <span className="hidden sm:inline text-gray-700">Liked</span>
               </button>
             )}
           </div>
