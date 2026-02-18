@@ -225,7 +225,7 @@ export default function Home() {
           <div className="flex flex-row justify-center items-center gap-2 sm:gap-3 w-full sm:w-auto md:animate-fade-in-up md:animate-fade-in-up-delay-4">
             <Link
               to="/products"
-              className="inline-flex items-center justify-center gap-1.5 sm:gap-2 flex-1 sm:flex-initial px-4 sm:px-8 py-2.5 sm:py-4 bg-indigo-600 text-white text-sm sm:text-lg font-semibold rounded-lg sm:rounded-xl hover:bg-indigo-700 transition-all shadow-md md:shadow-lg hover:shadow-xl"
+              className="cta-hero cta-hero-pulse inline-flex items-center justify-center gap-1.5 sm:gap-2 flex-1 sm:flex-initial px-4 sm:px-8 py-2.5 sm:py-4 bg-gradient-to-r from-indigo-600 via-fuchsia-500 to-blue-600 text-white text-sm sm:text-lg font-semibold rounded-lg sm:rounded-xl transition-all duration-300 shadow-[0_10px_30px_rgba(79,70,229,0.45)] hover:shadow-[0_16px_40px_rgba(99,102,241,0.6)] ring-2 ring-indigo-300/70 hover:ring-indigo-200/90 hover:scale-[1.03]"
               aria-label="Browse all products"
             >
               <svg className="w-4 h-4 sm:w-5 sm:h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -236,7 +236,7 @@ export default function Home() {
             </Link>
             <Link
               to="/create-post"
-              className="inline-flex items-center justify-center gap-1.5 sm:gap-2 flex-1 sm:flex-initial px-4 sm:px-8 py-2.5 sm:py-4 bg-white text-indigo-600 text-sm sm:text-lg font-semibold rounded-lg sm:rounded-xl border-2 border-indigo-200 hover:border-indigo-300 hover:bg-indigo-50 transition-all"
+              className="inline-flex items-center justify-center gap-1.5 sm:gap-2 flex-1 sm:flex-initial px-4 sm:px-8 py-2.5 sm:py-4 bg-gradient-to-r from-indigo-50 via-white to-indigo-100 text-indigo-700 text-sm sm:text-lg font-semibold rounded-lg sm:rounded-xl border-2 border-indigo-300/90 hover:border-indigo-400 transition-all duration-300 shadow-[0_12px_32px_rgba(99,102,241,0.35)] hover:shadow-[0_18px_44px_rgba(99,102,241,0.55)] ring-2 ring-indigo-200/80 hover:bg-white hover:scale-[1.03]"
               aria-label="Sell an item"
             >
               <svg className="w-4 h-4 sm:w-5 sm:h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -460,10 +460,10 @@ export default function Home() {
             <Link
               key={cat.value}
               to={`/products?category=${cat.value}`}
-              className="group rounded-2xl border border-slate-200 bg-white/90 px-4 py-5 shadow-sm transition-all hover:-translate-y-0.5 hover:border-indigo-200 hover:shadow-lg"
+              className="group rounded-2xl border border-indigo-100/80 bg-gradient-to-r from-white via-indigo-50 to-white px-4 py-5 shadow-[0_10px_28px_rgba(99,102,241,0.12)] transition-all hover:-translate-y-0.5 hover:border-indigo-200 hover:shadow-[0_14px_34px_rgba(99,102,241,0.2)]"
             >
               <div className="flex items-center justify-between">
-                <div className={`w-10 h-10 rounded-xl bg-gradient-to-br ${cat.tone} flex items-center justify-center shadow-sm`}>
+                <div className={`w-10 h-10 rounded-xl bg-gradient-to-br ${cat.tone} flex items-center justify-center shadow-md ring-1 ring-white/60`}>
                   {cat.icon}
                 </div>
                 <svg className="w-4 h-4 text-slate-300 group-hover:text-indigo-500 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">

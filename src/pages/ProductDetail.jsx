@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router';
 import { getProductById } from '../services/productService';
+import { normalizeBranchCode } from '../utils/branchCodes';
+import { useLocalStorage } from '../hooks/useLocalStorage';
 
 export default function ProductDetail() {
   const { id } = useParams();
@@ -10,6 +12,8 @@ export default function ProductDetail() {
   const [error, setError] = useState(null);
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const [shortImageUrl, setShortImageUrl] = useState(null);
+  const [likedIds, setLikedIds] = useLocalStorage("likedPosts", []);
+  const [shareMessage, setShareMessage] = useState('');
   //zoom
   const [isZoomOpen, setIsZoomOpen] = useState(false);
   const [zoomScale, setZoomScale] = useState(1);
@@ -89,7 +93,59 @@ export default function ProductDetail() {
   // Format branch name
   const formatBranch = (branch) => {
     if (!branch) return 'All Branches';
-    return branch;
+    return normalizeBranchCode(branch);
+  };
+
+  const isLiked = likedIds.some(
+    (item) => (typeof item === "object" ? item.id : item) === product?.id
+  );
+
+  const handleLikeClick = () => {
+    if (!product) return;
+
+    const isAlreadyLiked = likedIds.some(
+      (item) => (typeof item === "object" ? item.id : item) === product.id
+    );
+
+    if (isAlreadyLiked) {
+      setLikedIds(
+        likedIds.filter(
+          (item) => (typeof item === "object" ? item.id : item) !== product.id
+        )
+      );
+    } else {
+      setLikedIds([...likedIds, product]);
+    }
+  };
+
+  const handleShareClick = async () => {
+    if (!product) return;
+
+    const shareUrl = window.location.href;
+    const shareData = {
+      title: product.title,
+      text: `Check out this product: ${product.title}`,
+      url: shareUrl,
+    };
+
+    try {
+      if (navigator.share) {
+        await navigator.share(shareData);
+        return;
+      }
+
+      if (navigator.clipboard?.writeText) {
+        await navigator.clipboard.writeText(shareUrl);
+        setShareMessage('Link copied');
+      } else {
+        setShareMessage('Copy the URL from the address bar');
+      }
+    } catch (error) {
+      console.error('Share failed:', error);
+      setShareMessage('Unable to share right now');
+    } finally {
+      setTimeout(() => setShareMessage(''), 2000);
+    }
   };
 
   // Loading state
@@ -202,10 +258,51 @@ export default function ProductDetail() {
                 </span>
               </div>
 
-              {/* Title */}
-              <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-                {product.title}
-              </h1>
+              {/* Title + Actions */}
+              <div className="flex flex-wrap items-start justify-between gap-3 mb-4">
+                <h1 className="text-3xl md:text-4xl font-bold text-gray-900">
+                  {product.title}
+                </h1>
+                <div className="flex items-center gap-2">
+                  <button
+                    type="button"
+                    onClick={handleLikeClick}
+                    className={`inline-flex items-center justify-center w-9 h-9 rounded-lg border transition-all duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-200 ${
+                      isLiked
+                        ? 'border-red-300 bg-red-50 text-red-500 shadow-sm'
+                        : 'border-gray-200 bg-gray-50 text-red-500 hover:bg-white hover:shadow-sm'
+                    }`}
+                    aria-label={isLiked ? 'Remove from liked' : 'Like this product'}
+                  >
+                    <svg
+                      className="w-4.5 h-4.5"
+                      fill={isLiked ? 'currentColor' : 'none'}
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
+                      />
+                    </svg>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={handleShareClick}
+                    className="inline-flex items-center justify-center w-9 h-9 rounded-lg border border-indigo-200/80 bg-gray-50 text-indigo-600 hover:bg-white transition-all duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-200 hover:shadow-sm"
+                    aria-label="Share this product"
+                  >
+                    <svg className="w-4.5 h-4.5" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                      <path d="M21.8 3.2a1 1 0 00-1.02-.24L2.9 9.86a1 1 0 00.02 1.9l7.11 2.17 2.17 7.11a1 1 0 001.9.02l6.9-17.88a1 1 0 00-.2-.98zM12.9 13.1l-1.7 4.42-1.37-4.5a1 1 0 00-.66-.66l-4.5-1.37 4.42-1.7 8.53-3.28-4.72 7.09z" />
+                    </svg>
+                  </button>
+                </div>
+                {shareMessage && (
+                  <p className="w-full text-sm text-gray-500">{shareMessage}</p>
+                )}
+              </div>
 
               {/* Price */}
               <div className="mb-6">

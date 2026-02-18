@@ -1,6 +1,7 @@
 import { supabase } from './supabaseClient';
 import { getCurrentUser } from './authService';
 import { getCurrentAdmin } from './adminService';
+import { normalizeBranchCode, expandBranchCodes } from '../utils/branchCodes';
 
 /**
  * Product Service
@@ -72,7 +73,7 @@ export const createProduct = async (productData) => {
     const productInsert = {
       seller_id: user.id,
       student_pin_number: student.pin_number,
-      branch: productData.branch || null, // null means "All Branches"
+      branch: productData.branch ? normalizeBranchCode(productData.branch) : null, // null means "All Branches"
       category: productData.category,
       title: productData.title.trim(),
       description: productData.description.trim(),
@@ -135,7 +136,9 @@ export const getProducts = async (filters = {}) => {
     }
 
     if (filters.branch) {
-      query = query.or(`branch.is.null,branch.eq.${filters.branch}`);
+      const branchOptions = expandBranchCodes(filters.branch);
+      const branchFilter = branchOptions.join(',');
+      query = query.or(`branch.is.null,branch.in.(${branchFilter})`);
     }
 
     // Apply pagination

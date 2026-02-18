@@ -69,6 +69,28 @@
   }
 }
 
+@keyframes shimmer {
+  0% {
+    transform: translateX(-120%) skewX(-16deg);
+  }
+  100% {
+    transform: translateX(220%) skewX(-16deg);
+  }
+}
+
+@keyframes aura-pulse {
+  0%, 100% {
+    box-shadow:
+      0 12px 34px rgba(79, 70, 229, 0.45),
+      0 0 0 0 rgba(99, 102, 241, 0.4);
+  }
+  50% {
+    box-shadow:
+      0 18px 44px rgba(99, 102, 241, 0.65),
+      0 0 0 12px rgba(99, 102, 241, 0.12);
+  }
+}
+
 .animate-blob {
   animation: blob 7s infinite;
 }
@@ -84,6 +106,32 @@
 .animate-gradient {
   background-size: 200% 200%;
   animation: gradient 3s ease infinite;
+}
+
+.cta-hero {
+  position: relative;
+  overflow: hidden;
+}
+
+.cta-hero::after {
+  content: "";
+  position: absolute;
+  inset: -140% auto -140% -40%;
+  width: 45%;
+  background: linear-gradient(
+    120deg,
+    transparent,
+    rgba(255, 255, 255, 0.55),
+    transparent
+  );
+  opacity: 0.55;
+  transform: translateX(-120%) skewX(-16deg);
+  animation: shimmer 2.8s ease-in-out infinite;
+  pointer-events: none;
+}
+
+.cta-hero-pulse {
+  animation: aura-pulse 2.6s ease-in-out infinite;
 }
 
 /* Remove number input spinner arrows */

@@ -8,6 +8,7 @@ import {
   getAvailableSections,
   getAvailablePINs 
 } from '../services/pinService';
+import { formatPinNumber } from '../utils/branchCodes';
 
 export default function Register() {
   const navigate = useNavigate();
@@ -510,7 +511,7 @@ export default function Register() {
               </option>
               {availablePINs.map((pin) => (
                 <option key={pin.pin_number} value={pin.pin_number}>
-                  {pin.pin_number}
+                  {formatPinNumber(pin.pin_number)}
                 </option>
               ))}
             </select>

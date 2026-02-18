@@ -40,12 +40,12 @@ export default function CreatePost() {
   const branchOptions = [
     { value: '', label: 'All Branches' },
     { value: 'CM', label: 'CM (Computer Science)' },
-    { value: 'CE', label: 'CE (Civil)' },
+    { value: 'C', label: 'C (Civil)' },
     { value: 'M', label: 'M (Mechanical)' },
-    { value: 'ECE', label: 'ECE' },
-    { value: 'EEE', label: 'EEE' },
+    { value: 'EC', label: 'EC' },
+    { value: 'EE', label: 'EE' },
     { value: 'CIOT', label: 'CIOT' },
-    { value: 'AIML', label: 'AIML' },
+    { value: 'AIM', label: 'AIM' },
   ];
 
   const categoryOptions = [

@@ -1,4 +1,5 @@
 import { supabase } from './supabaseClient';
+import { normalizeBranchCode, expandBranchCodes } from '../utils/branchCodes';
 
 /**
  * PIN Service
@@ -73,7 +74,13 @@ export const getAvailableBranches = async (joiningYear) => {
     }
 
     // Get unique branches
-    const uniqueBranches = [...new Set(data?.map((pin) => pin.branch).filter(Boolean))].sort();
+    const uniqueBranches = [
+      ...new Set(
+        data
+          ?.map((pin) => normalizeBranchCode(pin.branch))
+          .filter(Boolean)
+      ),
+    ].sort();
 
     return {
       success: true,
@@ -105,11 +112,12 @@ export const getAvailableYears = async (joiningYear, branch) => {
       };
     }
 
+    const branchOptions = expandBranchCodes(branch);
     const { data, error } = await supabase
       .from('student_pins')
       .select('year')
       .eq('joining_year', joiningYear)
-      .eq('branch', branch)
+      .in('branch', branchOptions)
       .eq('status', 'available')
       .order('year', { ascending: true });
 
@@ -155,11 +163,12 @@ export const getAvailableSections = async (joiningYear, branch, year) => {
       };
     }
 
+    const branchOptions = expandBranchCodes(branch);
     const { data, error } = await supabase
       .from('student_pins')
       .select('section')
       .eq('joining_year', joiningYear)
-      .eq('branch', branch)
+      .in('branch', branchOptions)
       .eq('year', year)
       .eq('status', 'available')
       .order('section', { ascending: true });
@@ -209,7 +218,8 @@ export const getAvailablePINs = async (joiningYear, branch, year, section) => {
       query = query.eq('joining_year', joiningYear);
     }
     if (branch) {
-      query = query.eq('branch', branch);
+      const branchOptions = expandBranchCodes(branch);
+      query = query.in('branch', branchOptions);
     }
     if (year) {
       query = query.eq('year', year);
@@ -412,7 +422,8 @@ export const getAllPINs = async (filters = {}) => {
       query = query.eq('joining_year', filters.joiningYear);
     }
     if (filters.branch) {
-      query = query.eq('branch', filters.branch);
+      const branchOptions = expandBranchCodes(filters.branch);
+      query = query.in('branch', branchOptions);
     }
     if (filters.year) {
       query = query.eq('year', filters.year);
@@ -611,7 +622,9 @@ export const getPINStatistics = async () => {
     const uniqueJoiningYears = [...new Set(allPINs?.map((pin) => pin.joining_year).filter(Boolean))].sort((a, b) => b - a);
     
     // Get unique branches
-    const uniqueBranches = [...new Set(allPINs?.map((pin) => pin.branch).filter(Boolean))];
+    const uniqueBranches = [
+      ...new Set(allPINs?.map((pin) => normalizeBranchCode(pin.branch)).filter(Boolean)),
+    ];
     const branchesCount = uniqueBranches.length;
 
     // Get unique sections
