@@ -317,7 +317,7 @@ export default function Navbar() {
                   : "hover:bg-gray-50"
               }`}
             >
-              Customer Feedback
+              Feedback
             </Link>
 
             {isLoading ? (

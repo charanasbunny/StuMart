@@ -1,13 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getCurrentAdmin } from '../services/adminService';
-import { getFeedbackForAdmin } from '../services/feedbackService';
+import { deleteFeedbackAsAdmin, getFeedbackForAdmin } from '../services/feedbackService';
 
 export default function AdminFeedbacks() {
   const navigate = useNavigate();
   const [feedbacks, setFeedbacks] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState('');
+  const [deletingId, setDeletingId] = useState(null);
+  const [expandedIds, setExpandedIds] = useState([]);
 
   useEffect(() => {
     const loadFeedbacks = async () => {
@@ -38,6 +40,29 @@ export default function AdminFeedbacks() {
       </div>
     );
   }
+
+  const handleDelete = async (feedbackId) => {
+    if (!window.confirm('Delete this feedback? This cannot be undone.')) {
+      return;
+    }
+
+    setDeletingId(feedbackId);
+    const result = await deleteFeedbackAsAdmin(feedbackId);
+    if (!result.success) {
+      setError(result.error || 'Failed to delete feedback.');
+    } else {
+      setFeedbacks((prev) => prev.filter((item) => item.id !== feedbackId));
+    }
+    setDeletingId(null);
+  };
+
+  const toggleExpanded = (feedbackId) => {
+    setExpandedIds((prev) =>
+      prev.includes(feedbackId)
+        ? prev.filter((id) => id !== feedbackId)
+        : [...prev, feedbackId]
+    );
+  };
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -73,7 +98,65 @@ export default function AdminFeedbacks() {
         )}
 
         {feedbacks.length > 0 && (
-          <div className="bg-white rounded-lg shadow overflow-x-auto">
+          <div className="space-y-4">
+            <div className="grid grid-cols-1 gap-3 md:hidden">
+              {feedbacks.map((item) => {
+                const isExpanded = expandedIds.includes(item.id);
+                const description = item.description || '';
+                const preview = description.length > 140 ? `${description.slice(0, 140)}...` : description;
+
+                return (
+                  <div key={item.id} className="bg-white rounded-xl shadow p-4">
+                    <div className="flex items-start justify-between gap-3">
+                      <div>
+                        <p className="text-sm font-semibold text-gray-900">
+                          {item.students?.name || 'Unknown'}
+                        </p>
+                        <p className="text-xs text-gray-500">
+                          {item.students?.pin_number || 'N/A'} · {item.students?.email || 'N/A'}
+                        </p>
+                      </div>
+                      <button
+                        onClick={() => handleDelete(item.id)}
+                        disabled={deletingId === item.id}
+                        className="text-xs px-2 py-1 rounded border border-red-200 text-red-600 hover:bg-red-50 disabled:opacity-60"
+                      >
+                        {deletingId === item.id ? 'Deleting...' : 'Delete'}
+                      </button>
+                    </div>
+                    <p className="mt-3 text-sm text-gray-700 whitespace-pre-wrap">
+                      {isExpanded ? description : preview}
+                    </p>
+                    {description.length > 140 && (
+                      <button
+                        type="button"
+                        onClick={() => toggleExpanded(item.id)}
+                        className="mt-2 text-xs font-medium text-indigo-600 hover:text-indigo-700"
+                      >
+                        {isExpanded ? 'Show less' : 'Read more'}
+                      </button>
+                    )}
+                    <div className="mt-3 flex items-center justify-between text-xs text-gray-500">
+                      {item.image_url ? (
+                        <a
+                          href={item.image_url}
+                          target="_blank"
+                          rel="noreferrer"
+                          className="text-indigo-600 hover:underline"
+                        >
+                          View image
+                        </a>
+                      ) : (
+                        <span>No image</span>
+                      )}
+                      <span>{item.created_at ? new Date(item.created_at).toLocaleDateString() : 'N/A'}</span>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+
+            <div className="hidden md:block bg-white rounded-lg shadow overflow-x-auto">
             <table className="min-w-full text-xs sm:text-sm">
               <thead className="bg-gray-50 text-gray-600">
                 <tr>
@@ -83,6 +166,7 @@ export default function AdminFeedbacks() {
                   <th className="text-left px-3 py-2 sm:px-4 sm:py-3 font-medium">Feedback</th>
                   <th className="text-left px-3 py-2 sm:px-4 sm:py-3 font-medium">Image</th>
                   <th className="text-left px-3 py-2 sm:px-4 sm:py-3 font-medium">Date</th>
+                  <th className="text-left px-3 py-2 sm:px-4 sm:py-3 font-medium">Actions</th>
                 </tr>
               </thead>
               <tbody className="divide-y">
@@ -117,10 +201,20 @@ export default function AdminFeedbacks() {
                     <td className="px-3 py-2 sm:px-4 sm:py-4 text-gray-600">
                       {item.created_at ? new Date(item.created_at).toLocaleString() : 'N/A'}
                     </td>
+                    <td className="px-3 py-2 sm:px-4 sm:py-4">
+                      <button
+                        onClick={() => handleDelete(item.id)}
+                        disabled={deletingId === item.id}
+                        className="text-xs px-2 py-1 rounded border border-red-200 text-red-600 hover:bg-red-50 disabled:opacity-60"
+                      >
+                        {deletingId === item.id ? 'Deleting...' : 'Delete'}
+                      </button>
+                    </td>
                   </tr>
                 ))}
               </tbody>
             </table>
+            </div>
           </div>
         )}
       </div>

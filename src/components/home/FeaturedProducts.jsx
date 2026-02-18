@@ -13,6 +13,7 @@ export default function FeaturedProducts({ setShowScrollIndicator }) {
   const touchStartX = useRef(null);
   const touchEndX = useRef(null);
   const [isHovering, setIsHovering] = useState(false);
+  const [openMenuKey, setOpenMenuKey] = useState(null);
 
   const n = featuredProducts.length;
   const extendedProducts =
@@ -162,6 +163,7 @@ export default function FeaturedProducts({ setShowScrollIndicator }) {
           ) : (
             <div
               className="relative overflow-hidden"
+              onClick={() => setOpenMenuKey(null)}
               onTouchStart={handleTouchStart}
               onTouchMove={handleTouchMove}
               onTouchEnd={handleTouchEnd}
@@ -199,9 +201,18 @@ export default function FeaturedProducts({ setShowScrollIndicator }) {
               >
                 {extendedProducts.map((product, index) => (
                   <FeaturedProduct
+                    key={`${product.id}-${index}`}
                     product={product}
                     index={index}
                     currentIndex={currentIndex}
+                    menuOpen={openMenuKey === `${product.id}-${index}`}
+                    onToggleMenu={() =>
+                      setOpenMenuKey((prev) =>
+                        prev === `${product.id}-${index}`
+                          ? null
+                          : `${product.id}-${index}`
+                      )
+                    }
                   />
                 ))}
               </div>

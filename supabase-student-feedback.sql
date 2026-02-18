@@ -24,6 +24,44 @@ create policy students_can_insert_feedback
     )
   );
 
+-- Authenticated users can read feedback
+drop policy if exists authenticated_can_read_feedback on public.student_feedback;
+create policy authenticated_can_read_feedback
+  on public.student_feedback
+  for select
+  using (auth.role() = 'authenticated');
+
+-- Admins can insert feedback for any student
+drop policy if exists admins_can_insert_feedback on public.student_feedback;
+create policy admins_can_insert_feedback
+  on public.student_feedback
+  for insert
+  with check (
+    exists (
+      select 1
+      from public.admin_users
+      where admin_users.auth_user_id = auth.uid()
+    )
+    and exists (
+      select 1
+      from public.students
+      where students.pin_number = student_feedback.student_pin_number
+    )
+  );
+
+-- Admins can delete feedback
+drop policy if exists admins_can_delete_feedback on public.student_feedback;
+create policy admins_can_delete_feedback
+  on public.student_feedback
+  for delete
+  using (
+    exists (
+      select 1
+      from public.admin_users
+      where admin_users.auth_user_id = auth.uid()
+    )
+  );
+
 -- Admins can read all feedback
 drop policy if exists admins_can_read_feedback on public.student_feedback;
 create policy admins_can_read_feedback
