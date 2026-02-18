@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getCurrentUser } from '../services/authService';
-import { createFeedback } from '../services/feedbackService';
+import { createFeedback, getFeedbackForStudents } from '../services/feedbackService';
 import {
   getImagePreview,
   revokeImagePreview,
@@ -10,13 +10,20 @@ import {
 
 export default function CustomerFeedback() {
   const MAX_DESCRIPTION_LENGTH = 500;
+  const PREVIEW_COUNT = 3;
   const navigate = useNavigate();
+  const formRef = useRef(null);
   const [student, setStudent] = useState(null);
   const [user, setUser] = useState(null);
   const [description, setDescription] = useState('');
   const [imageFile, setImageFile] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isLoadingFeedback, setIsLoadingFeedback] = useState(true);
+  const [feedbackEntries, setFeedbackEntries] = useState([]);
+  const [feedbackError, setFeedbackError] = useState('');
+  const [showAllFeedback, setShowAllFeedback] = useState(false);
+  const [showForm, setShowForm] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
 
@@ -33,6 +40,26 @@ export default function CustomerFeedback() {
 
     loadUser();
   }, [navigate]);
+
+  useEffect(() => {
+    const loadFeedback = async () => {
+      if (!user) {
+        return;
+      }
+      setIsLoadingFeedback(true);
+      setFeedbackError('');
+      const result = await getFeedbackForStudents({ limit: 20 });
+      if (result.success) {
+        setFeedbackEntries(result.data || []);
+      } else {
+        setFeedbackError(result.error || 'Unable to load feedback.');
+      }
+      setIsLoadingFeedback(false);
+    };
+
+    loadFeedback();
+  }, [user]);
+
 
   useEffect(() => {
     return () => {
@@ -99,6 +126,11 @@ export default function CustomerFeedback() {
       }
       setImagePreview(null);
       setSuccess('Feedback submitted. Thank you.');
+      const refresh = await getFeedbackForStudents({ limit: 20 });
+      if (refresh.success) {
+        setFeedbackEntries(refresh.data || []);
+      }
+      setShowForm(false);
     } catch (submitError) {
       setError(submitError.message || 'An unexpected error occurred.');
     } finally {
@@ -140,11 +172,66 @@ export default function CustomerFeedback() {
             </p>
           </div>
 
-          <div className="mb-8 rounded-xl border border-indigo-100 bg-indigo-50/60 px-4 py-3 text-sm text-indigo-700">
-            We read every response and use it to improve the platform.
-          </div>
+          {!showForm && (
+            <div className="mb-8">
+            <div className="flex items-center justify-between mb-3">
+              <h2 className="text-base font-semibold text-gray-900">Recent feedback</h2>
+              {feedbackEntries.length > PREVIEW_COUNT && (
+                <button
+                  type="button"
+                  onClick={() => setShowAllFeedback((prev) => !prev)}
+                  className="inline-flex items-center gap-1 text-sm text-indigo-600 hover:text-indigo-700"
+                >
+                  {showAllFeedback ? 'Show less' : 'View all'}
+                  <svg
+                    className={`w-4 h-4 transition-transform ${showAllFeedback ? 'rotate-180' : ''}`}
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                  </svg>
+                </button>
+              )}
+            </div>
 
-          <form onSubmit={handleSubmit} className="space-y-7">
+            {isLoadingFeedback ? (
+              <div className="rounded-xl border border-slate-100 bg-slate-50 px-4 py-6 text-sm text-slate-500">
+                Loading feedback...
+              </div>
+            ) : feedbackError ? (
+              <div className="rounded-xl border border-red-100 bg-red-50 px-4 py-3 text-sm text-red-700">
+                {feedbackError}
+              </div>
+            ) : feedbackEntries.length === 0 ? (
+              <div className="rounded-xl border border-slate-100 bg-slate-50 px-4 py-6 text-sm text-slate-600">
+                No feedback yet. Be the first to share.
+              </div>
+            ) : (
+              <div className="space-y-3">
+                {(showAllFeedback ? feedbackEntries : feedbackEntries.slice(0, PREVIEW_COUNT)).map((entry) => (
+                  <div key={entry.id} className="rounded-xl border border-slate-100 bg-white px-4 py-3">
+                    <div className="text-xs text-slate-500 mb-2">
+                      {entry.students?.name || 'Student'}
+                    </div>
+                    <p className="text-sm text-slate-700 whitespace-pre-wrap">
+                      {entry.description}
+                    </p>
+                    {entry.image_url && (
+                      <img
+                        src={entry.image_url}
+                        alt="Feedback"
+                        className="mt-3 w-full max-h-48 object-cover rounded-lg border border-slate-200"
+                      />
+                    )}
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+          )}
+          {showForm && (
+            <form ref={formRef} onSubmit={handleSubmit} className="space-y-7">
             <div>
               <div className="flex items-center justify-between mb-2">
                 <label htmlFor="description" className="block text-sm font-semibold text-gray-800">
@@ -218,9 +305,34 @@ export default function CustomerFeedback() {
             >
               {isSubmitting ? 'Submitting...' : 'Submit Feedback'}
             </button>
-          </form>
+            </form>
+          )}
         </div>
       </div>
+
+      <button
+        type="button"
+        onClick={() => {
+          setShowForm((prev) => !prev);
+          if (!showForm) {
+            setTimeout(() => {
+              formRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }, 60);
+          }
+        }}
+        className="fixed bottom-6 right-6 z-40 flex items-center justify-center w-12 h-12 rounded-full bg-indigo-600 text-white shadow-lg hover:bg-indigo-700 transition"
+        aria-label={showForm ? 'Close feedback form' : 'Create feedback'}
+      >
+        {showForm ? (
+          <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        ) : (
+          <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M12 4v16m8-8H4" />
+          </svg>
+        )}
+      </button>
     </div>
   );
 }
