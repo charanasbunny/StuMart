@@ -111,14 +111,7 @@ export default function AdminDashboard() {
           </p>
         </div>
 
-        <div className="admin-card p-4 sm:p-6">
-          <h3 className="text-sm font-semibold text-gray-900">Quick Help</h3>
-          <ul className="mt-2 text-xs sm:text-sm text-gray-600 space-y-1">
-            <li>1) Review new products and hide anything incorrect.</li>
-            <li>2) Check feedback for issues that need a reply.</li>
-            <li>3) Use PINs to add, block, or verify students.</li>
-          </ul>
-        </div>
+        
 
         <div className="admin-card p-4 sm:p-6">
           <div className="flex items-center justify-between mb-4">
