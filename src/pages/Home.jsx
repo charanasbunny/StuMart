@@ -448,7 +448,7 @@ export default function Home() {
             {
               value: "others",
               label: "Others",
-              detail: "Everything else",
+              detail: "Any other items",
               tone: "from-rose-500 to-pink-500",
               icon: (
                 <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
