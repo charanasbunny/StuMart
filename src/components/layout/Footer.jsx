@@ -5,26 +5,14 @@ export default function Footer() {
     <footer className="w-full bg-gradient-to-r from-blue-900 via-purple-800 to-purple-900">
       <div className="w-full py-5 md:py-6 lg:py-8 px-5 md:px-8 lg:px-12 max-w-7xl mx-auto">
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-5 md:gap-8">
-          {/* Logo, Heading and Text - Left */}
-          <div className="flex items-center md:items-start gap-3 md:gap-4 flex-1 text-center md:text-left">
-            {/* Logo */}
-            <div className="flex-shrink-0">
-              <img 
-                src="/newlogo.jpeg" 
-                alt="StuMart Logo" 
-                className="w-10 h-10 md:w-14 md:h-14 object-contain drop-shadow-lg"
-              />
-            </div>
-            
-            {/* Heading and Text */}
-            <div className="flex flex-col justify-start">
-              <h2 className="text-base md:text-xl font-semibold text-white mb-1 tracking-wide">
-                Built for Students, by Students
-              </h2>
-              <p className="text-[11px] md:text-sm text-blue-100/90 leading-snug">
-                Sell your extra items now.
-              </p>
-            </div>
+          {/* Heading and Text - Left */}
+          <div className="flex flex-col justify-start flex-1 text-center md:text-left">
+            <h2 className="text-base md:text-xl font-semibold text-white mb-1 tracking-wide">
+              Built for Students, by Students
+            </h2>
+            <p className="text-[11px] md:text-sm text-blue-100/90 leading-snug">
+              Sell your extra items now.
+            </p>
           </div>
 
           {/* Support & Follow Us - Right */}
