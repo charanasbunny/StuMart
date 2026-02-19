@@ -144,10 +144,10 @@ export default function Home() {
       <h1 className="sr-only">
         GVL Poly Student Marketplace – AANM & VVRSR Polytechnic
       </h1>
-      <div className="mx-auto max-w-4xl px-4 pt-4 text-center text-xs md:text-sm text-slate-600 bg-white/70 md:bg-white/50 rounded-xl md:rounded-lg py-2.5 md:py-2 border border-slate-100">
+      <div className="mx-auto max-w-4xl px-4 pt-0 text-center text-xs md:text-sm text-slate-600 bg-white/70 md:bg-white/50 rounded-xl md:rounded-lg py-2 md:py-2 border border-slate-100 mb-0">
         <p>Official student marketplace for GVL Polytechnic (AANM & VVRSR). Not affiliated with any commercial store.</p>
       </div>
-      <section className="w-full relative overflow-hidden min-h-0 md:min-h-[60vh] flex items-center py-4 md:py-0">
+      <section className="w-full relative overflow-hidden min-h-0 md:min-h-[60vh] flex items-center pt-0 pb-4 md:py-0">
         <div
           className="absolute inset-0 z-0 bg-center bg-no-repeat"
           style={{
@@ -363,8 +363,14 @@ export default function Home() {
         </p>
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 md:gap-8">
           <div className="bg-white rounded-xl shadow-lg p-4 md:p-8 hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
-            <div className="w-10 h-10 md:w-14 md:h-14 rounded-xl bg-gradient-to-br from-indigo-500 to-indigo-400 shadow-md flex items-center justify-center mb-3 md:mb-4 mx-auto">
-              <svg className="w-5 h-5 md:w-7 md:h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <div
+              className="premium-icon premium-icon--filled w-10 h-10 md:w-14 md:h-14 rounded-xl flex items-center justify-center mb-3 md:mb-4 mx-auto"
+              style={{
+                "--premium-glow": "79 70 229",
+                "--premium-fill": "linear-gradient(135deg, #6366f1, #8b5cf6)",
+              }}
+            >
+              <svg className="w-5 h-5 md:w-7 md:h-7 text-white/95" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
               </svg>
             </div>
@@ -374,8 +380,14 @@ export default function Home() {
             </p>
           </div>
           <div className="bg-white rounded-xl shadow-lg p-4 md:p-8 hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
-            <div className="w-10 h-10 md:w-14 md:h-14 rounded-xl bg-gradient-to-br from-purple-500 to-fuchsia-500 shadow-md flex items-center justify-center mb-3 md:mb-4 mx-auto">
-              <svg className="w-5 h-5 md:w-7 md:h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <div
+              className="premium-icon premium-icon--filled w-10 h-10 md:w-14 md:h-14 rounded-xl flex items-center justify-center mb-3 md:mb-4 mx-auto"
+              style={{
+                "--premium-glow": "168 85 247",
+                "--premium-fill": "linear-gradient(135deg, #a855f7, #ec4899)",
+              }}
+            >
+              <svg className="w-5 h-5 md:w-7 md:h-7 text-white/95" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
               </svg>
@@ -386,8 +398,14 @@ export default function Home() {
             </p>
           </div>
           <div className="bg-white rounded-xl shadow-lg p-4 md:p-8 hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
-            <div className="w-10 h-10 md:w-14 md:h-14 rounded-xl bg-gradient-to-br from-emerald-500 to-green-400 shadow-md flex items-center justify-center mb-3 md:mb-4 mx-auto">
-              <svg className="w-5 h-5 md:w-7 md:h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <div
+              className="premium-icon premium-icon--filled w-10 h-10 md:w-14 md:h-14 rounded-xl flex items-center justify-center mb-3 md:mb-4 mx-auto"
+              style={{
+                "--premium-glow": "16 185 129",
+                "--premium-fill": "linear-gradient(135deg, #10b981, #22c55e)",
+              }}
+            >
+              <svg className="w-5 h-5 md:w-7 md:h-7 text-white/95" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
             </div>
@@ -414,9 +432,10 @@ export default function Home() {
               value: "books",
               label: "Books",
               detail: "Notes, guides, manuals",
-              tone: "from-indigo-500 to-indigo-400",
+              glow: "79 70 229",
+              fill: "linear-gradient(135deg, #6366f1, #8b5cf6)",
               icon: (
-                <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="w-5 h-5 text-white/95" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 5a2 2 0 012-2h10a2 2 0 012 2v15a1 1 0 01-1.447.894L12 18.118l-4.553 2.776A1 1 0 016 20V5a2 2 0 00-2-2z" />
                 </svg>
               ),
@@ -425,9 +444,10 @@ export default function Home() {
               value: "stationary",
               label: "Stationery",
               detail: "Essentials & supplies",
-              tone: "from-purple-500 to-fuchsia-500",
+              glow: "168 85 247",
+              fill: "linear-gradient(135deg, #a855f7, #ec4899)",
               icon: (
-                <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="w-5 h-5 text-white/95" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7l-1-4H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V9a2 2 0 00-2-2h-1z" />
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 13h6m-6 4h6" />
                 </svg>
@@ -437,9 +457,10 @@ export default function Home() {
               value: "electronics",
               label: "Electronics",
               detail: "Gadgets & accessories",
-              tone: "from-emerald-500 to-green-400",
+              glow: "16 185 129",
+              fill: "linear-gradient(135deg, #10b981, #22c55e)",
               icon: (
-                <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="w-5 h-5 text-white/95" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.75 3h4.5a1.5 1.5 0 011.5 1.5v15a1.5 1.5 0 01-1.5 1.5h-4.5a1.5 1.5 0 01-1.5-1.5v-15A1.5 1.5 0 019.75 3z" />
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 18h.01" />
                 </svg>
@@ -449,9 +470,10 @@ export default function Home() {
               value: "others",
               label: "Others",
               detail: "Everything else",
-              tone: "from-rose-500 to-pink-500",
+              glow: "244 63 94",
+              fill: "linear-gradient(135deg, #f43f5e, #fb7185)",
               icon: (
-                <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="w-5 h-5 text-white/95" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v12m6-6H6" />
                 </svg>
               ),
@@ -460,10 +482,16 @@ export default function Home() {
             <Link
               key={cat.value}
               to={`/products?category=${cat.value}`}
-              className="group rounded-2xl border border-indigo-100/80 bg-gradient-to-r from-white via-indigo-50 to-white px-4 py-5 shadow-[0_10px_28px_rgba(99,102,241,0.12)] transition-all hover:-translate-y-0.5 hover:border-indigo-200 hover:shadow-[0_14px_34px_rgba(99,102,241,0.2)]"
+              className="group category-card-premium rounded-2xl px-4 py-5 transition-all hover:-translate-y-0.5"
             >
               <div className="flex items-center justify-between">
-                <div className={`w-10 h-10 rounded-xl bg-gradient-to-br ${cat.tone} flex items-center justify-center shadow-md ring-1 ring-white/60`}>
+                <div
+                  className="premium-icon premium-icon--filled w-10 h-10 rounded-xl flex items-center justify-center"
+                  style={{
+                    "--premium-glow": cat.glow,
+                    "--premium-fill": cat.fill,
+                  }}
+                >
                   {cat.icon}
                 </div>
                 <svg className="w-4 h-4 text-slate-300 group-hover:text-indigo-500 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
