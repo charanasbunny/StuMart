@@ -3,10 +3,22 @@
 create table if not exists public.student_feedback (
   id uuid primary key default gen_random_uuid(),
   student_pin_number text not null references public.students(pin_number),
+  student_name text,
   description text not null,
   image_url text,
   created_at timestamp with time zone default now()
 );
+
+-- Add student_name for existing tables
+alter table public.student_feedback
+  add column if not exists student_name text;
+
+-- Optional: backfill names for existing feedback
+update public.student_feedback
+set student_name = students.name
+from public.students
+where students.pin_number = student_feedback.student_pin_number
+  and student_feedback.student_name is null;
 
 alter table public.student_feedback enable row level security;
 

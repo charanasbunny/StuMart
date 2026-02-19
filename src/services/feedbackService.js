@@ -40,6 +40,7 @@ export const createFeedback = async ({ description, imageUrl }) => {
 
     const insertPayload = {
       student_pin_number: student.pin_number,
+      student_name: student.name || null,
       description: description.trim(),
       image_url: imageUrl || null,
     };
@@ -80,27 +81,14 @@ export const createFeedback = async ({ description, imageUrl }) => {
  */
 export const getFeedbackForStudents = async ({ limit = 6 } = {}) => {
   try {
-    const { user, student, error: userError } = await getCurrentUser();
-
-    if (userError || !user || !student) {
-      return {
-        success: false,
-        data: null,
-        error: 'User not authenticated.',
-      };
-    }
-
     let query = supabase
       .from('student_feedback')
       .select(`
         id,
+        student_name,
         description,
         image_url,
-        created_at,
-        students:student_pin_number (
-          name,
-          pin_number
-        )
+        created_at
       `)
       .order('created_at', { ascending: false });
 
@@ -140,7 +128,12 @@ export const getFeedbackForStudents = async ({ limit = 6 } = {}) => {
  * @param {string|null} feedbackData.imageUrl
  * @returns {Promise<{success: boolean, data: Object|null, error: string|null}>}
  */
-export const createFeedbackAsAdmin = async ({ studentPinNumber, description, imageUrl }) => {
+export const createFeedbackAsAdmin = async ({
+  studentPinNumber,
+  studentName,
+  description,
+  imageUrl,
+}) => {
   try {
     const MAX_DESCRIPTION_LENGTH = 500;
     const { admin, error: adminError } = await getCurrentAdmin();
@@ -179,6 +172,7 @@ export const createFeedbackAsAdmin = async ({ studentPinNumber, description, ima
 
     const insertPayload = {
       student_pin_number: studentPinNumber,
+      student_name: studentName || null,
       description: description.trim(),
       image_url: imageUrl || null,
     };

@@ -30,22 +30,20 @@ export default function CustomerFeedback() {
   useEffect(() => {
     const loadUser = async () => {
       const { user: currentUser, student: currentStudent, error: userError } = await getCurrentUser();
-      if (userError || !currentUser || !currentStudent) {
-        navigate('/login');
+      if (!userError && currentUser && currentStudent) {
+        setUser(currentUser);
+        setStudent(currentStudent);
         return;
       }
-      setUser(currentUser);
-      setStudent(currentStudent);
+      setUser(null);
+      setStudent(null);
     };
 
     loadUser();
-  }, [navigate]);
+  }, []);
 
   useEffect(() => {
     const loadFeedback = async () => {
-      if (!user) {
-        return;
-      }
       setIsLoadingFeedback(true);
       setFeedbackError('');
       const result = await getFeedbackForStudents({ limit: 20 });
@@ -58,7 +56,7 @@ export default function CustomerFeedback() {
     };
 
     loadFeedback();
-  }, [user]);
+  }, []);
 
 
   useEffect(() => {
@@ -170,6 +168,11 @@ export default function CustomerFeedback() {
             <p className="hidden sm:block text-base text-gray-600 mt-2 max-w-2xl mx-auto">
               Share suggestions or issues to help us improve the student experience. Description is required, image is optional.
             </p>
+            {!user && (
+              <p className="text-xs text-slate-500 mt-3">
+                Log in to submit feedback. Everyone can view feedback below.
+              </p>
+            )}
           </div>
 
           {!showForm && (
@@ -212,7 +215,7 @@ export default function CustomerFeedback() {
                 {(showAllFeedback ? feedbackEntries : feedbackEntries.slice(0, PREVIEW_COUNT)).map((entry) => (
                   <div key={entry.id} className="rounded-xl border border-slate-100 bg-white px-4 py-3">
                     <div className="text-xs text-slate-500 mb-2">
-                      {entry.students?.name || 'Student'}
+                      {entry.student_name || "Unknown"}
                     </div>
                     <p className="text-sm text-slate-700 whitespace-pre-wrap">
                       {entry.description}
@@ -313,6 +316,10 @@ export default function CustomerFeedback() {
       <button
         type="button"
         onClick={() => {
+          if (!user || !student) {
+            navigate('/login');
+            return;
+          }
           setShowForm((prev) => !prev);
           if (!showForm) {
             setTimeout(() => {
