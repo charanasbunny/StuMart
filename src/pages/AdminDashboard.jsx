@@ -1,13 +1,15 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { getCurrentAdmin, adminSignOut } from '../services/adminService';
+import { getCurrentAdmin } from '../services/adminService';
 import { getPINStatistics } from '../services/pinService';
+import AdminLayout from '../components/admin/AdminLayout';
 
 export default function AdminDashboard() {
   const navigate = useNavigate();
   const [admin, setAdmin] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
-  const [isLoggingOut, setIsLoggingOut] = useState(false);
+  const [isRefreshing, setIsRefreshing] = useState(false);
+  const [lastUpdated, setLastUpdated] = useState(null);
   const [pinStats, setPinStats] = useState({
     totalPINs: 0,
     availablePINs: 0,
@@ -23,20 +25,24 @@ export default function AdminDashboard() {
   /**
    * Load current admin data and statistics
    */
-  useEffect(() => {
-    const loadAdminData = async () => {
+  const loadAdminData = useCallback(
+    async (isRefresh = false) => {
+      if (isRefresh) {
+        setIsRefreshing(true);
+      } else {
+        setIsLoading(true);
+      }
+
       try {
         const { admin: adminData, error } = await getCurrentAdmin();
-        
+
         if (error || !adminData) {
-          // If admin is not authenticated, redirect to admin login
           navigate('/login?type=admin');
           return;
         }
 
         setAdmin(adminData);
 
-        // Load PIN statistics
         const pinStatsResult = await getPINStatistics();
         if (pinStatsResult.success && pinStatsResult.data) {
           setPinStats({
@@ -50,38 +56,24 @@ export default function AdminDashboard() {
           });
         }
         setPinStatsLoading(false);
+        setLastUpdated(new Date());
       } catch (error) {
         console.error('Error loading admin data:', error);
         navigate('/login?type=admin');
       } finally {
-        setIsLoading(false);
+        if (isRefresh) {
+          setIsRefreshing(false);
+        } else {
+          setIsLoading(false);
+        }
       }
-    };
+    },
+    [navigate]
+  );
 
+  useEffect(() => {
     loadAdminData();
-  }, [navigate]);
-
-  /**
-   * Handle logout
-   */
-  const handleLogout = async () => {
-    setIsLoggingOut(true);
-    try {
-      const result = await adminSignOut();
-      if (result.success) {
-        navigate('/login?type=admin');
-      } else {
-        console.error('Logout error:', result.error);
-        // Still redirect to login even if logout has an error
-        navigate('/login?type=admin');
-      }
-    } catch (error) {
-      console.error('Logout error:', error);
-      navigate('/login?type=admin');
-    } finally {
-      setIsLoggingOut(false);
-    }
-  };
+  }, [loadAdminData]);
 
   // Show loading state
   if (isLoading) {
@@ -101,85 +93,85 @@ export default function AdminDashboard() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Header */}
-      <div className="bg-white shadow">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 sm:py-4">
-          <div className="flex items-center justify-between">
-            <div>
-              <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">
-                Admin Dashboard
-              </h1>
-              <p className="mt-1 text-xs sm:text-sm text-gray-500">
-                StuMart - AANM VVRSR Polytechnic Gudlavalleru
-              </p>
-            </div>
-            <button
-              onClick={handleLogout}
-              disabled={isLoggingOut}
-              className="px-3 py-2 text-sm bg-red-600 text-white rounded-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-              {isLoggingOut ? 'Logging out...' : 'Logout'}
-            </button>
-          </div>
-        </div>
-      </div>
-
-      {/* Main Content */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
-        {/* Welcome Card */}
-        <div className="bg-white shadow rounded-lg p-4 sm:p-6 mb-4 sm:mb-6">
-          <h2 className="text-lg sm:text-xl font-semibold text-gray-900 mb-3 sm:mb-4">
-            Welcome, Admin!
+    <AdminLayout
+      title="Admin Dashboard"
+      subtitle="StuMart - AANM VVRSR Polytechnic Gudlavalleru"
+      lastUpdated={lastUpdated}
+      onRefresh={() => loadAdminData(true)}
+      isRefreshing={isRefreshing}
+    >
+      <div className="max-w-6xl mx-auto space-y-5 sm:space-y-6">
+        <div className="admin-card p-4 sm:p-6">
+          <h2 className="text-lg sm:text-xl font-semibold text-gray-900 mb-2">
+            Welcome, Admin
           </h2>
           <p className="text-sm sm:text-base text-gray-600">
-            This is your admin dashboard. Here you can manage student accounts, 
-            view registrations, and control the platform.
+            Review the latest listings, then check feedback and PIN status when needed.
+            Everything you need is in the navigation.
           </p>
         </div>
 
-        {/* PIN Statistics Section */}
-        <div className="bg-white shadow rounded-lg p-4 sm:p-6 mb-4 sm:mb-6">
-          <h2 className="text-lg sm:text-xl font-semibold text-gray-900 mb-3 sm:mb-4">
-            PIN Management Statistics
-          </h2>
-          <div className="grid grid-cols-1 gap-4 sm:gap-6 sm:grid-cols-2 lg:grid-cols-5">
-            <div className="bg-indigo-50 rounded-lg p-3 sm:p-4">
-              <p className="text-sm font-medium text-indigo-600">Total PINs</p>
-              <p className="text-2xl sm:text-3xl font-bold text-indigo-900 mt-2">
+        <div className="admin-card p-4 sm:p-6">
+          <h3 className="text-sm font-semibold text-gray-900">Quick Help</h3>
+          <ul className="mt-2 text-xs sm:text-sm text-gray-600 space-y-1">
+            <li>1) Review new products and hide anything incorrect.</li>
+            <li>2) Check feedback for issues that need a reply.</li>
+            <li>3) Use PINs to add, block, or verify students.</li>
+          </ul>
+        </div>
+
+        <div className="admin-card p-4 sm:p-6">
+          <div className="flex items-center justify-between mb-4">
+            <div>
+              <h2 className="text-lg sm:text-xl font-semibold text-gray-900">
+                PIN Management Stats
+              </h2>
+              <p className="text-xs sm:text-sm text-gray-500">Live status of student registrations.</p>
+            </div>
+            <div className="admin-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h10M4 18h6" />
+              </svg>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-5">
+            <div className="admin-stat">
+              <p className="text-xs uppercase tracking-wide text-gray-500">Total PINs</p>
+              <p className="text-2xl font-semibold text-gray-900 mt-2">
                 {pinStatsLoading ? '...' : pinStats.totalPINs}
               </p>
             </div>
-            <div className="bg-green-50 rounded-lg p-3 sm:p-4">
-              <p className="text-sm font-medium text-green-600">Available</p>
-              <p className="text-2xl sm:text-3xl font-bold text-green-900 mt-2">
+            <div className="admin-stat">
+              <p className="text-xs uppercase tracking-wide text-gray-500">Available</p>
+              <p className="text-2xl font-semibold text-emerald-600 mt-2">
                 {pinStatsLoading ? '...' : pinStats.availablePINs}
               </p>
             </div>
-            <div className="bg-blue-50 rounded-lg p-3 sm:p-4">
-              <p className="text-sm font-medium text-blue-600">Registered</p>
-              <p className="text-2xl sm:text-3xl font-bold text-blue-900 mt-2">
+            <div className="admin-stat">
+              <p className="text-xs uppercase tracking-wide text-gray-500">Registered</p>
+              <p className="text-2xl font-semibold text-sky-600 mt-2">
                 {pinStatsLoading ? '...' : pinStats.registeredPINs}
               </p>
             </div>
-            <div className="bg-purple-50 rounded-lg p-3 sm:p-4">
-              <p className="text-sm font-medium text-purple-600">Branches</p>
-              <p className="text-2xl sm:text-3xl font-bold text-purple-900 mt-2">
+            <div className="admin-stat">
+              <p className="text-xs uppercase tracking-wide text-gray-500">Branches</p>
+              <p className="text-2xl font-semibold text-gray-900 mt-2">
                 {pinStatsLoading ? '...' : pinStats.branchesCount}
               </p>
               {!pinStatsLoading && pinStats.branches.length > 0 && (
-                <p className="text-xs text-purple-600 mt-1">
+                <p className="text-xs text-gray-500 mt-2">
                   {pinStats.branches.join(', ')}
                 </p>
               )}
             </div>
-            <div className="bg-orange-50 rounded-lg p-3 sm:p-4">
-              <p className="text-sm font-medium text-orange-600">Sections</p>
-              <p className="text-2xl sm:text-3xl font-bold text-orange-900 mt-2">
+            <div className="admin-stat">
+              <p className="text-xs uppercase tracking-wide text-gray-500">Sections</p>
+              <p className="text-2xl font-semibold text-gray-900 mt-2">
                 {pinStatsLoading ? '...' : pinStats.sectionsCount}
               </p>
               {!pinStatsLoading && pinStats.sections.length > 0 && (
-                <p className="text-xs text-orange-600 mt-1">
+                <p className="text-xs text-gray-500 mt-2">
                   {pinStats.sections.slice(0, 5).join(', ')}
                   {pinStats.sections.length > 5 && ` +${pinStats.sections.length - 5} more`}
                 </p>
@@ -188,39 +180,8 @@ export default function AdminDashboard() {
           </div>
         </div>
 
-        {/* Quick Actions */}
-        <div className="bg-white shadow rounded-lg p-4 sm:p-6">
-          <h2 className="text-lg sm:text-xl font-semibold text-gray-900 mb-3 sm:mb-4">
-            Quick Actions
-          </h2>
-          <div className="grid grid-cols-1 gap-3 sm:gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            <button 
-              onClick={() => navigate('/admin/pin-management')}
-              className="p-3 sm:p-4 border-2 border-dashed border-gray-300 rounded-lg hover:border-indigo-500 hover:bg-indigo-50 transition-colors text-left"
-            >
-              <h3 className="font-medium text-gray-900">Manage PIN Numbers</h3>
-              <p className="text-xs sm:text-sm text-gray-500 mt-1">Create and manage student PIN numbers</p>
-            </button>
-           
-            <button
-              onClick={() => navigate('/admin/products')}
-              className="p-3 sm:p-4 border-2 border-dashed border-gray-300 rounded-lg hover:border-indigo-500 hover:bg-indigo-50 transition-colors text-left"
-            >
-              <h3 className="font-medium text-gray-900">View Products</h3>
-              <p className="text-xs sm:text-sm text-gray-500 mt-1">Monitor and moderate product listings</p>
-            </button>
-
-            <button
-              onClick={() => navigate('/admin/feedbacks')}
-              className="p-3 sm:p-4 border-2 border-dashed border-gray-300 rounded-lg hover:border-indigo-500 hover:bg-indigo-50 transition-colors text-left"
-            >
-              <h3 className="font-medium text-gray-900">Student Feedback</h3>
-              <p className="text-xs sm:text-sm text-gray-500 mt-1">Review submitted issues and suggestions</p>
-            </button>
-          </div>
-        </div>
       </div>
-    </div>
+    </AdminLayout>
   );
 }
 

@@ -1,8 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { getCurrentAdmin } from "../services/adminService";
 import { getAllProductsForAdmin, adminDeleteProduct } from "../services/productService";
 import { normalizeBranchCode } from "../utils/branchCodes";
+import useDebouncedValue from "../hooks/useDebouncedValue";
+import AdminLayout from "../components/admin/AdminLayout";
 
 export default function AdminProducts() {
   const navigate = useNavigate();
@@ -11,9 +13,16 @@ export default function AdminProducts() {
   const [products, setProducts] = useState([]);
   const [filteredProducts, setFilteredProducts] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
+  const debouncedSearch = useDebouncedValue(searchQuery, 250);
   const [isLoading, setIsLoading] = useState(true);
+  const [isRefreshing, setIsRefreshing] = useState(false);
+  const [lastUpdated, setLastUpdated] = useState(null);
   const [isFilterOpen, setIsFilterOpen] = useState(false);
   const [deletingId, setDeletingId] = useState(null);
+  const [loadError, setLoadError] = useState("");
+  const [notice, setNotice] = useState(null);
+  const [selectedProductIds, setSelectedProductIds] = useState([]);
+  const [isBulkProcessing, setIsBulkProcessing] = useState(false);
 
   /* ---------------- FILTER STATE ---------------- */
   const [selectedCategories, setSelectedCategories] = useState([]);
@@ -49,29 +58,56 @@ export default function AdminProducts() {
   ];
 
   /* ---------------- LOAD ADMIN + PRODUCTS ---------------- */
-  useEffect(() => {
-    const load = async () => {
-      const { admin } = await getCurrentAdmin();
-      if (!admin) {
-        navigate("/login?type=admin");
-        return;
+  const loadProducts = useCallback(
+    async (isRefresh = false) => {
+      if (isRefresh) {
+        setIsRefreshing(true);
+      } else {
+        setIsLoading(true);
       }
 
-      setAdmin(admin);
+      try {
+        const { admin } = await getCurrentAdmin();
+        if (!admin) {
+          navigate("/login?type=admin");
+          return;
+        }
 
-      const res = await getAllProductsForAdmin();
-      setProducts(res.data || []);
-      setIsLoading(false);
-    };
-    load();
-  }, [navigate]);
+        setAdmin(admin);
+
+        const res = await getAllProductsForAdmin();
+        if (!res.success) {
+          setLoadError(res.error || "Failed to load products");
+          setProducts([]);
+        } else {
+          setLoadError("");
+          setProducts(res.data || []);
+        }
+        setLastUpdated(new Date());
+      } catch (error) {
+        console.error("Error loading products:", error);
+        setLoadError("Failed to load products");
+      } finally {
+        if (isRefresh) {
+          setIsRefreshing(false);
+        } else {
+          setIsLoading(false);
+        }
+      }
+    },
+    [navigate]
+  );
+
+  useEffect(() => {
+    loadProducts();
+  }, [loadProducts]);
 
   /* ---------------- FILTER LOGIC ---------------- */
   useEffect(() => {
     let list = [...products];
 
-    if (searchQuery.trim()) {
-      const q = searchQuery.toLowerCase();
+    if (debouncedSearch.trim()) {
+      const q = debouncedSearch.toLowerCase();
       list = list.filter(
         p =>
           p.title?.toLowerCase().includes(q) ||
@@ -109,7 +145,7 @@ export default function AdminProducts() {
     setFilteredProducts(list);
   }, [
     products,
-    searchQuery,
+    debouncedSearch,
     selectedCategories,
     selectedBranches,
     selectedPriceRange,
@@ -125,16 +161,18 @@ export default function AdminProducts() {
     if (!window.confirm("This is permanent. Confirm delete.")) return;
 
     setDeletingId(id);
-    await adminDeleteProduct(id);
-    setProducts(prev =>
-      prev.map(p => (p.id === id ? { ...p, status: "inactive" } : p))
-    );
+    const result = await adminDeleteProduct(id);
+    if (result.success) {
+      setProducts(prev =>
+        prev.map(p => (p.id === id ? { ...p, status: "inactive" } : p))
+      );
+      setSelectedProductIds((prev) => prev.filter((itemId) => itemId !== id));
+      setNotice({ type: "success", message: "Product moved to inactive." });
+    } else {
+      setNotice({ type: "error", message: result.error || "Failed to delete product." });
+    }
     setDeletingId(null);
   };
-
-  if (isLoading) {
-    return <div className="p-10 text-center">Loading…</div>;
-  }
 
   /* ---------------- FILTER SIDEBAR ---------------- */
   const activeFilterCount =
@@ -150,12 +188,112 @@ export default function AdminProducts() {
     setShowFreeOnly(false);
   };
 
+  const clearSearch = () => setSearchQuery("");
+
+  const resetAll = () => {
+    clearAllFilters();
+    clearSearch();
+  };
+
+  const toggleSelectProduct = (productId) => {
+    setSelectedProductIds((prev) =>
+      prev.includes(productId)
+        ? prev.filter((id) => id !== productId)
+        : [...prev, productId]
+    );
+  };
+
+  const selectAllFiltered = () => {
+    setSelectedProductIds(filteredProducts.map((item) => item.id));
+  };
+
+  const clearSelection = () => setSelectedProductIds([]);
+
+  const handleBulkAction = async (mode) => {
+    if (selectedProductIds.length === 0) return;
+    const message =
+      mode === "delete"
+        ? "Delete selected products? (They will be marked inactive.)"
+        : "Hide selected products? (They will be marked inactive.)";
+    if (!window.confirm(message)) return;
+
+    setIsBulkProcessing(true);
+    let successCount = 0;
+    let failCount = 0;
+
+    for (const id of selectedProductIds) {
+      const result = await adminDeleteProduct(id);
+      if (result.success) {
+        successCount += 1;
+      } else {
+        failCount += 1;
+      }
+    }
+
+    if (successCount > 0) {
+      setProducts((prev) =>
+        prev.map((p) =>
+          selectedProductIds.includes(p.id) ? { ...p, status: "inactive" } : p
+        )
+      );
+    }
+
+    if (failCount > 0) {
+      setNotice({
+        type: "error",
+        message: `Updated ${successCount} item(s). ${failCount} failed.`,
+      });
+    } else {
+      setNotice({
+        type: "success",
+        message: `${successCount} item(s) updated.`,
+      });
+    }
+
+    setSelectedProductIds([]);
+    setIsBulkProcessing(false);
+  };
+
+  const hasAllFilteredSelected =
+    filteredProducts.length > 0 &&
+    filteredProducts.every((item) => selectedProductIds.includes(item.id));
+
+  useEffect(() => {
+    setSelectedProductIds((prev) =>
+      prev.filter((id) => filteredProducts.some((item) => item.id === id))
+    );
+  }, [filteredProducts]);
+
+  if (isLoading) {
+    return <div className="p-10 text-center">Loading…</div>;
+  }
+
+  const activeChips = [];
+  if (searchQuery.trim()) {
+    activeChips.push({ key: "search", label: `Search: ${searchQuery}` });
+  }
+  selectedCategories.forEach((value) => {
+    const label = categoryOptions.find((opt) => opt.value === value)?.label || value;
+    activeChips.push({ key: `cat-${value}`, label });
+  });
+  selectedBranches.forEach((value) => {
+    const label = branchOptions.find((opt) => opt.value === value)?.label || value;
+    activeChips.push({ key: `branch-${value}`, label });
+  });
+  if (selectedPriceRange !== "all") {
+    const label = priceOptions.find((opt) => opt.value === selectedPriceRange)?.label;
+    activeChips.push({ key: "price", label: label || selectedPriceRange });
+  }
+  if (showFreeOnly) {
+    activeChips.push({ key: "free", label: "Free only" });
+  }
+
   const FilterSidebar = ({ isMobile = false }) => (
     <div className="w-full lg:w-64 bg-white border rounded-lg">
       <div className="flex items-center justify-between p-4 border-b">
         <h3 className="font-semibold text-gray-900">Filters</h3>
         {isMobile && (
-          <button onClick={() => setIsFilterOpen(false)}>✕</button>
+          <button onClick={() => setIsFilterOpen(false)} aria-label="Close filters">✕</button>
         )}
       </div>
 
@@ -238,99 +376,205 @@ export default function AdminProducts() {
 
   /* ---------------- UI ---------------- */
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* SEARCH */}
-      <div className="bg-white p-3 sm:p-4 flex gap-2 sm:gap-3 items-center sticky top-0 z-10">
-        <button
-          onClick={() => navigate("/admin/dashboard")}
-          className="inline-flex items-center justify-center w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-gray-100 text-gray-700 hover:bg-gray-200"
-          aria-label="Back to dashboard"
-        >
-          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-          </svg>
-        </button>
-        <input
-          value={searchQuery}
-          onChange={e => setSearchQuery(e.target.value)}
-          placeholder="Search products…"
-          className="flex-1 border rounded px-3 py-2 text-sm sm:text-base"
-        />
-        <button
-          onClick={() => setIsFilterOpen(true)}
-          className="lg:hidden border px-3 py-2 rounded text-sm"
-        >
-          Filters {activeFilterCount > 0 && `(${activeFilterCount})`}
-        </button>
-      </div>
+    <AdminLayout
+      title="Products"
+      subtitle="Monitor, review, and moderate listings."
+      lastUpdated={lastUpdated}
+      onRefresh={() => loadProducts(true)}
+      isRefreshing={isRefreshing}
+    >
+      <div className="max-w-6xl mx-auto space-y-4">
+        {loadError && (
+          <div className="admin-alert admin-alert--error">{loadError}</div>
+        )}
+        {notice && (
+          <div
+            className={`admin-alert ${notice.type === "success" ? "admin-alert--success" : "admin-alert--error"}`}
+          >
+            {notice.message}
+          </div>
+        )}
 
-      <div className="flex gap-4 p-3 sm:p-4">
-        <div className="hidden lg:block">
-          <FilterSidebar />
+        <div className="admin-card p-3 sm:p-4 flex flex-col gap-3 admin-sticky-toolbar">
+          <div className="flex flex-col sm:flex-row sm:items-center gap-3">
+            <div className="flex-1">
+              <label className="text-xs uppercase tracking-wide text-gray-500">Search</label>
+              <div className="mt-2 flex items-center gap-2">
+                <input
+                  value={searchQuery}
+                  onChange={e => setSearchQuery(e.target.value)}
+                  placeholder="Search title, description, or PIN"
+                  className="w-full border rounded-lg px-3 py-2 text-sm"
+                />
+                <button
+                  onClick={() => setIsFilterOpen(true)}
+                  className="inline-flex items-center gap-2 border px-3 py-2 rounded-lg text-sm"
+                  aria-label="Open filters"
+                >
+                  <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M3 6h18M6 12h12M10 18h4" />
+                  </svg>
+                  <span className="hidden sm:inline">Filters</span>
+                  {activeFilterCount > 0 && (
+                    <span className="text-xs px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-700">
+                      {activeFilterCount}
+                    </span>
+                  )}
+                </button>
+              </div>
+            </div>
+            {(searchQuery || activeFilterCount > 0) && (
+              <button onClick={resetAll} className="admin-button admin-button--ghost">
+                Clear all
+              </button>
+            )}
+          </div>
+          {activeChips.length > 0 && (
+            <div className="flex flex-wrap gap-2">
+              {activeChips.map((chip) => (
+                <span key={chip.key} className="admin-chip">
+                  {chip.label}
+                </span>
+              ))}
+            </div>
+          )}
+          <div className="flex flex-wrap items-center gap-2 text-xs text-gray-500">
+            <span>Showing {filteredProducts.length} item(s)</span>
+            {filteredProducts.length > 0 && (
+              <button
+                type="button"
+                onClick={hasAllFilteredSelected ? clearSelection : selectAllFiltered}
+                className="admin-button admin-button--ghost"
+              >
+                {hasAllFilteredSelected ? "Clear selection" : "Select all"}
+              </button>
+            )}
+            {selectedProductIds.length > 0 && (
+              <div className="flex items-center gap-2">
+                <span>{selectedProductIds.length} selected</span>
+                <button
+                  type="button"
+                  onClick={() => handleBulkAction("hide")}
+                  disabled={isBulkProcessing}
+                  className="admin-button"
+                >
+                  Hide
+                </button>
+                <button
+                  type="button"
+                  onClick={() => handleBulkAction("delete")}
+                  disabled={isBulkProcessing}
+                  className="admin-button admin-button--ghost"
+                >
+                  Delete
+                </button>
+              </div>
+            )}
+          </div>
         </div>
 
-        {/* PRODUCTS GRID */}
-        <div className="flex-1 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4">
-          {filteredProducts.map(p => (
-            <div
-              key={p.id}
-              className="bg-white rounded shadow-sm overflow-hidden flex flex-col lg:rounded-md"
-            >
-              <div className="aspect-[4/3] lg:aspect-[16/9] bg-gray-100">
-                <img
-                  src={getImage(p.image_urls)}
-                  alt={p.title}
-                  className="w-full h-full object-cover"
-                />
-              </div>
+        <div className="flex gap-4">
+          <div className="hidden lg:block">
+            <FilterSidebar />
+          </div>
 
-              <div className="p-2 sm:p-3 lg:p-2 flex flex-col flex-1 space-y-2">
-                <Link
-                  to={`/admin/products/${p.id}`}
-                  className="font-semibold hover:text-indigo-600 text-xs sm:text-sm lg:text-[13px]"
-                >
-                  {p.title}
-                </Link>
-
-                <p className="text-xs sm:text-sm text-gray-600 lg:text-xs">
-                  {parseInt(p.price, 10) === 0 ? "FREE" : `₹ ${parseInt(p.price, 10)}`}
-                </p>
-
-                {/* PERFECTLY ALIGNED BUTTONS */}
-                <div className="grid grid-cols-2 gap-2 mt-auto">
-                  <Link
-                    to={`/admin/products/${p.id}`}
-                    className="h-8 sm:h-9 lg:h-8 flex items-center justify-center bg-indigo-600 text-white text-xs sm:text-sm lg:text-xs rounded"
-                  >
-                    View
-                  </Link>
-
-                  <button
-                    onClick={() => handleDelete(p.id)}
-                    disabled={deletingId === p.id}
-                    className="h-8 sm:h-9 lg:h-8 flex items-center justify-center bg-red-600 text-white text-xs sm:text-sm lg:text-xs rounded disabled:opacity-60"
-                  >
-                    Delete
+          <div className="flex-1">
+            {filteredProducts.length === 0 ? (
+              <div className="admin-card p-6 text-center text-sm text-gray-500">
+                No products match your filters.
+                <div className="mt-3 flex items-center justify-center gap-2">
+                  <button onClick={resetAll} className="admin-button">
+                    Reset filters
                   </button>
                 </div>
               </div>
-            </div>
-          ))}
-        </div>
-      </div>
+            ) : (
+              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4">
+                {filteredProducts.map(p => (
+                  <div
+                    key={p.id}
+                    className="admin-card overflow-hidden flex flex-col relative"
+                  >
+                    <div className="admin-select-wrap">
+                      <input
+                        type="checkbox"
+                        checked={selectedProductIds.includes(p.id)}
+                        onChange={() => toggleSelectProduct(p.id)}
+                        className="admin-select"
+                        aria-label={`Select ${p.title}`}
+                      />
+                    </div>
+                    <div className="admin-media-frame aspect-[4/3] lg:aspect-[16/9]">
+                      <img
+                        src={getImage(p.image_urls)}
+                        alt={p.title}
+                        className="admin-media-image"
+                        loading="lazy"
+                      />
+                    </div>
 
-      {/* MOBILE FILTER */}
-      {isFilterOpen && (
-        <>
-          <div
-            className="fixed inset-0 bg-black/40 z-40"
-            onClick={() => setIsFilterOpen(false)}
-          />
-          <div className="fixed left-0 top-0 bottom-0 w-72 bg-white z-50 overflow-y-auto">
-            <FilterSidebar isMobile />
+                    <div className="p-3 flex flex-col flex-1 space-y-2">
+                      <Link
+                        to={`/admin/products/${p.id}`}
+                        className="font-semibold hover:text-emerald-700 text-xs sm:text-sm"
+                      >
+                        {p.title}
+                      </Link>
+
+                      <p className="text-xs sm:text-sm text-gray-600">
+                        {parseInt(p.price, 10) === 0 ? "FREE" : `₹ ${parseInt(p.price, 10)}`}
+                      </p>
+
+                      <div className="grid grid-cols-2 gap-2 mt-auto">
+                        <Link
+                          to={`/admin/products/${p.id}`}
+                          className="h-9 flex items-center justify-center bg-emerald-600 text-white text-xs sm:text-sm rounded-lg"
+                        >
+                          View
+                        </Link>
+
+                        <button
+                          onClick={() => handleDelete(p.id)}
+                          disabled={deletingId === p.id}
+                          className="h-9 flex items-center justify-center bg-rose-600 text-white rounded-lg disabled:opacity-60"
+                          aria-label="Delete product"
+                          title="Delete"
+                        >
+                          {deletingId === p.id ? (
+                            <svg className="w-4 h-4 animate-spin" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                              <circle cx="12" cy="12" r="10" strokeOpacity="0.25" />
+                              <path strokeLinecap="round" strokeLinejoin="round" d="M22 12a10 10 0 0 1-10 10" />
+                            </svg>
+                          ) : (
+                            <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
+                              <path strokeLinecap="round" strokeLinejoin="round" d="M4 7h16" />
+                              <path strokeLinecap="round" strokeLinejoin="round" d="M9 7V5a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2" />
+                              <path strokeLinecap="round" strokeLinejoin="round" d="M6 7l1 12a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1l1-12" />
+                              <path strokeLinecap="round" strokeLinejoin="round" d="M10 11v6M14 11v6" />
+                            </svg>
+                          )}
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
-        </>
-      )}
-    </div>
+        </div>
+
+        {isFilterOpen && (
+          <>
+            <div
+              className="fixed inset-0 bg-black/40 z-40"
+              onClick={() => setIsFilterOpen(false)}
+            />
+            <div className="fixed left-0 top-0 bottom-0 w-72 bg-white z-50 overflow-y-auto">
+              <FilterSidebar isMobile />
+            </div>
+          </>
+        )}
+      </div>
+    </AdminLayout>
   );
 }

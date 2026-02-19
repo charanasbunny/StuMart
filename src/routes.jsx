@@ -72,11 +72,7 @@ export const publicRoutes = [
   { path: "/forgot-password", element: <ForgotPassword /> },
   {
     path: "/customer-feedback",
-    element: (
-      <ProtectedRoute>
-        <CustomerFeedback />
-      </ProtectedRoute>
-    ),
+    element: <CustomerFeedback />,
   },
 
 ];

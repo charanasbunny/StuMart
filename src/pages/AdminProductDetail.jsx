@@ -1,7 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { getCurrentAdmin } from '../services/adminService';
 import { getProductDetailForAdmin } from '../services/productService';
+import AdminLayout from '../components/admin/AdminLayout';
 
 export default function AdminProductDetail() {
   const navigate = useNavigate();
@@ -9,11 +10,17 @@ export default function AdminProductDetail() {
   const [admin, setAdmin] = useState(null);
   const [product, setProduct] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [isRefreshing, setIsRefreshing] = useState(false);
+  const [lastUpdated, setLastUpdated] = useState(null);
   const [error, setError] = useState(null);
 
-  useEffect(() => {
-    const loadProduct = async () => {
-      setIsLoading(true);
+  const loadProduct = useCallback(
+    async (isRefresh = false) => {
+      if (isRefresh) {
+        setIsRefreshing(true);
+      } else {
+        setIsLoading(true);
+      }
       setError(null);
 
       try {
@@ -30,15 +37,23 @@ export default function AdminProductDetail() {
         } else {
           setError(result.error || 'Failed to load product');
         }
+        setLastUpdated(new Date());
       } catch (err) {
         setError('Unexpected error');
       } finally {
-        setIsLoading(false);
+        if (isRefresh) {
+          setIsRefreshing(false);
+        } else {
+          setIsLoading(false);
+        }
       }
-    };
+    },
+    [id, navigate]
+  );
 
+  useEffect(() => {
     loadProduct();
-  }, [id, navigate]);
+  }, [loadProduct]);
 
   if (isLoading) {
     return (
@@ -60,61 +75,84 @@ export default function AdminProductDetail() {
     product.image_urls?.[0] ||
     'https://via.placeholder.com/500x400?text=No+Image';
 
+  const handleShare = async () => {
+    const shareData = {
+      title: product.title || 'StuMart Product',
+      text: product.title || 'Product details',
+      url: window.location.href,
+    };
+
+    try {
+      if (navigator.share) {
+        await navigator.share(shareData);
+        return;
+      }
+      if (navigator.clipboard?.writeText) {
+        await navigator.clipboard.writeText(shareData.url);
+        alert('Link copied to clipboard.');
+      }
+    } catch (err) {
+      console.error('Share failed:', err);
+      alert('Unable to share right now.');
+    }
+  };
+
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Header */}
-      <div className="bg-white border-b">
-        <div className="max-w-6xl mx-auto px-4 py-3 sm:py-4 flex items-center gap-3">
-          <button
-            onClick={() => navigate('/admin/products')}
-            className="inline-flex items-center justify-center w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-gray-100 text-gray-700 hover:bg-gray-200 shadow-sm"
-            aria-label="Back to products"
-          >
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-            </svg>
-          </button>
-          <div>
-            <h1 className="text-xl sm:text-2xl font-bold text-gray-900">Product Detail</h1>
-          </div>
-        </div>
-      </div>
-
-      {/* Content */}
-      <div className="max-w-6xl mx-auto px-4 py-6 sm:py-8">
-        <div className="bg-white rounded-xl shadow p-4 sm:p-6 grid grid-cols-1 lg:grid-cols-3 gap-6">
-
-          {/* Image */}
+    <AdminLayout
+      title="Product Detail"
+      subtitle="Review listing information and seller details."
+      backTo="/admin/products"
+      lastUpdated={lastUpdated}
+      onRefresh={() => loadProduct(true)}
+      isRefreshing={isRefreshing}
+    >
+      <div className="max-w-6xl mx-auto space-y-4">
+        <div className="admin-card p-4 sm:p-6 grid grid-cols-1 lg:grid-cols-3 gap-6">
           <div className="lg:col-span-1">
-            <div className="aspect-[4/3] bg-gray-100 rounded-lg overflow-hidden">
+            <div className="admin-media-frame aspect-[4/3]">
               <img
                 src={image}
                 alt={product.title}
-                className="w-full h-full object-contain"
+                className="admin-media-image"
+                loading="lazy"
               />
             </div>
           </div>
 
-          {/* Info */}
           <div className="lg:col-span-2 space-y-4">
-            <div>
-              <h2 className="text-xl font-semibold text-gray-900">
-                {product.title}
-              </h2>
-              <p className="text-sm text-gray-500 mt-1">
-                Category: {product.category || 'N/A'}
-              </p>
+            <div className="flex items-start justify-between gap-3">
+              <div>
+                <h2 className="text-xl font-semibold text-gray-900">
+                  {product.title}
+                </h2>
+                <p className="text-sm text-gray-500 mt-1">
+                  Category: {product.category || 'N/A'}
+                </p>
+              </div>
+              <button
+                type="button"
+                onClick={handleShare}
+                className="admin-button admin-button--ghost"
+                aria-label="Share product"
+              >
+                <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M4 12v7a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-7" />
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M12 16V5" />
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M8 9l4-4 4 4" />
+                </svg>
+                Share
+              </button>
             </div>
 
             <div className="flex flex-wrap gap-4">
-              <div className="bg-gray-50 px-4 py-2 rounded-md">
+              <div className="admin-soft-card px-4 py-2">
                 <p className="text-xs text-gray-500">Price</p>
-                <p className="font-semibold text-indigo-600">
+                <p className="font-semibold text-emerald-600">
                   {parseInt(product.price, 10) === 0 ? 'FREE' : `₹ ${parseInt(product.price, 10)}`}
                 </p>
               </div>
 
-              <div className="bg-gray-50 px-4 py-2 rounded-md">
+              <div className="admin-soft-card px-4 py-2">
                 <p className="text-xs text-gray-500">Status</p>
                 <p className="font-semibold">
                   {product.status || 'Active'}
@@ -141,8 +179,7 @@ export default function AdminProductDetail() {
           </div>
         </div>
 
-        {/* Description */}
-        <div className="bg-white rounded-xl shadow p-4 sm:p-6 mt-4 sm:mt-6">
+        <div className="admin-card p-4 sm:p-6">
           <h3 className="text-lg font-semibold text-gray-900 mb-2">
             Description
           </h3>
@@ -151,6 +188,6 @@ export default function AdminProductDetail() {
           </p>
         </div>
       </div>
-    </div>
+    </AdminLayout>
   );
 }

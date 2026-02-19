@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router';
 import { getCurrentAdmin } from '../services/adminService';
 import { 
@@ -10,10 +10,14 @@ import {
   getPINStatistics 
 } from '../services/pinService';
 import { formatPinNumber, normalizeBranchCode } from '../utils/branchCodes';
+import useDebouncedValue from '../hooks/useDebouncedValue';
+import AdminLayout from '../components/admin/AdminLayout';
 
 export default function AdminPINManagement() {
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(true);
+  const [isRefreshing, setIsRefreshing] = useState(false);
+  const [lastUpdated, setLastUpdated] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [activeTab, setActiveTab] = useState('create'); // 'create' or 'manage'
 
@@ -40,6 +44,10 @@ export default function AdminPINManagement() {
     status: '',
   });
   const [selectedPINs, setSelectedPINs] = useState([]);
+  const [pinSearch, setPinSearch] = useState('');
+  const debouncedPinSearch = useDebouncedValue(pinSearch, 250);
+  const [pinPage, setPinPage] = useState(1);
+  const pinPageSize = 15;
 
   // Statistics
   const [stats, setStats] = useState({
@@ -80,43 +88,56 @@ export default function AdminPINManagement() {
   ];
 
   // Check admin authentication
-  useEffect(() => {
-    const checkAdmin = async () => {
-      const { admin, error } = await getCurrentAdmin();
-      if (error || !admin) {
-        navigate('/login?type=admin');
-      } else {
-        setIsLoading(false);
-        loadStatistics();
-        if (activeTab === 'manage') {
-          loadPINs();
-        }
-      }
-    };
-    checkAdmin();
-  }, [navigate]);
-
-  // Load PINs when filters change or tab changes
-  useEffect(() => {
-    if (activeTab === 'manage') {
-      loadPINs();
-    }
-  }, [filters, activeTab]);
-
-  const loadStatistics = async () => {
+  const loadStatistics = useCallback(async () => {
     const result = await getPINStatistics();
     if (result.success && result.data) {
       setStats(result.data);
     }
-  };
+    return result;
+  }, []);
 
-  const loadPINs = async () => {
+  const loadPINs = useCallback(async () => {
     setLoadingPINs(true);
     const result = await getAllPINs(filters);
     if (result.success) {
       setAllPINs(result.data || []);
     }
     setLoadingPINs(false);
+    return result;
+  }, [filters]);
+
+  useEffect(() => {
+    const checkAdmin = async () => {
+      const { admin, error } = await getCurrentAdmin();
+      if (error || !admin) {
+        navigate('/login?type=admin');
+      } else {
+        await loadStatistics();
+        if (activeTab === 'manage') {
+          await loadPINs();
+        }
+        setLastUpdated(new Date());
+        setIsLoading(false);
+      }
+    };
+    checkAdmin();
+  }, [navigate, loadStatistics, loadPINs, activeTab]);
+
+  // Load PINs when filters change or tab changes
+  useEffect(() => {
+    if (activeTab === 'manage') {
+      loadPINs();
+    }
+  }, [filters, activeTab, loadPINs]);
+
+  const handleRefresh = async () => {
+    setIsRefreshing(true);
+    await loadStatistics();
+    if (activeTab === 'manage') {
+      await loadPINs();
+    }
+    setLastUpdated(new Date());
+    setIsRefreshing(false);
   };
 
   const handleChange = (e) => {
@@ -130,7 +151,12 @@ export default function AdminPINManagement() {
     const { name, value } = e.target;
     setFilters((prev) => ({ ...prev, [name]: value }));
     setSelectedPINs([]);
+    setPinPage(1);
   };
+
+  useEffect(() => {
+    setPinPage(1);
+  }, [debouncedPinSearch]);
 
   const validateForm = () => {
     const newErrors = {};
@@ -337,10 +363,14 @@ export default function AdminPINManagement() {
   };
 
   const handleSelectAll = () => {
-    if (selectedPINs.length === allPINs.length) {
-      setSelectedPINs([]);
+    const filteredIds = filteredPINs.map((pin) => pin.pin_number);
+    const hasAllFiltered =
+      filteredIds.length > 0 && filteredIds.every((id) => selectedPINs.includes(id));
+
+    if (hasAllFiltered) {
+      setSelectedPINs((prev) => prev.filter((id) => !filteredIds.includes(id)));
     } else {
-      setSelectedPINs(allPINs.map((pin) => pin.pin_number));
+      setSelectedPINs((prev) => Array.from(new Set([...prev, ...filteredIds])));
     }
   };
 
@@ -395,6 +425,31 @@ export default function AdminPINManagement() {
     }
   };
 
+  const filteredPINs = allPINs.filter((pin) => {
+    if (!debouncedPinSearch.trim()) return true;
+    const q = debouncedPinSearch.toLowerCase();
+    return (
+      pin.pin_number?.toLowerCase().includes(q) ||
+      normalizeBranchCode(pin.branch)?.toLowerCase().includes(q) ||
+      String(pin.year || '').toLowerCase().includes(q) ||
+      pin.section?.toLowerCase().includes(q) ||
+      pin.status?.toLowerCase().includes(q)
+    );
+  });
+
+  const totalPinPages = Math.max(1, Math.ceil(filteredPINs.length / pinPageSize));
+  const clampedPinPage = Math.min(pinPage, totalPinPages);
+  const pagedPINs = filteredPINs.slice(
+    (clampedPinPage - 1) * pinPageSize,
+    clampedPinPage * pinPageSize
+  );
+
+  useEffect(() => {
+    if (pinPage > totalPinPages) {
+      setPinPage(totalPinPages);
+    }
+  }, [pinPage, totalPinPages]);
+
   if (isLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-50">
@@ -407,61 +462,45 @@ export default function AdminPINManagement() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Header */}
-      <div className="bg-white shadow">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 sm:py-4">
-          <div className="flex items-center justify-between">
-            <div>
-              <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">PIN Management</h1>
-              <p className="mt-1 text-xs sm:text-sm text-gray-500">
-                Create and manage student PIN numbers
-              </p>
-            </div>
-            <button
-              onClick={() => navigate('/admin/dashboard')}
-              className="px-3 py-2 text-sm bg-gray-600 text-white rounded-md hover:bg-gray-700"
-            >
-              Back to Dashboard
-            </button>
-          </div>
-        </div>
-      </div>
-
-      {/* Statistics */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6">
-        <div className="grid grid-cols-2 gap-3 sm:gap-4 sm:grid-cols-5 mb-4 sm:mb-6">
-          <div className="bg-white rounded-lg p-3 sm:p-4 shadow">
-            <p className="text-sm text-gray-600">Total PINs</p>
+    <AdminLayout
+      title="PIN Management"
+      subtitle="Create and manage student PIN numbers."
+      lastUpdated={lastUpdated}
+      onRefresh={handleRefresh}
+      isRefreshing={isRefreshing}
+    >
+      <div className="max-w-6xl mx-auto space-y-4">
+        <div className="grid grid-cols-2 gap-3 sm:gap-4 sm:grid-cols-5">
+          <div className="admin-stat">
+            <p className="text-xs uppercase tracking-wide text-gray-500">Total PINs</p>
             <p className="text-xl sm:text-2xl font-bold text-gray-900">{stats.totalPINs}</p>
           </div>
-          <div className="bg-white rounded-lg p-3 sm:p-4 shadow">
-            <p className="text-sm text-gray-600">Available</p>
-            <p className="text-xl sm:text-2xl font-bold text-green-600">{stats.availablePINs}</p>
+          <div className="admin-stat">
+            <p className="text-xs uppercase tracking-wide text-gray-500">Available</p>
+            <p className="text-xl sm:text-2xl font-bold text-emerald-600">{stats.availablePINs}</p>
           </div>
-          <div className="bg-white rounded-lg p-3 sm:p-4 shadow">
-            <p className="text-sm text-gray-600">Registered</p>
-            <p className="text-xl sm:text-2xl font-bold text-blue-600">{stats.registeredPINs}</p>
+          <div className="admin-stat">
+            <p className="text-xs uppercase tracking-wide text-gray-500">Registered</p>
+            <p className="text-xl sm:text-2xl font-bold text-sky-600">{stats.registeredPINs}</p>
           </div>
-          <div className="bg-white rounded-lg p-3 sm:p-4 shadow">
-            <p className="text-sm text-gray-600">Branches</p>
-            <p className="text-xl sm:text-2xl font-bold text-purple-600">{stats.branchesCount}</p>
+          <div className="admin-stat">
+            <p className="text-xs uppercase tracking-wide text-gray-500">Branches</p>
+            <p className="text-xl sm:text-2xl font-bold text-gray-900">{stats.branchesCount}</p>
           </div>
-          <div className="bg-white rounded-lg p-3 sm:p-4 shadow">
-            <p className="text-sm text-gray-600">Sections</p>
-            <p className="text-xl sm:text-2xl font-bold text-orange-600">{stats.sectionsCount}</p>
+          <div className="admin-stat">
+            <p className="text-xs uppercase tracking-wide text-gray-500">Sections</p>
+            <p className="text-xl sm:text-2xl font-bold text-gray-900">{stats.sectionsCount}</p>
           </div>
         </div>
 
-        {/* Tabs */}
-        <div className="bg-white shadow rounded-lg mb-6">
+        <div className="admin-card">
           <div className="border-b border-gray-200">
             <nav className="flex -mb-px">
               <button
                 onClick={() => setActiveTab('create')}
                 className={`px-3 sm:px-6 py-3 sm:py-4 text-sm font-medium border-b-2 ${
                   activeTab === 'create'
-                    ? 'border-indigo-500 text-indigo-600'
+                    ? 'border-emerald-600 text-emerald-700'
                     : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
                 }`}
               >
@@ -474,7 +513,7 @@ export default function AdminPINManagement() {
                 }}
                 className={`px-3 sm:px-6 py-3 sm:py-4 text-sm font-medium border-b-2 ${
                   activeTab === 'manage'
-                    ? 'border-indigo-500 text-indigo-600'
+                    ? 'border-emerald-600 text-emerald-700'
                     : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
                 }`}
               >
@@ -486,7 +525,7 @@ export default function AdminPINManagement() {
 
         {/* Create PIN Tab */}
         {activeTab === 'create' && (
-          <div className="bg-white shadow rounded-lg p-4 sm:p-6 md:p-8">
+          <div className="admin-card p-4 sm:p-6 md:p-8">
             <h2 className="text-xl sm:text-2xl font-semibold text-gray-900 mb-4 sm:mb-6">
               Create PIN Numbers
             </h2>
@@ -732,14 +771,14 @@ export default function AdminPINManagement() {
                 <button
                   type="button"
                   onClick={() => navigate('/admin/dashboard')}
-                  className="w-full sm:w-auto px-4 sm:px-6 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50"
+                  className="admin-button admin-button--ghost w-full sm:w-auto"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="w-full sm:w-auto px-4 sm:px-6 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="admin-button w-full sm:w-auto disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   {isSubmitting ? 'Creating PINs...' : 'Create PINs'}
                 </button>
@@ -750,7 +789,7 @@ export default function AdminPINManagement() {
 
         {/* Manage PINs Tab */}
         {activeTab === 'manage' && (
-          <div className="bg-white shadow rounded-lg p-4 sm:p-6">
+          <div className="admin-card p-4 sm:p-6">
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-4 sm:mb-6">
               <h2 className="text-xl sm:text-2xl font-semibold text-gray-900">
                 Manage PIN Numbers
@@ -766,7 +805,7 @@ export default function AdminPINManagement() {
             </div>
 
             {/* Filters */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3 sm:gap-4 mb-4 sm:mb-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-3 sm:gap-4 mb-4 sm:mb-6">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
                   Joining Year
@@ -848,6 +887,17 @@ export default function AdminPINManagement() {
                   ))}
                 </select>
               </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Search
+                </label>
+                <input
+                  value={pinSearch}
+                  onChange={(event) => setPinSearch(event.target.value)}
+                  placeholder="PIN, branch, section..."
+                  className="w-full px-3 sm:px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500"
+                />
+              </div>
             </div>
 
             {/* PINs Table */}
@@ -856,7 +906,7 @@ export default function AdminPINManagement() {
                 <div className="inline-block animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-indigo-600"></div>
                 <p className="mt-4 text-gray-600">Loading PINs...</p>
               </div>
-            ) : allPINs.length === 0 ? (
+            ) : filteredPINs.length === 0 ? (
               <div className="text-center py-8 sm:py-12">
                 <p className="text-gray-500">No PINs found matching your filters.</p>
               </div>
@@ -868,7 +918,10 @@ export default function AdminPINManagement() {
                       <th className="px-3 py-2 sm:px-4 sm:py-3 text-left">
                         <input
                           type="checkbox"
-                          checked={selectedPINs.length === allPINs.length && allPINs.length > 0}
+                          checked={
+                            filteredPINs.length > 0 &&
+                            filteredPINs.every((pin) => selectedPINs.includes(pin.pin_number))
+                          }
                           onChange={handleSelectAll}
                           className="rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
                         />
@@ -897,7 +950,7 @@ export default function AdminPINManagement() {
                     </tr>
                   </thead>
                   <tbody className="bg-white divide-y divide-gray-200">
-                    {allPINs.map((pin) => (
+                    {pagedPINs.map((pin) => (
                       <tr key={pin.pin_number} className="hover:bg-gray-50">
                         <td className="px-3 py-2 sm:px-4 sm:py-4 whitespace-nowrap">
                           <input
@@ -938,9 +991,16 @@ export default function AdminPINManagement() {
                         <td className="px-3 py-2 sm:px-4 sm:py-4 whitespace-nowrap text-xs sm:text-sm">
                           <button
                             onClick={() => handleDeletePIN(pin.pin_number)}
-                            className="text-red-600 hover:text-red-900 font-medium"
+                            className="h-8 w-8 inline-flex items-center justify-center rounded border border-red-200 text-red-600 hover:bg-red-50"
+                            aria-label="Delete PIN"
+                            title="Delete"
                           >
-                            Delete
+                            <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
+                              <path strokeLinecap="round" strokeLinejoin="round" d="M4 7h16" />
+                              <path strokeLinecap="round" strokeLinejoin="round" d="M9 7V5a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2" />
+                              <path strokeLinecap="round" strokeLinejoin="round" d="M6 7l1 12a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1l1-12" />
+                              <path strokeLinecap="round" strokeLinejoin="round" d="M10 11v6M14 11v6" />
+                            </svg>
                           </button>
                         </td>
                       </tr>
@@ -963,15 +1023,36 @@ export default function AdminPINManagement() {
             )}
 
             {/* Results Count */}
-            {!loadingPINs && (
-              <div className="mt-4 text-xs sm:text-sm text-gray-600">
-                Showing {allPINs.length} PIN(s)
-                {selectedPINs.length > 0 && ` (${selectedPINs.length} selected)`}
+            {!loadingPINs && filteredPINs.length > 0 && (
+              <div className="mt-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 text-xs sm:text-sm text-gray-600">
+                <span>
+                  Showing {pagedPINs.length} of {filteredPINs.length} PIN(s)
+                  {selectedPINs.length > 0 && ` (${selectedPINs.length} selected)`}
+                </span>
+                <div className="flex items-center gap-2">
+                  <button
+                    onClick={() => setPinPage((prev) => Math.max(1, prev - 1))}
+                    disabled={clampedPinPage === 1}
+                    className="admin-button admin-button--ghost"
+                  >
+                    Prev
+                  </button>
+                  <button
+                    onClick={() => setPinPage((prev) => Math.min(totalPinPages, prev + 1))}
+                    disabled={clampedPinPage === totalPinPages}
+                    className="admin-button"
+                  >
+                    Next
+                  </button>
+                  <span className="text-xs text-gray-500">
+                    Page {clampedPinPage} of {totalPinPages}
+                  </span>
+                </div>
               </div>
             )}
           </div>
         )}
       </div>
-    </div>
+    </AdminLayout>
   );
 }
