@@ -258,20 +258,23 @@
   position: absolute;
   top: 50%;
   left: 50%;
-  transform: translate(-50%, -50%);
-  width: 44px;
-  height: 44px;
+  transform: translate(-50%, -50%) translateY(12px);
+  width: 56px;
+  height: 56px;
   z-index: 2;
 }
 
 .radial-menu__button {
   position: relative;
-  width: 44px;
-  height: 44px;
+  width: 56px;
+  height: 56px;
   border-radius: 999px;
   background: linear-gradient(135deg, rgba(99, 102, 241, 0.95), rgba(139, 92, 246, 0.95));
-  box-shadow: 0 12px 22px rgba(15, 23, 42, 0.28), 0 6px 14px rgba(99, 102, 241, 0.28);
-  border: 1px solid rgba(255, 255, 255, 0.6);
+  box-shadow:
+    0 14px 26px rgba(15, 23, 42, 0.24),
+    0 10px 22px rgba(99, 102, 241, 0.35),
+    inset 0 1px 0 rgba(255, 255, 255, 0.75);
+  border: 1px solid rgba(255, 255, 255, 0.65);
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -292,18 +295,47 @@
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%) scale(0.2);
-  width: 36px;
-  height: 36px;
+  width: 46px;
+  height: 46px;
   border-radius: 999px;
-  background: linear-gradient(135deg, #0f172a, #1f2937);
+  background: var(--radial-fill, linear-gradient(135deg, #0f172a, #1f2937));
   color: #fff;
-  border: 1px solid rgba(255, 255, 255, 0.55);
-  box-shadow: 0 12px 20px rgba(15, 23, 42, 0.28), 0 6px 14px rgba(99, 102, 241, 0.22);
+  border: 1px solid rgba(255, 255, 255, 0.65);
+  box-shadow:
+    0 12px 22px rgba(15, 23, 42, 0.2),
+    0 10px 20px rgba(var(--radial-glow, 99 102 241) / 0.35),
+    inset 0 1px 0 rgba(255, 255, 255, 0.75);
   display: inline-flex;
   align-items: center;
   justify-content: center;
   opacity: 0;
   transition: transform 220ms ease, opacity 220ms ease;
+  overflow: hidden;
+}
+
+.radial-menu__item::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 999px;
+  background:
+    radial-gradient(
+      120% 120% at 18% 12%,
+      rgba(255, 255, 255, 0.9),
+      rgba(255, 255, 255, 0) 58%
+    ),
+    radial-gradient(
+      130% 130% at 85% 88%,
+      rgba(var(--radial-glow, 99 102 241) / 0.4),
+      rgba(var(--radial-glow, 99 102 241) / 0) 60%
+    );
+  opacity: 0.85;
+  pointer-events: none;
+}
+
+.radial-menu__item > * {
+  position: relative;
+  z-index: 1;
 }
 
 .radial-menu.is-open .radial-menu__items {
@@ -326,31 +358,27 @@
 }
 
 .radial-menu__item--like {
-  color: #fff;
-  background: linear-gradient(135deg, #fb7185, #f43f5e);
-  border-color: rgba(244, 63, 94, 0.55);
-  box-shadow: 0 12px 20px rgba(15, 23, 42, 0.2), 0 6px 16px rgba(244, 63, 94, 0.45);
+  --radial-glow: 244 63 94;
+  --radial-fill: linear-gradient(135deg, #f43f5e, #fb7185);
 }
 
 .radial-menu__item--share {
-  color: #fff;
-  background: linear-gradient(135deg, #34d399, #22c55e);
-  border-color: rgba(34, 197, 94, 0.55);
-  box-shadow: 0 12px 20px rgba(15, 23, 42, 0.2), 0 6px 16px rgba(34, 197, 94, 0.45);
+  --radial-glow: 16 185 129;
+  --radial-fill: linear-gradient(135deg, #10b981, #22c55e);
 }
 
 .radial-menu__item--details {
-  color: #fff;
-  background: linear-gradient(135deg, #60a5fa, #3b82f6);
-  border-color: rgba(59, 130, 246, 0.55);
-  box-shadow: 0 12px 20px rgba(15, 23, 42, 0.2), 0 6px 16px rgba(59, 130, 246, 0.45);
+  --radial-glow: 79 70 229;
+  --radial-fill: linear-gradient(135deg, #6366f1, #8b5cf6);
 }
 
 .radial-menu__item--like.is-active {
   background: linear-gradient(135deg, #0f172a, #111827);
   color: #f43f5e;
   border-color: rgba(244, 63, 94, 0.75);
-  box-shadow: 0 12px 20px rgba(15, 23, 42, 0.25), 0 6px 18px rgba(244, 63, 94, 0.6);
+  box-shadow:
+    0 12px 22px rgba(15, 23, 42, 0.24),
+    0 10px 22px rgba(244, 63, 94, 0.55);
 }
 
 /* Remove number input spinner arrows */
@@ -692,6 +720,36 @@ input[type="number"] {
   color: #0f766e;
   background: rgba(15, 118, 110, 0.12);
   font-weight: 600;
+}
+
+@media (max-width: 640px) {
+  .admin-nav-mobile {
+    display: flex;
+    gap: 8px;
+    padding: 6px 12px 10px;
+    margin: 0 12px 10px;
+    border-radius: 14px;
+    border: 1px solid rgba(148, 163, 184, 0.25);
+    background: rgba(255, 255, 255, 0.65);
+    box-shadow: 0 10px 18px rgba(15, 23, 42, 0.06);
+    overflow-x: auto;
+  }
+
+  .admin-nav-pill {
+    flex-direction: row;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 10px;
+    border-radius: 999px;
+    font-size: 12px;
+    background: rgba(255, 255, 255, 0.9);
+    box-shadow: 0 6px 12px rgba(15, 23, 42, 0.06);
+  }
+
+  .admin-nav-pill .admin-nav-icon {
+    width: 16px;
+    height: 16px;
+  }
 }
 
 .admin-content {

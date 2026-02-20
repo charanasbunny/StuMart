@@ -10,6 +10,14 @@ export default function FeaturedProduct({ product, index, currentIndex }) {
   const imageWrapperRef = useRef(null);
   const lastTouchRef = useRef(0);
   const productId = String(product.id);
+  const menuOffsetY = 6;
+  const menuRadii = {
+    like: 64,
+    share: 72,
+    details: 64,
+  };
+  const hitAngleTolerance = 28;
+  const hitRadiusTolerance = 26;
 
   const isRecentTouch = () => Date.now() - lastTouchRef.current < 450;
 
@@ -107,8 +115,6 @@ export default function FeaturedProduct({ product, index, currentIndex }) {
       <div
         className="relative h-48 bg-gray-100 flex items-center justify-center"
         ref={imageWrapperRef}
-        onMouseEnter={() => setIsMenuOpen(true)}
-        onMouseLeave={() => setIsMenuOpen(false)}
         onTouchEnd={(e) => {
           lastTouchRef.current = Date.now();
           const touch = e.changedTouches?.[0];
@@ -116,7 +122,7 @@ export default function FeaturedProduct({ product, index, currentIndex }) {
           if (!touch || !rect) return;
 
           const centerX = rect.left + rect.width / 2;
-          const centerY = rect.top + rect.height / 2;
+          const centerY = rect.top + rect.height / 2 + menuOffsetY;
           const dx = touch.clientX - centerX;
           const dy = touch.clientY - centerY;
           const distance = Math.hypot(dx, dy);
@@ -124,9 +130,9 @@ export default function FeaturedProduct({ product, index, currentIndex }) {
           const angleFromTop = ((rawAngle + 90 + 180) % 360) - 180;
 
           const targets = [
-            { angle: -50, radius: 54, action: () => handleToggleLike() },
-            { angle: 0, radius: 62, action: () => handleShare() },
-            { angle: 50, radius: 54, action: () => navigate(`/products/${product.id}`) },
+            { angle: -50, radius: menuRadii.like, action: () => handleToggleLike() },
+            { angle: 0, radius: menuRadii.share, action: () => handleShare() },
+            { angle: 50, radius: menuRadii.details, action: () => navigate(`/products/${product.id}`) },
           ];
 
           const hit = targets.find((target) => {
@@ -134,7 +140,7 @@ export default function FeaturedProduct({ product, index, currentIndex }) {
               (((angleFromTop - target.angle + 180) % 360) - 180),
             );
             const radiusDiff = Math.abs(distance - target.radius);
-            return angleDiff <= 20 && radiusDiff <= 18;
+            return angleDiff <= hitAngleTolerance && radiusDiff <= hitRadiusTolerance;
           });
 
           if (hit) {
@@ -167,11 +173,11 @@ export default function FeaturedProduct({ product, index, currentIndex }) {
             <button
               type="button"
               className={`radial-menu__item radial-menu__item--like ${isLiked ? "is-active" : ""}`}
-              style={{ "--angle": "-50deg", "--radius": "54px" }}
+              style={{ "--angle": "-50deg", "--radius": `${menuRadii.like}px` }}
               onClick={handleToggleLike}
               aria-label={isLiked ? "Unlike" : "Like"}
             >
-              <svg className="w-4 h-4" fill={isLiked ? "currentColor" : "none"} stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="w-5 h-5" fill={isLiked ? "currentColor" : "none"} stroke="currentColor" viewBox="0 0 24 24">
                 <path
                   strokeLinecap="round"
                   strokeLinejoin="round"
@@ -183,11 +189,11 @@ export default function FeaturedProduct({ product, index, currentIndex }) {
             <button
               type="button"
               className="radial-menu__item radial-menu__item--share"
-              style={{ "--angle": "0deg", "--radius": "62px" }}
+              style={{ "--angle": "0deg", "--radius": `${menuRadii.share}px` }}
               onClick={handleShare}
               aria-label="Share"
             >
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path
                   strokeLinecap="round"
                   strokeLinejoin="round"
@@ -205,14 +211,14 @@ export default function FeaturedProduct({ product, index, currentIndex }) {
             <button
               type="button"
               className="radial-menu__item radial-menu__item--details"
-              style={{ "--angle": "50deg", "--radius": "54px" }}
+              style={{ "--angle": "50deg", "--radius": `${menuRadii.details}px` }}
               onClick={(e) => {
                 e.stopPropagation();
                 navigate(`/products/${product.id}`);
               }}
               aria-label="View details"
             >
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path
                   strokeLinecap="round"
                   strokeLinejoin="round"
