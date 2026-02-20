@@ -1,18 +1,37 @@
+import { useState } from "react";
 import { Link } from "react-router";
+import ImageLightbox from "../ui/ImageLightbox";
 
 export default function Footer() {
+  const [isLogoLightboxOpen, setIsLogoLightboxOpen] = useState(false);
+
   return (
     <footer className="w-full bg-gradient-to-r from-blue-900 via-purple-800 to-purple-900">
       <div className="w-full py-5 md:py-6 lg:py-8 px-5 md:px-8 lg:px-12 max-w-7xl mx-auto">
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-5 md:gap-8">
           {/* Heading and Text - Left */}
           <div className="flex flex-col justify-start flex-1 text-center md:text-left">
-            <h2 className="text-base md:text-xl font-semibold text-white mb-1 tracking-wide">
-              Built for Students, by Students
-            </h2>
-            <p className="text-[11px] md:text-sm text-blue-100/90 leading-snug">
-              Sell your extra items now.
-            </p>
+            <div className="flex flex-col items-center md:items-start justify-center md:justify-start gap-3">
+              <button
+                type="button"
+                onClick={() => setIsLogoLightboxOpen(true)}
+                aria-label="Open logo"
+              >
+                <img
+                  src="/newlogo.jpeg"
+                  alt="StuMart Logo"
+                  className="h-[52px] w-[52px] md:h-[64px] md:w-[64px] object-contain"
+                />
+              </button>
+              <div>
+                <h2 className="text-base md:text-xl font-semibold text-white mb-1 tracking-wide">
+                  Built for Students, by Students
+                </h2>
+                <p className="text-[11px] md:text-sm text-blue-100/90 leading-snug">
+                  Sell your extra items now.
+                </p>
+              </div>
+            </div>
           </div>
 
           {/* Support & Follow Us - Right */}
@@ -77,6 +96,13 @@ export default function Footer() {
           © Designed by 2023 CME batch students · GVL Polytechnic
         </div>
       </div>
+
+      <ImageLightbox
+        src="/newlogo.jpeg"
+        alt="StuMart Logo"
+        isOpen={isLogoLightboxOpen}
+        onClose={() => setIsLogoLightboxOpen(false)}
+      />
     </footer>
   );
 }

@@ -1,7 +1,14 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { getCurrentAdmin } from '../services/adminService';
+import {
+  getCurrentAdmin,
+  getStudentStatistics,
+  getStudentRegistrationTrends,
+  getStudentBranchDistribution,
+} from '../services/adminService';
 import { getPINStatistics } from '../services/pinService';
+import { getAllProductsForAdmin } from '../services/productService';
+import { getFeedbackForAdmin } from '../services/feedbackService';
 import AdminLayout from '../components/admin/AdminLayout';
 
 export default function AdminDashboard() {
@@ -20,6 +27,37 @@ export default function AdminDashboard() {
     sections: [],
   });
   const [pinStatsLoading, setPinStatsLoading] = useState(true);
+  const [studentStats, setStudentStats] = useState({
+    total: 0,
+    pending: 0,
+    active: 0,
+    week: 0,
+    month: 0,
+    branches: [],
+  });
+  const [productStats, setProductStats] = useState({
+    total: 0,
+    active: 0,
+    inactive: 0,
+    freeCount: 0,
+    topCategory: 'N/A',
+    latestFive: [],
+    highestPriced: null,
+    latest: null,
+  });
+  const [feedbackStats, setFeedbackStats] = useState({
+    total: 0,
+    unresolved: 0,
+    latest: null,
+  });
+
+  const categoryLabels = {
+    books: 'Books',
+    stationary: 'Stationery',
+    electronics: 'Electronics',
+    others: 'Others',
+  };
+
 
 
   /**
@@ -43,7 +81,22 @@ export default function AdminDashboard() {
 
         setAdmin(adminData);
 
-        const pinStatsResult = await getPINStatistics();
+        const [
+          pinStatsResult,
+          studentStatsResult,
+          trendResult,
+          branchResult,
+          productsResult,
+          feedbackResult,
+        ] = await Promise.all([
+          getPINStatistics(),
+          getStudentStatistics(),
+          getStudentRegistrationTrends(),
+          getStudentBranchDistribution(),
+          getAllProductsForAdmin(),
+          getFeedbackForAdmin(),
+        ]);
+
         if (pinStatsResult.success && pinStatsResult.data) {
           setPinStats({
             totalPINs: pinStatsResult.data.totalPINs || 0,
@@ -56,6 +109,77 @@ export default function AdminDashboard() {
           });
         }
         setPinStatsLoading(false);
+
+        if (studentStatsResult.success && studentStatsResult.data) {
+          setStudentStats((prev) => ({
+            ...prev,
+            total: studentStatsResult.data.total || 0,
+            pending: studentStatsResult.data.pending || 0,
+            active: studentStatsResult.data.active || 0,
+          }));
+        }
+
+        if (trendResult.success && trendResult.data) {
+          setStudentStats((prev) => ({
+            ...prev,
+            week: trendResult.data.week || 0,
+            month: trendResult.data.month || 0,
+          }));
+        }
+
+        if (branchResult.success && branchResult.data) {
+          setStudentStats((prev) => ({
+            ...prev,
+            branches: branchResult.data || [],
+          }));
+        }
+
+        const products = productsResult.success ? productsResult.data || [] : [];
+        const sortedProducts = [...products].sort(
+          (a, b) => new Date(b.created_at) - new Date(a.created_at)
+        );
+        const totalProducts = products.length;
+        const activeProducts = products.filter(
+          (item) => (item.status || 'active') === 'active'
+        ).length;
+        const inactiveProducts = totalProducts - activeProducts;
+        const freeCount = products.filter(
+          (item) => parseInt(item.price, 10) === 0
+        ).length;
+        const categoryCounts = products.reduce((acc, item) => {
+          const category = item.category || 'unknown';
+          acc[category] = (acc[category] || 0) + 1;
+          return acc;
+        }, {});
+        const topCategoryKey = Object.entries(categoryCounts).sort(
+          (a, b) => b[1] - a[1]
+        )[0]?.[0];
+        const topCategory = categoryLabels[topCategoryKey] || topCategoryKey || 'N/A';
+        const highestPriced = products.reduce((max, item) => {
+          if (!item) return max;
+          const price = parseInt(item.price, 10) || 0;
+          const maxPrice = max ? parseInt(max.price, 10) || 0 : -1;
+          return price > maxPrice ? item : max;
+        }, null);
+
+        setProductStats({
+          total: totalProducts,
+          active: activeProducts,
+          inactive: inactiveProducts,
+          freeCount,
+          topCategory,
+          latestFive: sortedProducts.slice(0, 5),
+          highestPriced,
+          latest: sortedProducts[0] || null,
+        });
+
+        const feedbacks = feedbackResult.success ? feedbackResult.data || [] : [];
+        const latestFeedback = feedbacks[0] || null;
+        setFeedbackStats({
+          total: feedbacks.length,
+          unresolved: feedbacks.length,
+          latest: latestFeedback,
+        });
         setLastUpdated(new Date());
       } catch (error) {
         console.error('Error loading admin data:', error);
@@ -92,28 +216,110 @@ export default function AdminDashboard() {
     return null;
   }
 
+  const totalRecords =
+    (studentStats.total || 0) +
+    (productStats.total || 0) +
+    (pinStats.totalPINs || 0) +
+    (feedbackStats.total || 0);
   return (
     <AdminLayout
       title="Admin Dashboard"
-      subtitle="StuMart - AANM VVRSR Polytechnic Gudlavalleru"
       lastUpdated={lastUpdated}
       onRefresh={() => loadAdminData(true)}
       isRefreshing={isRefreshing}
     >
-      <div className="max-w-6xl mx-auto space-y-5 sm:space-y-6">
-        <div className="admin-card p-4 sm:p-6">
+      <div className="max-w-6xl mx-auto space-y-4 sm:space-y-6">
+        <div className="admin-card p-3 sm:p-6">
           <h2 className="text-lg sm:text-xl font-semibold text-gray-900 mb-2">
-            Welcome, Admin
+            Welcome, Admin!
           </h2>
           <p className="text-sm sm:text-base text-gray-600">
-            Review the latest listings, then check feedback and PIN status when needed.
-            Everything you need is in the navigation.
+            This admin space is for AANM &amp; VVRSR StuMart. You can manage listings,
+            student access, and feedback from here.
           </p>
         </div>
 
-        
+        <div className="grid grid-cols-1 gap-3 sm:gap-4 lg:grid-cols-2">
+          <div className="admin-card p-3 sm:p-6">
+            <div className="flex items-start justify-between gap-3 mb-4">
+              <div>
+                <h2 className="text-lg sm:text-xl font-semibold text-gray-900">System Health</h2>
+                <p className="text-xs sm:text-sm text-gray-500">Operational summary.</p>
+              </div>
+              <button
+                type="button"
+                onClick={() => loadAdminData(true)}
+                disabled={isRefreshing}
+                className="admin-button admin-button--ghost"
+              >
+                <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M21 12a9 9 0 1 1-2.64-6.36" />
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M21 3v6h-6" />
+                </svg>
+                <span className="admin-refresh-label">
+                  {isRefreshing ? 'Refreshing...' : 'Refresh'}
+                </span>
+              </button>
+            </div>
+            <div className="grid grid-cols-2 gap-3 sm:gap-4">
+              <div className="admin-stat col-span-2">
+                <p className="text-xs uppercase tracking-wide text-gray-500">Admin Email</p>
+                <p className="text-sm font-semibold text-gray-900 mt-2 break-all">
+                  {admin.email || 'N/A'}
+                </p>
+              </div>
+              <div className="admin-stat">
+                <p className="text-xs uppercase tracking-wide text-gray-500">Active Students</p>
+                <p className="text-2xl font-semibold text-emerald-600 mt-2">
+                  {studentStats.active}
+                </p>
+              </div>
+              <div className="admin-stat">
+                <p className="text-xs uppercase tracking-wide text-gray-500">Feedback Count</p>
+                <p className="text-2xl font-semibold text-gray-900 mt-2">
+                  {feedbackStats.total}
+                </p>
+              </div>
+            </div>
+          </div>
 
-        <div className="admin-card p-4 sm:p-6">
+          <div className="admin-card p-3 sm:p-6">
+            <div className="flex items-center justify-between mb-4">
+              <div>
+                <h2 className="text-lg sm:text-xl font-semibold text-gray-900">Product Summary</h2>
+                <p className="text-xs sm:text-sm text-gray-500">Marketplace health snapshot.</p>
+              </div>
+            </div>
+            <div className="grid grid-cols-2 gap-3 sm:gap-4 sm:grid-cols-2">
+              <div className="admin-stat">
+                <p className="text-xs uppercase tracking-wide text-gray-500">Active Products</p>
+                <p className="text-2xl font-semibold text-emerald-600 mt-2">
+                  {productStats.active}
+                </p>
+              </div>
+              <div className="admin-stat">
+                <p className="text-xs uppercase tracking-wide text-gray-500">Inactive Products</p>
+                <p className="text-2xl font-semibold text-gray-900 mt-2">
+                  {productStats.inactive}
+                </p>
+              </div>
+              <div className="admin-stat">
+                <p className="text-xs uppercase tracking-wide text-gray-500">Free Listings</p>
+                <p className="text-2xl font-semibold text-sky-600 mt-2">
+                  {productStats.freeCount}
+                </p>
+              </div>
+              <div className="admin-stat">
+                <p className="text-xs uppercase tracking-wide text-gray-500">Top Category</p>
+                <p className="text-lg font-semibold text-gray-900 mt-2">
+                  {productStats.topCategory}
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div className="admin-card p-3 sm:p-6">
           <div className="flex items-center justify-between mb-4">
             <div>
               <h2 className="text-lg sm:text-xl font-semibold text-gray-900">
@@ -128,7 +334,7 @@ export default function AdminDashboard() {
             </div>
           </div>
 
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-5">
+          <div className="grid grid-cols-2 gap-3 sm:gap-4 sm:grid-cols-2 lg:grid-cols-5">
             <div className="admin-stat">
               <p className="text-xs uppercase tracking-wide text-gray-500">Total PINs</p>
               <p className="text-2xl font-semibold text-gray-900 mt-2">
