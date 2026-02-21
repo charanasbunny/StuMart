@@ -239,3 +239,108 @@ export const getStudentStatistics = async () => {
   }
 };
 
+/**
+ * Get student registration trends (counts for last week and last month)
+ * @returns {Promise<{success: boolean, data: {week: number, month: number}|null, error: string|null}>}
+ */
+export const getStudentRegistrationTrends = async () => {
+  try {
+    const { admin, error: adminError } = await getCurrentAdmin();
+    if (adminError || !admin) {
+      return {
+        success: false,
+        error: 'Admin authentication required',
+        data: null,
+      };
+    }
+
+    const now = new Date();
+    const weekAgo = new Date(now);
+    weekAgo.setDate(weekAgo.getDate() - 7);
+    const monthAgo = new Date(now);
+    monthAgo.setMonth(monthAgo.getMonth() - 1);
+
+    const [weekResult, monthResult] = await Promise.all([
+      supabase
+        .from('students')
+        .select('*', { count: 'exact', head: true })
+        .gte('created_at', weekAgo.toISOString()),
+      supabase
+        .from('students')
+        .select('*', { count: 'exact', head: true })
+        .gte('created_at', monthAgo.toISOString()),
+    ]);
+
+    if (weekResult.error || monthResult.error) {
+      return {
+        success: false,
+        error: 'Failed to fetch registration trends',
+        data: null,
+      };
+    }
+
+    return {
+      success: true,
+      error: null,
+      data: {
+        week: weekResult.count || 0,
+        month: monthResult.count || 0,
+      },
+    };
+  } catch (error) {
+    return {
+      success: false,
+      error: error.message || 'Failed to get registration trends',
+      data: null,
+    };
+  }
+};
+
+/**
+ * Get student count (or list) per branch for admin dashboard
+ * @returns {Promise<{success: boolean, data: Array|null, error: string|null}>}
+ */
+export const getStudentBranchDistribution = async () => {
+  try {
+    const { admin, error: adminError } = await getCurrentAdmin();
+    if (adminError || !admin) {
+      return {
+        success: false,
+        error: 'Admin authentication required',
+        data: null,
+      };
+    }
+
+    const { data: students, error } = await supabase
+      .from('students')
+      .select('branch');
+
+    if (error) {
+      return {
+        success: false,
+        error: 'Failed to fetch branch distribution',
+        data: null,
+      };
+    }
+
+    const byBranch = (students || []).reduce((acc, row) => {
+      const branch = row?.branch || 'Unknown';
+      acc[branch] = (acc[branch] || 0) + 1;
+      return acc;
+    }, {});
+    const branches = Object.entries(byBranch).map(([name, count]) => ({ name, count }));
+
+    return {
+      success: true,
+      error: null,
+      data: branches,
+    };
+  } catch (error) {
+    return {
+      success: false,
+      error: error.message || 'Failed to get branch distribution',
+      data: null,
+    };
+  }
+};
+
