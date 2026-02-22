@@ -241,8 +241,8 @@ export const getStudentStatistics = async () => {
 };
 
 /**
- * Get student registration trends for the last week and month
- * @returns {Promise<{success: boolean, data: Object|null, error: string|null}>}
+ * Get student registration trends (counts for last week and last month)
+ * @returns {Promise<{success: boolean, data: {week: number, month: number}|null, error: string|null}>}
  */
 export const getStudentRegistrationTrends = async () => {
   try {
@@ -256,20 +256,20 @@ export const getStudentRegistrationTrends = async () => {
     }
 
     const now = new Date();
-    const weekStart = new Date(now);
-    weekStart.setDate(now.getDate() - 7);
-    const monthStart = new Date(now);
-    monthStart.setDate(now.getDate() - 30);
+    const weekAgo = new Date(now);
+    weekAgo.setDate(weekAgo.getDate() - 7);
+    const monthAgo = new Date(now);
+    monthAgo.setMonth(monthAgo.getMonth() - 1);
 
     const [weekResult, monthResult] = await Promise.all([
       supabase
         .from('students')
         .select('*', { count: 'exact', head: true })
-        .gte('created_at', weekStart.toISOString()),
+        .gte('created_at', weekAgo.toISOString()),
       supabase
         .from('students')
         .select('*', { count: 'exact', head: true })
-        .gte('created_at', monthStart.toISOString()),
+        .gte('created_at', monthAgo.toISOString()),
     ]);
 
     if (weekResult.error || monthResult.error) {
