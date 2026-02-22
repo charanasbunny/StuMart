@@ -1,6 +1,7 @@
 import React, { useMemo, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { adminSignOut } from '../../services/adminService';
+import ImageLightbox from '../ui/ImageLightbox';
 
 const navItems = [
   {
@@ -58,6 +59,7 @@ export default function AdminLayout({
   const navigate = useNavigate();
   const location = useLocation();
   const [isLoggingOut, setIsLoggingOut] = useState(false);
+  const [isLogoLightboxOpen, setIsLogoLightboxOpen] = useState(false);
 
   const activePath = useMemo(() => location.pathname, [location.pathname]);
   const updatedLabel = lastUpdated ? lastUpdated.toLocaleString() : null;
@@ -73,7 +75,7 @@ export default function AdminLayout({
       console.error('Logout error:', error);
     } finally {
       setIsLoggingOut(false);
-      navigate('/login?type=admin');
+      navigate('/login');
     }
   };
 
@@ -82,6 +84,17 @@ export default function AdminLayout({
       <div className="admin-shell">
         <aside className="admin-sidebar hidden lg:flex">
           <div className="admin-sidebar-header">
+            <button
+              type="button"
+              onClick={() => setIsLogoLightboxOpen(true)}
+              aria-label="Open logo"
+            >
+              <img
+                src="/newlogotransparent.png"
+                alt="StuMart Logo"
+                className="w-[84px] h-[84px] object-contain mb-5"
+              />
+            </button>
             <div className="admin-brand">StuMart Admin</div>
             <p className="admin-brand-sub">Operations console</p>
           </div>
@@ -100,23 +113,25 @@ export default function AdminLayout({
               );
             })}
           </nav>
-          <div className="admin-sidebar-footer">
-            <button
-              type="button"
-              onClick={handleLogout}
-              disabled={isLoggingOut}
-              className="admin-button admin-button--ghost"
-            >
-              {isLoggingOut ? 'Logging out...' : 'Logout'}
-            </button>
-          </div>
         </aside>
 
         <div className="admin-main">
           <header className="admin-header">
-            <div className="admin-header-content">
-              <div>
-                <div className="admin-title-row">
+            <div className="admin-header-content flex items-center justify-between gap-3">
+              <div className="flex items-center gap-3 min-w-0">
+                <button
+                  type="button"
+                  onClick={() => setIsLogoLightboxOpen(true)}
+                  aria-label="Open logo"
+                  className="lg:hidden"
+                >
+                  <img
+                    src="/newlogotransparent.png"
+                    alt="StuMart Logo"
+                    className="h-[84px] w-[84px] object-contain"
+                  />
+                </button>
+                <div className="admin-title-row min-w-0">
                   {backTo && (
                     <button
                       type="button"
@@ -131,35 +146,16 @@ export default function AdminLayout({
                   )}
                   <h1 className="admin-title">{title}</h1>
                 </div>
-                {subtitle && <p className="admin-subtitle">{subtitle}</p>}
               </div>
-              <div className="admin-header-actions">
+              <div className="admin-header-actions flex items-center gap-2">
                 {updatedLabel && (
                   <span className="admin-updated">Updated {updatedLabel}</span>
                 )}
-                {onRefresh && (
-                  <button
-                    type="button"
-                    onClick={onRefresh}
-                    disabled={isRefreshing}
-                    className="admin-button admin-button--ghost"
-                  >
-                    <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M21 12a9 9 0 1 1-2.64-6.36" />
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M21 3v6h-6" />
-                    </svg>
-                    <span className="admin-refresh-label">
-                      {isRefreshing ? 'Refreshing...' : 'Refresh'}
-                    </span>
-                  </button>
-                )}
-              </div>
-              <div className="admin-header-actions admin-header-actions--mobile lg:hidden">
                 <button
                   type="button"
                   onClick={handleLogout}
                   disabled={isLoggingOut}
-                  className="admin-button"
+                  className="admin-button lg:hidden"
                 >
                   {isLoggingOut ? 'Logging out...' : 'Logout'}
                 </button>
@@ -185,6 +181,13 @@ export default function AdminLayout({
           <main className="admin-content admin-animate-in">{children}</main>
         </div>
       </div>
+
+      <ImageLightbox
+        src="/newlogotransparent.png"
+        alt="StuMart Logo"
+        isOpen={isLogoLightboxOpen}
+        onClose={() => setIsLogoLightboxOpen(false)}
+      />
     </div>
   );
 }

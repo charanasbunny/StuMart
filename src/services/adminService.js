@@ -1,4 +1,5 @@
 import { supabase } from './supabaseClient';
+import { normalizeBranchCode } from '../utils/branchCodes';
 
 /**
  * Admin Authentication Service
@@ -234,6 +235,115 @@ export const getStudentStatistics = async () => {
     return {
       success: false,
       error: error.message || 'Failed to get student statistics',
+      data: null,
+    };
+  }
+};
+
+/**
+ * Get student registration trends for the last week and month
+ * @returns {Promise<{success: boolean, data: Object|null, error: string|null}>}
+ */
+export const getStudentRegistrationTrends = async () => {
+  try {
+    const { admin, error: adminError } = await getCurrentAdmin();
+    if (adminError || !admin) {
+      return {
+        success: false,
+        error: 'Admin authentication required',
+        data: null,
+      };
+    }
+
+    const now = new Date();
+    const weekStart = new Date(now);
+    weekStart.setDate(now.getDate() - 7);
+    const monthStart = new Date(now);
+    monthStart.setDate(now.getDate() - 30);
+
+    const [weekResult, monthResult] = await Promise.all([
+      supabase
+        .from('students')
+        .select('*', { count: 'exact', head: true })
+        .gte('created_at', weekStart.toISOString()),
+      supabase
+        .from('students')
+        .select('*', { count: 'exact', head: true })
+        .gte('created_at', monthStart.toISOString()),
+    ]);
+
+    if (weekResult.error || monthResult.error) {
+      return {
+        success: false,
+        error: 'Failed to fetch registration trends',
+        data: null,
+      };
+    }
+
+    return {
+      success: true,
+      error: null,
+      data: {
+        week: weekResult.count || 0,
+        month: monthResult.count || 0,
+      },
+    };
+  } catch (error) {
+    return {
+      success: false,
+      error: error.message || 'Failed to fetch registration trends',
+      data: null,
+    };
+  }
+};
+
+/**
+ * Get branch-wise student distribution
+ * @returns {Promise<{success: boolean, data: Array|null, error: string|null}>}
+ */
+export const getStudentBranchDistribution = async () => {
+  try {
+    const { admin, error: adminError } = await getCurrentAdmin();
+    if (adminError || !admin) {
+      return {
+        success: false,
+        error: 'Admin authentication required',
+        data: null,
+      };
+    }
+
+    const { data, error } = await supabase
+      .from('students')
+      .select('branch');
+
+    if (error) {
+      return {
+        success: false,
+        error: error.message || 'Failed to fetch branch distribution',
+        data: null,
+      };
+    }
+
+    const counts = (data || []).reduce((acc, row) => {
+      const branch = normalizeBranchCode(row.branch || 'Unknown');
+      if (!branch) return acc;
+      acc[branch] = (acc[branch] || 0) + 1;
+      return acc;
+    }, {});
+
+    const distribution = Object.entries(counts)
+      .map(([branch, count]) => ({ branch, count }))
+      .sort((a, b) => b.count - a.count);
+
+    return {
+      success: true,
+      error: null,
+      data: distribution,
+    };
+  } catch (error) {
+    return {
+      success: false,
+      error: error.message || 'Failed to fetch branch distribution',
       data: null,
     };
   }

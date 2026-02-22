@@ -1,5 +1,6 @@
 import { Link, useNavigate, useLocation } from "react-router";
 import { useEffect, useState } from "react";
+import ImageLightbox from "../ui/ImageLightbox";
 import {
   getCurrentUser,
   signOut,
@@ -16,6 +17,7 @@ export default function Navbar() {
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [isLoggingOut, setIsLoggingOut] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isLogoLightboxOpen, setIsLogoLightboxOpen] = useState(false);
 
   useEffect(() => {
     const checkAuth = async () => {
@@ -100,12 +102,13 @@ export default function Navbar() {
         <div className="max-w-6xl mx-auto px-4 min-h-[4rem] sm:min-h-[4.5rem] flex items-center justify-between">
           
           {/* Logo and College Name */}
-          <Link
-            to="/"
-            className="flex items-center gap-3 sm:gap-4 flex-shrink-0"
-            onClick={closeMobileMenu}
-          >
-            <div className="flex items-center justify-center h-14 w-14 sm:h-16 sm:w-16 md:h-20 md:w-20">
+          <div className="flex items-center gap-3 sm:gap-4 flex-shrink-0">
+            <button
+              type="button"
+              className="flex items-center justify-center h-14 w-14 sm:h-16 sm:w-16 md:h-20 md:w-20"
+              onClick={() => setIsLogoLightboxOpen(true)}
+              aria-label="Open logo"
+            >
               <img
                 src="/newlogotransparent.png"
                 alt="AANM & VVRSR StuMart Logo"
@@ -114,16 +117,20 @@ export default function Navbar() {
                 height={64}
                 decoding="async"
               />
-            </div>
-            <div className="flex flex-col justify-center min-w-0">
+            </button>
+            <Link
+              to="/"
+              className="flex flex-col justify-center min-w-0"
+              onClick={closeMobileMenu}
+            >
               <span className="text-lg sm:text-xl md:text-2xl font-extrabold text-white leading-tight whitespace-nowrap tracking-wide drop-shadow-sm">
                 AANM & VVRSR
               </span>
               <span className="text-xs sm:text-sm md:text-base text-blue-100 leading-tight whitespace-nowrap uppercase tracking-widest">
                 Polytechnic
               </span>
-            </div>
-          </Link>
+            </Link>
+          </div>
 
           {/* Desktop Navigation - Hidden on mobile */}
           <div className="hidden md:flex items-center justify-center gap-4 lg:gap-6 text-blue-100 flex-1">
@@ -252,7 +259,12 @@ export default function Navbar() {
           {/* Sidebar Header */}
           <div className="bg-gradient-to-r from-blue-700 via-purple-600 to-purple-700 p-6">
             <div className="flex items-center gap-3">
-              <div className="flex items-center justify-center rounded-full shadow-sm ring-2 ring-white/40 h-16 w-16 overflow-hidden bg-transparent">
+              <button
+                type="button"
+                onClick={() => setIsLogoLightboxOpen(true)}
+                aria-label="Open logo"
+                className="flex items-center justify-center rounded-full shadow-sm ring-2 ring-white/40 h-16 w-16 overflow-hidden bg-transparent"
+              >
                 <img
                   src="/newlogotransparent.png"
                   alt="StuMart Logo"
@@ -261,7 +273,7 @@ export default function Navbar() {
                   height={56}
                   decoding="async"
                 />
-              </div>
+              </button>
               <div className="flex flex-col">
                 <span className="text-base font-extrabold text-white leading-tight tracking-wide">
                   AANM & VVRSR
@@ -401,6 +413,13 @@ export default function Navbar() {
           </div>
         </div>
       )}
+
+      <ImageLightbox
+        src="/newlogotransparent.png"
+        alt="StuMart Logo"
+        isOpen={isLogoLightboxOpen}
+        onClose={() => setIsLogoLightboxOpen(false)}
+      />
     </>
   );
 }
