@@ -38,9 +38,22 @@ export default function Register() {
   const [errors, setErrors] = useState({});
   const [isLoading, setIsLoading] = useState(false);
   const [successMessage, setSuccessMessage] = useState('');
+  const [redirectCountdown, setRedirectCountdown] = useState(null);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [shake, setShake] = useState(false);
+
+  // Countdown after successful registration
+  useEffect(() => {
+    if (redirectCountdown === null || redirectCountdown <= 0) return;
+    const id = setInterval(() => setRedirectCountdown((c) => c - 1), 1000);
+    return () => clearInterval(id);
+  }, [redirectCountdown]);
+
+  // Redirect to login when countdown hits 0
+  useEffect(() => {
+    if (redirectCountdown === 0) navigate('/login');
+  }, [redirectCountdown, navigate]);
 
   // Fetch available joining years on mount
   useEffect(() => {
@@ -277,8 +290,8 @@ export default function Register() {
       });
 
       if (result.success) {
-        setSuccessMessage('Registration successful! Please check your email and click the confirmation link to activate your account. You will be redirected to login page.');
-        setTimeout(() => navigate('/login'), 5000);
+        setSuccessMessage('success');
+        setRedirectCountdown(5);
       } else {
         setErrors({ submit: result.error });
         setShake(true);
@@ -326,6 +339,52 @@ export default function Register() {
         border border-white/30 shadow-2xl space-y-6
         ${shake ? 'animate-shake' : ''}`}
       >
+        {successMessage === 'success' ? (
+          /* ---------- Success / confirmation screen ---------- */
+          <div className="space-y-6 text-center">
+            <div className="mx-auto w-16 h-16 rounded-full bg-emerald-100 flex items-center justify-center ring-4 ring-emerald-200/80">
+              <svg className="w-8 h-8 text-emerald-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+              </svg>
+            </div>
+            <div>
+              <h2 className="text-2xl font-bold text-gray-900">
+                Check your email
+              </h2>
+              <p className="mt-2 text-gray-700">
+                We sent a confirmation link to your email. Click it to activate your account.
+              </p>
+            </div>
+            <ul className="text-left text-sm text-gray-600 space-y-2 bg-white/40 rounded-xl p-4">
+              <li className="flex items-center gap-2">
+                <span className="flex-shrink-0 w-5 h-5 rounded-full bg-emerald-500 text-white flex items-center justify-center text-xs font-bold">1</span>
+                Open your inbox
+              </li>
+              <li className="flex items-center gap-2">
+                <span className="flex-shrink-0 w-5 h-5 rounded-full bg-emerald-500 text-white flex items-center justify-center text-xs font-bold">2</span>
+                Click the confirmation link
+              </li>
+              <li className="flex items-center gap-2">
+                <span className="flex-shrink-0 w-5 h-5 rounded-full bg-emerald-500 text-white flex items-center justify-center text-xs font-bold">3</span>
+                Come back here and log in
+              </li>
+            </ul>
+            <div className="space-y-3">
+              {redirectCountdown !== null && redirectCountdown > 0 && (
+                <p className="text-sm text-gray-500">
+                  Redirecting to login in <span className="font-semibold text-indigo-600">{redirectCountdown}</span> second{redirectCountdown !== 1 ? 's' : ''}…
+                </p>
+              )}
+              <Link
+                to="/login"
+                className="inline-block w-full py-3 rounded-xl bg-indigo-600 text-white font-semibold hover:bg-indigo-700 transition active:scale-95"
+              >
+                Go to Login
+              </Link>
+            </div>
+          </div>
+        ) : (
+          <>
         <h2 className="text-center text-3xl font-bold text-gray-900">
           Create Student Account
         </h2>
@@ -658,12 +717,6 @@ export default function Register() {
               {errors.submit}
             </p>
           )}
-
-          {successMessage && (
-            <p className="text-center text-sm text-green-600 animate-pulse">
-              {successMessage}
-            </p>
-          )}
         </form>
 
         <p className="text-center text-sm text-gray-700">
@@ -672,6 +725,8 @@ export default function Register() {
             Login
           </Link>
         </p>
+          </>
+        )}
       </div>
 
       <style>
