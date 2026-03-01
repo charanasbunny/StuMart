@@ -26,12 +26,12 @@ export default function Layout() {
 
         confirmationTimeout = setTimeout(async () => {
           try {
-            // Check if email is already confirmed in database; maybeSingle() avoids 406 when no row
+            // Check if email is already confirmed in database (optimize: only select needed field)
             const { data: student } = await supabase
               .from('students')
               .select('email_confirmed')
               .eq('auth_user_id', session.user.id)
-              .maybeSingle();
+              .single();
 
             // If email confirmed in Auth but not in database, call confirm_student_email()
             if (student && !student.email_confirmed) {

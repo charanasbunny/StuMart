@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useSearchParams, Link, useNavigate } from 'react-router-dom';
-import { getApprovedRequestByToken } from '../services/registrationService';
+import { getApprovedRequestByToken, claimApprovedRegistration } from '../services/registrationService';
 import { signUpPasswordOnly } from '../services/authService';
 
 export default function CompleteSignup() {
@@ -43,26 +43,21 @@ export default function CompleteSignup() {
     }
     setSubmitLoading(true);
     try {
-      // Re-validate token right before creating auth user to avoid stale/expired-link orphans.
-      const latest = await getApprovedRequestByToken(token);
-      if (!latest.success || !latest.data) {
-        setError('This approval link is invalid or expired. Ask admin to approve again and send a new link.');
-        setSubmitLoading(false);
-        return;
-      }
-
-      const signUpResult = await signUpPasswordOnly(request.email, password, {
-        registration_token: token,
-        registration_request_id: request.id,
-        registration_pin_number: request.pin_number,
-      });
+      const signUpResult = await signUpPasswordOnly(request.email, password);
       if (!signUpResult.success) {
         setError(signUpResult.error || 'Could not create account.');
         setSubmitLoading(false);
         return;
       }
+      const claimResult = await claimApprovedRegistration(token);
+      if (!claimResult.success) {
+        const msg = claimResult.error || 'Could not complete registration.';
+        setError(msg.includes('already registered') ? 'This email is already registered. Please log in.' : msg);
+        setSubmitLoading(false);
+        return;
+      }
       setSuccess(true);
-      setTimeout(() => navigate('/login', { state: { message: 'Account created. Check your email, confirm it, then log in. Your student profile will be linked automatically.' } }), 3000);
+      setTimeout(() => navigate('/login', { state: { message: 'Account created. Check your email to confirm and then log in.' } }), 3000);
     } catch (err) {
       const msg = err.message || 'Something went wrong.';
       setError(msg.includes('already registered') || msg.includes('duplicate key') ? 'This email is already registered. Please log in.' : msg);
@@ -119,15 +114,6 @@ export default function CompleteSignup() {
         <p className="mt-2 text-gray-600 text-center text-sm">Set a password for your StuMart account.</p>
 
         <form onSubmit={handleSubmit} className="mt-6 space-y-4">
-          <div>
-            <label className="block text-sm font-medium text-gray-700">Name</label>
-            <input
-              type="text"
-              value={request.name}
-              readOnly
-              className="mt-1 block w-full px-4 py-2 rounded-lg border border-gray-300 bg-gray-50 text-gray-600"
-            />
-          </div>
           <div>
             <label className="block text-sm font-medium text-gray-700">Email</label>
             <input

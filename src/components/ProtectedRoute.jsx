@@ -1,20 +1,19 @@
 import React, { useEffect, useState } from 'react';
-import { Navigate, useLocation } from 'react-router';
+import { Navigate } from 'react-router';
 import { getCurrentUser } from '../services/authService';
 
 /**
  * ProtectedRoute Component
- *
+ * 
  * This component protects routes that require authentication.
  * It checks:
  * 1. User is logged in
  * 2. Email is verified
  * 3. Student record exists
- *
- * If any check fails, redirects to login with returnUrl so user is sent back after signing in.
+ * 
+ * If any check fails, redirects to login page.
  */
 export default function ProtectedRoute({ children }) {
-  const location = useLocation();
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -22,7 +21,7 @@ export default function ProtectedRoute({ children }) {
     const checkAuth = async () => {
       try {
         const { user, student, error } = await getCurrentUser();
-
+        
         // User must be authenticated, verified, and have a student record
         if (user && student && !error) {
           setIsAuthenticated(true);
@@ -52,10 +51,9 @@ export default function ProtectedRoute({ children }) {
     );
   }
 
-  // Redirect to login with returnUrl so after sign-in we can send user back
+  // Redirect to login if not authenticated
   if (!isAuthenticated) {
-    const returnUrl = encodeURIComponent(location.pathname + location.search);
-    return <Navigate to={`/login?returnUrl=${returnUrl}`} replace state={{ from: location }} />;
+    return <Navigate to="/login" replace />;
   }
 
   // Render protected content

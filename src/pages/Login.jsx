@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { signIn, resendVerificationEmail } from '../services/authService';
 import { adminSignIn } from '../services/adminService';
-import { useNavigate, Link, useSearchParams, useLocation } from "react-router-dom";
-import { supabase } from '../services/supabaseClient';
+import { useNavigate, Link, useSearchParams } from "react-router-dom";
 
 
 
@@ -10,7 +9,6 @@ import { supabase } from '../services/supabaseClient';
 
 export default function Login() {
   const navigate = useNavigate();
-  const location = useLocation();
   const [searchParams] = useSearchParams();
   const getLoginTypeFromParams = () => {
     const type = searchParams.get('type');
@@ -26,7 +24,6 @@ export default function Login() {
   const [showResendEmail, setShowResendEmail] = useState(false);
   const [resendLoading, setResendLoading] = useState(false);
   const [resendMessage, setResendMessage] = useState('');
-  const successMessage = location.state?.message;
 
   useEffect(() => {
     const type = searchParams.get('type');
@@ -34,20 +31,6 @@ export default function Login() {
       setLoginType(type);
     }
   }, [loginType, searchParams]);
-
-  // When user lands from email confirmation or password reset link, Supabase sets session from URL hash.
-  // If we already have a confirmed session, redirect to intended page or Profile.
-  useEffect(() => {
-    let mounted = true;
-    (async () => {
-      const { data: { session } } = await supabase.auth.getSession();
-      if (!mounted || !session?.user?.email_confirmed_at) return;
-      const returnUrl = searchParams.get('returnUrl');
-      const path = returnUrl ? decodeURIComponent(returnUrl) : '/Profile';
-      navigate(path, { replace: true });
-    })();
-    return () => { mounted = false; };
-  }, [navigate, searchParams]);
 
   /**
    * Validate email format
@@ -73,6 +56,10 @@ export default function Login() {
     // Password validation
     if (!formData.password) {
       newErrors.password = 'Password is required';
+    } else if (formData.password.length < 6) {
+      newErrors.password = 'Minimum 6 characters';
+    } else if (formData.password.length > 12) {
+      newErrors.password = 'Maximum 12 characters';
     } else if (formData.password.length < 6) {
       newErrors.password = 'Minimum 6 characters';
     } else if (formData.password.length > 12) {
@@ -137,16 +124,15 @@ export default function Login() {
           setErrors({ submit: result.error });
         }
       } else {
-        // Call student sign-in service
+        // Call student signin service
         const result = await signIn(
           formData.email.trim().toLowerCase(),
           formData.password
         );
 
         if (result.success) {
-          const returnUrl = searchParams.get('returnUrl');
-          const path = returnUrl ? decodeURIComponent(returnUrl) : '/Profile';
-          navigate(path, { replace: true });
+          // Redirect to Profile page on successful login
+          navigate('/Profile');
         } else {
           // Check if error is related to email verification
           if (result.error && result.error.toLowerCase().includes('verify')) {
@@ -208,11 +194,6 @@ export default function Login() {
           <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
             Sign in to your account
           </h2>
-          {successMessage && (
-            <div className="mt-3 rounded-md bg-green-50 p-3 border border-green-200">
-              <p className="text-sm text-green-800">{successMessage}</p>
-            </div>
-          )}
           <p className="mt-2 text-center text-sm text-gray-600">
             {loginType === 'student' ? (
               <>
