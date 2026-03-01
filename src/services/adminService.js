@@ -275,7 +275,7 @@ export const getStudentRegistrationTrends = async () => {
     if (weekResult.error || monthResult.error) {
       return {
         success: false,
-        error: 'Failed to fetch registration trends',
+        error: 'Failed to fetch the registration trends',
         data: null,
       };
     }
