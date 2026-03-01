@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate, Link } from 'react-router';
-import { signUp } from '../services/authService';
+import { Link } from 'react-router';
+import { submitRegistrationRequest } from '../services/registrationService';
 import { 
   getAvailableJoiningYears,
   getAvailableBranches,
@@ -11,8 +11,6 @@ import {
 import { formatPinNumber } from '../utils/branchCodes';
 
 export default function Register() {
-  const navigate = useNavigate();
-
   const [formData, setFormData] = useState({
     joiningYear: '',
     branch: '',
@@ -21,8 +19,6 @@ export default function Register() {
     pinNumber: '',
     name: '',
     email: '',
-    password: '',
-    confirmPassword: '',
   });
 
   const [availableJoiningYears, setAvailableJoiningYears] = useState([]);
@@ -38,22 +34,7 @@ export default function Register() {
   const [errors, setErrors] = useState({});
   const [isLoading, setIsLoading] = useState(false);
   const [successMessage, setSuccessMessage] = useState('');
-  const [redirectCountdown, setRedirectCountdown] = useState(null);
-  const [showPassword, setShowPassword] = useState(false);
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [shake, setShake] = useState(false);
-
-  // Countdown after successful registration
-  useEffect(() => {
-    if (redirectCountdown === null || redirectCountdown <= 0) return;
-    const id = setInterval(() => setRedirectCountdown((c) => c - 1), 1000);
-    return () => clearInterval(id);
-  }, [redirectCountdown]);
-
-  // Redirect to login when countdown hits 0
-  useEffect(() => {
-    if (redirectCountdown === 0) navigate('/login');
-  }, [redirectCountdown, navigate]);
 
   // Fetch available joining years on mount
   useEffect(() => {
@@ -208,20 +189,6 @@ export default function Register() {
     } else if (!validateEmail(formData.email)) {
       newErrors.email = 'Invalid email format';
     }
-    if (!formData.password) {
-      newErrors.password = 'Password is required';
-    } else if (formData.password.length < 6) {
-      newErrors.password = 'Minimum 6 characters';
-    } else if (formData.password.length > 12) {
-      newErrors.password = 'Maximum 12 characters';
-    } else if (!/\d/.test(formData.password)) {
-      newErrors.password = 'Must contain at least one number';
-    }
-    if (!formData.confirmPassword) {
-      newErrors.confirmPassword = 'Confirm your password';
-    } else if (formData.password !== formData.confirmPassword) {
-      newErrors.confirmPassword = 'Passwords do not match';
-    }
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -282,16 +249,18 @@ export default function Register() {
     setIsLoading(true);
 
     try {
-      const result = await signUp({
+      const result = await submitRegistrationRequest({
         pinNumber: formData.pinNumber.trim(),
         name: formData.name.trim(),
         email: formData.email.trim().toLowerCase(),
-        password: formData.password,
+        joiningYear: parseInt(formData.joiningYear, 10),
+        branch: formData.branch.trim(),
+        year: parseInt(formData.year, 10),
+        section: formData.section.trim(),
       });
 
       if (result.success) {
         setSuccessMessage('success');
-        setRedirectCountdown(5);
       } else {
         setErrors({ submit: result.error });
         setShake(true);
@@ -304,21 +273,6 @@ export default function Register() {
       setIsLoading(false);
     }
   };
-
-  /* ---------- Icons ---------- */
-  const eyeIcon = (
-    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 transition-transform duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5} strokeLinecap="round" strokeLinejoin="round">
-      <path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-      <path d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-    </svg>
-  );
-
-  const eyeOffIcon = (
-    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 transition-transform duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5} strokeLinecap="round" strokeLinejoin="round">
-      <path d="M13.875 18.825A10.05 10.05 0 0112 19c-5.523 0-10-4.477-10-10 0-1.02.152-2.004.437-2.93M6.343 6.343A9.956 9.956 0 0112 5c5.523 0 10 4.477 10 10a9.956 9.956 0 01-1.343 5.657M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-      <path d="M3 3l18 18" />
-    </svg>
-  );
 
   /* ---------- UI ---------- */
   return (
@@ -340,41 +294,36 @@ export default function Register() {
         ${shake ? 'animate-shake' : ''}`}
       >
         {successMessage === 'success' ? (
-          /* ---------- Success / confirmation screen ---------- */
+          /* ---------- Request submitted – wait for admin ---------- */
           <div className="space-y-6 text-center">
             <div className="mx-auto w-16 h-16 rounded-full bg-emerald-100 flex items-center justify-center ring-4 ring-emerald-200/80">
               <svg className="w-8 h-8 text-emerald-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
             </div>
             <div>
               <h2 className="text-2xl font-bold text-gray-900">
-                Check your email
+                Request submitted
               </h2>
               <p className="mt-2 text-gray-700">
-                We sent a confirmation link to your email. Click it to activate your account.
+                Your details will be verified by the admin. Once approved, you will receive a link to set your password and complete your account.
               </p>
             </div>
             <ul className="text-left text-sm text-gray-600 space-y-2 bg-white/40 rounded-xl p-4">
               <li className="flex items-center gap-2">
                 <span className="flex-shrink-0 w-5 h-5 rounded-full bg-emerald-500 text-white flex items-center justify-center text-xs font-bold">1</span>
-                Open your inbox
+                Admin will verify your details and PIN
               </li>
               <li className="flex items-center gap-2">
                 <span className="flex-shrink-0 w-5 h-5 rounded-full bg-emerald-500 text-white flex items-center justify-center text-xs font-bold">2</span>
-                Click the confirmation link
+                You will get a link to complete registration (from admin)
               </li>
               <li className="flex items-center gap-2">
                 <span className="flex-shrink-0 w-5 h-5 rounded-full bg-emerald-500 text-white flex items-center justify-center text-xs font-bold">3</span>
-                Come back here and log in
+                Set your password and confirm your email to start using StuMart
               </li>
             </ul>
             <div className="space-y-3">
-              {redirectCountdown !== null && redirectCountdown > 0 && (
-                <p className="text-sm text-gray-500">
-                  Redirecting to login in <span className="font-semibold text-indigo-600">{redirectCountdown}</span> second{redirectCountdown !== 1 ? 's' : ''}…
-                </p>
-              )}
               <Link
                 to="/login"
                 className="inline-block w-full py-3 rounded-xl bg-indigo-600 text-white font-semibold hover:bg-indigo-700 transition active:scale-95"
@@ -640,76 +589,12 @@ export default function Register() {
             )}
           </div>
 
-          {/* Password */}
-          <div className="relative">
-            <input
-              type={showPassword ? 'text' : 'password'}
-              name="password"
-              value={formData.password}
-              onChange={handleChange}
-              placeholder=" "
-              className={`peer w-full px-4 pt-6 pb-3 rounded-xl placeholder-black backdrop-blur-md outline-none
-              ${errors.password ? 'border border-red-500 bg-red-100' : 'border border-white/40 bg-indigo-50 peer-placeholder-shown:bg-white/40'}
-              focus:ring-2 ${errors.password ? 'focus:ring-red-400' : 'focus:ring-indigo-400'}`}
-            />
-            <label className={`absolute left-4 top-1 text-sm transition-all backdrop-blur-sm px-1 rounded-sm
-              peer-placeholder-shown:top-6 peer-placeholder-shown:text-base
-              peer-focus:top-1 peer-focus:text-sm
-              ${errors.password ? 'text-red-600 bg-red-50' : 'text-indigo-500 bg-white/10 peer-placeholder-shown:text-gray-600 peer-focus:text-indigo-500'}`}>
-              Password
-            </label>
-            {errors.password && (
-              <div className="absolute left-4 top-full mt-3 z-50 bg-red-200 border border-red-400 text-red-900 text-sm px-3 py-1 rounded shadow-md animate-popup">
-                {errors.password}
-              </div>
-            )}
-            <button
-              type="button"
-              onClick={() => setShowPassword(!showPassword)}
-              className="absolute right-4 top-5.5 text-gray-500 hover:text-indigo-600"
-            >
-              {showPassword ? eyeOffIcon : eyeIcon}
-            </button>
-          </div>
-
-          {/* Confirm Password */}
-          <div className="relative">
-            <input
-              type={showConfirmPassword ? 'text' : 'password'}
-              name="confirmPassword"
-              value={formData.confirmPassword}
-              onChange={handleChange}
-              placeholder=" "
-              className={`peer w-full px-4 pt-6 pb-3 rounded-xl placeholder-black backdrop-blur-md outline-none
-              ${errors.confirmPassword ? 'border border-red-500 bg-red-100' : 'border border-white/40 bg-indigo-50 peer-placeholder-shown:bg-white/40'}
-              focus:ring-2 ${errors.confirmPassword ? 'focus:ring-red-400' : 'focus:ring-indigo-400'}`}
-            />
-            <label className={`absolute left-4 top-1 text-sm transition-all backdrop-blur-sm px-1 rounded-sm
-              peer-placeholder-shown:top-6 peer-placeholder-shown:text-base
-              peer-focus:top-1 peer-focus:text-sm
-              ${errors.confirmPassword ? 'text-red-600 bg-red-50' : 'text-indigo-500 bg-white/10 peer-placeholder-shown:text-gray-600 peer-focus:text-indigo-500'}`}>
-              Confirm Password
-            </label>
-            {errors.confirmPassword && (
-              <div className="absolute left-4 top-full mt-3 z-50 bg-red-200 border border-red-400 text-red-900 text-sm px-3 py-1 rounded shadow-md animate-popup">
-                {errors.confirmPassword}
-              </div>
-            )}
-            <button
-              type="button"
-              onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-              className="absolute right-4 top-5.5 text-gray-500 hover:text-indigo-600"
-            >
-              {showConfirmPassword ? eyeOffIcon : eyeIcon}
-            </button>
-          </div>
-
           <button
             disabled={isLoading}
             className="cursor-pointer w-full py-3 rounded-xl bg-indigo-600 text-white font-semibold
             hover:bg-indigo-700 transition active:scale-95 disabled:opacity-50"
           >
-            {isLoading ? 'Creating Account...' : 'Sign Up'}
+            {isLoading ? 'Submitting...' : 'Submit request'}
           </button>
 
           {errors.submit && (

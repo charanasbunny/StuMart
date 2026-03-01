@@ -155,6 +155,33 @@ export const signUp = async ({ pinNumber, name, email, password }) => {
     };
   }
 };
+
+/**
+ * Create Auth user with email + password only (no student record).
+ * Used when completing an admin-approved registration; student record is created via claim_approved_registration.
+ * @param {string} email
+ * @param {string} password
+ * @returns {Promise<{success: boolean, error: string|null, data: {user: Object}|null}>}
+ */
+export const signUpPasswordOnly = async (email, password) => {
+  try {
+    const cleanEmail = email.trim().toLowerCase();
+    const { data, error } = await supabase.auth.signUp({
+      email: cleanEmail,
+      password,
+      options: { emailRedirectTo: `${getBaseUrl()}/login` },
+    });
+    if (error) {
+      let msg = error.message;
+      if (error.message?.includes('already registered') || error.message?.includes('already exists')) msg = 'This email is already registered. Try logging in.';
+      return { success: false, error: msg, data: null };
+    }
+    return { success: true, error: null, data: data?.user ? { user: data.user } : null };
+  } catch (err) {
+    return { success: false, error: err.message || 'Sign up failed', data: null };
+  }
+};
+
 /**
  * Send password reset email
  * @param {string} email - User email

@@ -3,10 +3,7 @@
   "outputDirectory": "dist",
   "devCommand": "npm run dev",
   "rewrites": [
-    {
-      "source": "/(.*)",
-      "destination": "/index.html"
-    }
+    { "source": "/complete-signup", "destination": "/index.html" },
+    { "source": "/(.*)", "destination": "/index.html" }
   ]
 }
-
