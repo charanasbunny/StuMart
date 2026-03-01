@@ -344,7 +344,7 @@ export default function ProductDetail() {
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   {/* Phone Call Button */}
                   <a
-                    href="tel:9392668228"
+                    href="tel:not available now"
                     className="inline-flex items-center justify-center px-4 py-3 bg-gradient-to-br from-indigo-600 to-indigo-500 text-white font-medium rounded-lg hover:from-indigo-500 hover:to-indigo-400 transition-colors duration-200 shadow-md hover:shadow-lg"
                   >
                     <svg className="w-5 h-5 mr-2 text-white/90" fill="none" stroke="currentColor" viewBox="0 0 24 24">

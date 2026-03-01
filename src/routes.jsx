@@ -15,9 +15,11 @@ import AdminFeedbacks from "./pages/AdminFeedbacks";
 import AdminPINManagement from "./pages/AdminPINManagement";
 import AdminProducts from "./pages/AdminProducts";
 import AdminProductDetail from "./pages/AdminProductDetail";
+import AdminRegistrationRequests from "./pages/AdminRegistrationRequests";
 import LikedPost from "./pages/Likedpost";
 import AboutUs from "./pages/AboutUs";
 import ContactUs from "./pages/ContactUs";
+import CompleteSignup from "./pages/CompleteSignup";
 import { Navigate } from "react-router-dom";
 
 export const publicRoutes = [
@@ -40,6 +42,7 @@ export const publicRoutes = [
 
   { path: "/login", element: <Login /> },
   { path: "/register", element: <Register /> },
+  { path: "/complete-signup", element: <CompleteSignup /> },
 
   {
     path: "/Profile",
@@ -94,6 +97,15 @@ export const adminRoutes = [
     element: (
       <ProtectedAdminRoute>
         <AdminPINManagement />
+      </ProtectedAdminRoute>
+    ),
+  },
+
+  {
+    path: "/admin/registration-requests",
+    element: (
+      <ProtectedAdminRoute>
+        <AdminRegistrationRequests />
       </ProtectedAdminRoute>
     ),
   },
