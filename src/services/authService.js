@@ -234,7 +234,7 @@ export const signUpPasswordOnly = async (email, password, metadata = {}) => {
  */
 export const sendPasswordReset = async (email) => {
   try {
-    const { data, error } = await supabase.auth.resetPasswordForEmail(email, {
+    const { error } = await supabase.auth.resetPasswordForEmail(email, {
       redirectTo: `${getBaseUrl()}/login`, // Where user lands after reset
     });
 
