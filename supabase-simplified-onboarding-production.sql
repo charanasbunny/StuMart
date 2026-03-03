@@ -102,8 +102,12 @@ BEGIN
     RAISE EXCEPTION 'Request not found or not pending';
   END IF;
 
-  -- 48-char cryptographic random token (requires pgcrypto in Supabase).
-  v_token := encode(gen_random_bytes(24), 'hex');
+  -- 48-char token using built-in PostgreSQL only (no extension dependency).
+  v_token := substring(
+    md5(random()::text || clock_timestamp()::text || p_request_id::text) ||
+    md5(random()::text || clock_timestamp()::text || p_request_id::text || 'x')
+    from 1 for 48
+  );
 
   UPDATE registration_requests
   SET status = 'approved',
