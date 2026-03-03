@@ -5,6 +5,7 @@ import {
   getRegistrationRequests,
   adminApproveRequest,
   adminRejectRequest,
+  sendApprovalEmail,
 } from '../services/registrationService';
 import AdminLayout from '../components/admin/AdminLayout';
 
@@ -17,6 +18,7 @@ export default function AdminRegistrationRequests() {
   const [error, setError] = useState('');
   const [actionId, setActionId] = useState(null);
   const [approvalUrl, setApprovalUrl] = useState(null);
+  const [success, setSuccess] = useState('');
 
   const loadRequests = useCallback(
     async (isRefresh = false) => {
@@ -46,13 +48,29 @@ export default function AdminRegistrationRequests() {
     loadRequests();
   }, [loadRequests]);
 
-  const handleApprove = async (requestId) => {
-    setActionId(requestId);
+  const handleApprove = async (request) => {
+    setActionId(request.id);
     setApprovalUrl(null);
-    const result = await adminApproveRequest(requestId);
+    setSuccess('');
+    setError('');
+
+    const result = await adminApproveRequest(request.id);
     if (result.success && result.data?.completionUrl) {
-      setApprovalUrl(result.data.completionUrl);
-      setRequests((prev) => prev.filter((r) => r.id !== requestId));
+      const emailResult = await sendApprovalEmail({
+        toEmail: request.email,
+        studentName: request.name,
+        completionUrl: result.data.completionUrl,
+        tokenExpiresAt: result.data.tokenExpiresAt,
+      });
+
+      if (emailResult.success) {
+        setSuccess(`Approved and email sent to ${request.email}.`);
+        setApprovalUrl(null);
+      } else {
+        setError(`Approved, but email failed. Copy and share the link manually. (${emailResult.error})`);
+        setApprovalUrl(result.data.completionUrl);
+      }
+      setRequests((prev) => prev.filter((r) => r.id !== request.id));
     } else {
       setError(result.error || 'Failed to approve.');
     }
@@ -98,6 +116,9 @@ export default function AdminRegistrationRequests() {
       <div className="max-w-5xl mx-auto">
         {error && (
           <div className="mb-4 p-3 rounded-lg bg-red-50 text-red-700 text-sm">{error}</div>
+        )}
+        {success && (
+          <div className="mb-4 p-3 rounded-lg bg-emerald-50 text-emerald-700 text-sm">{success}</div>
         )}
 
         {approvalUrl && (
@@ -146,7 +167,7 @@ export default function AdminRegistrationRequests() {
                         <div className="flex flex-wrap items-center gap-2">
                           <button
                             type="button"
-                            onClick={() => handleApprove(r.id)}
+                            onClick={() => handleApprove(r)}
                             disabled={actionId !== null}
                             className="admin-button admin-button--primary text-sm py-1.5 px-3"
                           >

@@ -125,6 +125,48 @@ export const adminApproveRequest = async (requestId) => {
 };
 
 /**
+ * Admin: send approval email containing completion URL.
+ * Uses Supabase Edge Function: send-approval-email
+ */
+export const sendApprovalEmail = async ({ toEmail, studentName, completionUrl, tokenExpiresAt }) => {
+  try {
+    const invokeSend = async () => {
+      return supabase.functions.invoke('send-approval-email', {
+        body: {
+          toEmail,
+          studentName,
+          completionUrl,
+          tokenExpiresAt,
+        },
+      });
+    };
+
+    const { data: sessionData, error: sessionError } = await supabase.auth.getSession();
+    if (sessionError || !sessionData?.session) {
+      return { success: false, error: 'Admin session missing. Please login again.', data: null };
+    }
+
+    let { data, error } = await invokeSend();
+
+    // Self-heal stale token: refresh once and retry.
+    if (error?.message?.toLowerCase().includes('invalid jwt')) {
+      const { data: refreshed, error: refreshError } = await supabase.auth.refreshSession(sessionData.session);
+      if (refreshError || !refreshed?.session) {
+        return { success: false, error: 'Invalid admin session token. Please logout and login again.', data: null };
+      }
+      const retry = await invokeSend();
+      data = retry.data;
+      error = retry.error;
+    }
+
+    if (error) return { success: false, error: error.message || 'Failed to send email', data: null };
+    return { success: true, error: null, data: data || null };
+  } catch (err) {
+    return { success: false, error: err.message || 'Failed to send email', data: null };
+  }
+};
+
+/**
  * Admin: reject a request. PIN becomes available again.
  */
 export const adminRejectRequest = async (requestId, reason = null) => {
