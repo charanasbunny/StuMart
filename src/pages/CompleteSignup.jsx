@@ -72,7 +72,7 @@ export default function CompleteSignup() {
       }
 
       setSuccess(true);
-      setTimeout(() => navigate('/login', { state: { message: 'Account created and linked. Check your email, confirm it, then log in.' } }), 3000);
+      setTimeout(() => navigate('/login', { state: { message: 'Account created successfully. You can now log in.' } }), 3000);
     } catch (err) {
       const msg = err.message || 'Something went wrong.';
       setError(msg.includes('already registered') || msg.includes('duplicate key') ? 'This email is already registered. Please log in.' : msg);
@@ -115,7 +115,7 @@ export default function CompleteSignup() {
             </svg>
           </div>
           <h2 className="text-xl font-bold text-gray-900">Account created</h2>
-          <p className="mt-2 text-gray-600">Check your email and click the confirmation link, then log in.</p>
+          <p className="mt-2 text-gray-600">Account created successfully. Redirecting you to login.</p>
           <p className="mt-4 text-sm text-gray-500">Redirecting to login...</p>
         </div>
       </div>

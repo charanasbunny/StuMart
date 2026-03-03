@@ -2,8 +2,8 @@ import { supabase } from './supabaseClient';
 
 /**
  * Authentication Service
- * Handles all authentication-related operations including signup, login, logout,
- * and email verification checks.
+ * Handles all authentication-related operations including signup, login, and logout.
+ * Note: Production onboarding flow uses admin approval + completion token (no Supabase email confirmation dependency).
  */
 
 /**
@@ -43,13 +43,11 @@ export const signUp = async ({ pinNumber, name, email, password }) => {
     }
 
     // Step 1: Create user in Supabase Auth
-    // Supabase will automatically send confirmation email
     const { data: authData, error: authError } = await supabase.auth.signUp({
       email: cleanEmail,
       password,
       options: {
         emailRedirectTo: `${getBaseUrl()}/login`,
-        // Ensure confirmation email is sent
         data: {
           name: name.trim(),
           pin_number: pinNumber.trim(),
@@ -86,20 +84,19 @@ export const signUp = async ({ pinNumber, name, email, password }) => {
 
     // Step 2: Create student record using database function
     // This function validates PIN availability and marks it as registered
-    // Account is created but status is 'pending' until email is confirmed
+    // Account is created directly as active in simplified flow
     const { data: studentData, error: studentError } = await supabase
       .rpc('create_student_record', {
         p_pin_number: pinNumber.trim(),
         p_name: name.trim(),
         p_email: cleanEmail,
         p_auth_user_id: authData.user.id,
-        p_status: 'pending', // Account is pending until email confirmation
+        p_status: 'active',
       });
 
     if (studentError || !studentData || studentData.length === 0) {
       // If student insertion fails, we have an orphaned auth user
       // Note: Client-side cannot delete auth users (requires admin API)
-      // The user will need to verify email to login, but won't have a student record
       // This is a known limitation - in production, use a server-side function to handle cleanup
       console.error('Failed to create student record:', studentError);
 
@@ -128,9 +125,6 @@ export const signUp = async ({ pinNumber, name, email, password }) => {
     const student = studentData[0];
     
     // Step 3: Return success
-    // Note: Account is created but email_confirmed = FALSE
-    // Supabase has automatically sent confirmation email
-    // User must click link in email to activate account
     return {
       success: true,
       error: null,
@@ -240,18 +234,7 @@ export const signIn = async (email, password) => {
       };
     }
 
-    // Step 2: Check if email is verified
-    if (!authData.user.email_confirmed_at) {
-      // Sign out the user immediately if email is not verified
-      await supabase.auth.signOut();
-      return {
-        success: false,
-        error: 'Please verify your email before logging in. Check your inbox for the verification link.',
-        data: null,
-      };
-    }
-
-    // Step 3: Verify student record exists in students table
+    // Step 2: Verify student record exists in students table
     // Use maybeSingle() so we get 200 + null when no row exists instead of 406 from .single()
     let { data: studentData, error: studentError } = await supabase
       .from('students')
@@ -278,34 +261,17 @@ export const signIn = async (email, password) => {
       };
     }
 
-    // Step 4: If email is confirmed in Auth but not in database, call confirm_student_email()
-    if (authData.user.email_confirmed_at && !studentData.email_confirmed) {
-      const { data: confirmedData, error: confirmError } = await supabase.rpc('confirm_student_email', {
-        p_auth_user_id: authData.user.id
-      });
-
-      if (confirmError) {
-        console.error('Error confirming email in database:', confirmError);
-        // Continue anyway - will try again on next login
-      } else if (confirmedData && confirmedData.length > 0) {
-        // Use the confirmed student data
-        studentData.email_confirmed = true;
-        studentData.status = 'active';
-        studentData.email_confirmed_at = confirmedData[0].email_confirmed_at;
-      }
-    }
-
-    // Step 5: Verify student is active (must have confirmed email)
-    if (studentData.status !== 'active' || !studentData.email_confirmed) {
+    // Step 3: Verify student account is active.
+    if (studentData.status !== 'active') {
       await supabase.auth.signOut();
       return {
         success: false,
-        error: 'Your email is not confirmed. Please check your inbox and click the confirmation link.',
+        error: 'Your account is not active yet. Contact admin.',
         data: null,
       };
     }
 
-    // Step 5: Return success with user and student data
+    // Step 4: Return success with user and student data
     return {
       success: true,
       error: null,
@@ -368,15 +334,6 @@ export const getCurrentUser = async () => {
 
     const user = session.user;
 
-    // Check if email is verified
-    if (!user.email_confirmed_at) {
-      return {
-        user: null,
-        student: null,
-        error: 'Email not verified',
-      };
-    }
-
     // Get student record; use maybeSingle() to avoid 406 when no row exists
     let { data: studentData, error: studentError } = await supabase
       .from('students')
@@ -392,7 +349,7 @@ export const getCurrentUser = async () => {
       };
     }
 
-    // Update status to 'active' if it's still 'pending' (email is verified)
+    // Backward-compat: auto-activate legacy pending rows.
     if (studentData.status === 'pending') {
       const { data: updatedStudent, error: updateError } = await supabase
         .from('students')
