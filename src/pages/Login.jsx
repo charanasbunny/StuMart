@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { signIn, resendVerificationEmail } from '../services/authService';
+import { signIn, resendVerificationEmail, getCurrentUser } from '../services/authService';
 import { adminSignIn } from '../services/adminService';
 import { useNavigate, Link, useSearchParams, useLocation } from "react-router-dom";
 import { supabase } from '../services/supabaseClient';
@@ -35,19 +35,23 @@ export default function Login() {
     }
   }, [loginType, searchParams]);
 
-  // When user lands from email confirmation or password reset link, Supabase sets session from URL hash.
-  // If we already have a confirmed session, redirect to intended page or Profile.
+  // Avoid redirect loops: only auto-redirect when a fully linked student session exists.
   useEffect(() => {
     let mounted = true;
     (async () => {
+      if (loginType !== 'student') return;
       const { data: { session } } = await supabase.auth.getSession();
       if (!mounted || !session?.user?.email_confirmed_at) return;
+
+      const current = await getCurrentUser();
+      if (!mounted || !current?.user || !current?.student || current?.error) return;
+
       const returnUrl = searchParams.get('returnUrl');
       const path = returnUrl ? decodeURIComponent(returnUrl) : '/Profile';
       navigate(path, { replace: true });
     })();
     return () => { mounted = false; };
-  }, [navigate, searchParams]);
+  }, [loginType, navigate, searchParams]);
 
   /**
    * Validate email format

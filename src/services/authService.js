@@ -17,54 +17,6 @@ const getBaseUrl = () => {
   return 'https://gvlpolymart.app';
 };
 
-/**
- * Extract registration completion token saved during complete-signup.
- */
-const getRegistrationTokenFromUser = (user) => {
-  return user?.user_metadata?.registration_token || null;
-};
-
-/**
- * Try to finalize approved registration using the token stored in user metadata.
- * This repairs cases where Auth user exists but students row was not created yet.
- */
-const tryClaimApprovedRegistrationFromMetadata = async (user) => {
-  try {
-    if (!user?.id) {
-      return { success: false, error: 'Missing authenticated user.' };
-    }
-
-    const token = getRegistrationTokenFromUser(user);
-    if (!token) {
-      return { success: false, error: null };
-    }
-
-    const { error } = await supabase.rpc('claim_approved_registration', {
-      p_token: token,
-      p_auth_user_id: user.id,
-    });
-
-    if (!error) {
-      return { success: true, error: null };
-    }
-
-    // "already registered" means row may already exist; treat as non-fatal.
-    if (error.message?.toLowerCase().includes('already registered')) {
-      return { success: true, error: null };
-    }
-
-    if (error.message?.toLowerCase().includes('expired')) {
-      return {
-        success: false,
-        error: 'Your approval link has expired. Please ask admin to approve again and send a new link.',
-      };
-    }
-
-    return { success: false, error: error.message || 'Could not complete registration claim.' };
-  } catch (err) {
-    return { success: false, error: err.message || 'Could not complete registration claim.' };
-  }
-};
 
 /**
  * Sign up a new student
@@ -198,7 +150,7 @@ export const signUp = async ({ pinNumber, name, email, password }) => {
 
 /**
  * Create Auth user with email + password only (no immediate student insert).
- * Used in complete-signup flow; student row is linked automatically on first verified login.
+ * Used in complete-signup flow; student row must be linked immediately by claim RPC.
  * @param {string} email
  * @param {string} password
  * @returns {Promise<{success: boolean, error: string|null, data: {user: Object}|null}>}
@@ -316,30 +268,14 @@ export const signIn = async (email, password) => {
       };
     }
 
-    // Permanent flow: if students row is missing, auto-claim using registration token metadata.
     if (!studentData) {
-      const claimResult = await tryClaimApprovedRegistrationFromMetadata(authData.user);
-
-      if (claimResult.success) {
-        const refetch = await supabase
-          .from('students')
-          .select('*')
-          .eq('auth_user_id', authData.user.id)
-          .maybeSingle();
-        studentData = refetch.data || null;
-        studentError = refetch.error || null;
-      }
-
-      if (studentError || !studentData) {
-        await supabase.auth.signOut();
-        return {
-          success: false,
-          error:
-            claimResult.error ||
-            'No student account is linked to this email. Complete registration from admin link, then verify email.',
-          data: null,
-        };
-      }
+      await supabase.auth.signOut();
+      return {
+        success: false,
+        error:
+          'No student account is linked to this email. Complete signup from the admin approval link or contact support.',
+        data: null,
+      };
     }
 
     // Step 4: If email is confirmed in Auth but not in database, call confirm_student_email()
@@ -448,32 +384,11 @@ export const getCurrentUser = async () => {
       .eq('auth_user_id', user.id)
       .maybeSingle();
 
-    // If row is missing, attempt one-time auto-claim from metadata token.
-    if (!studentData && !studentError) {
-      const claimResult = await tryClaimApprovedRegistrationFromMetadata(user);
-      if (claimResult.success) {
-        const refetch = await supabase
-          .from('students')
-          .select('pin_number, name, email, joining_year, branch, year, section, auth_user_id, status, email_confirmed, email_confirmed_at, created_at, updated_at')
-          .eq('auth_user_id', user.id)
-          .maybeSingle();
-        studentData = refetch.data || null;
-        studentError = refetch.error || null;
-      }
-      if (!studentData && claimResult.error) {
-        return {
-          user: null,
-          student: null,
-          error: claimResult.error,
-        };
-      }
-    }
-
     if (studentError || !studentData) {
       return {
         user: null,
         student: null,
-        error: 'Student record not found',
+        error: 'Student record not found. Please complete signup using your admin approval link.',
       };
     }
 
