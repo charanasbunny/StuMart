@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useSearchParams, Link, useNavigate } from 'react-router-dom';
-import { getApprovedRequestByToken } from '../services/registrationService';
+import { claimApprovedRegistration, getApprovedRequestByToken } from '../services/registrationService';
 import { signUpPasswordOnly } from '../services/authService';
 
 export default function CompleteSignup() {
@@ -61,8 +61,18 @@ export default function CompleteSignup() {
         setSubmitLoading(false);
         return;
       }
+
+      const createdAuthUserId = signUpResult?.data?.user?.id || null;
+      const claimResult = await claimApprovedRegistration(token, createdAuthUserId);
+      if (!claimResult.success) {
+        console.error('Claim approved registration failed:', claimResult.error);
+        setError('Account created but linking failed. Contact support/admin with your email.');
+        setSubmitLoading(false);
+        return;
+      }
+
       setSuccess(true);
-      setTimeout(() => navigate('/login', { state: { message: 'Account created. Check your email, confirm it, then log in. Your student profile will be linked automatically.' } }), 3000);
+      setTimeout(() => navigate('/login', { state: { message: 'Account created and linked. Check your email, confirm it, then log in.' } }), 3000);
     } catch (err) {
       const msg = err.message || 'Something went wrong.';
       setError(msg.includes('already registered') || msg.includes('duplicate key') ? 'This email is already registered. Please log in.' : msg);

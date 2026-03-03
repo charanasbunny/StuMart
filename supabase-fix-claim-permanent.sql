@@ -1,8 +1,5 @@
--- Permanent fix for complete-signup claim flow
--- Goals:
--- 1) Prevent orphaned auth users from getting stuck without students row
--- 2) Make claim_approved_registration idempotent
--- 3) Enforce email ownership match between auth user and approved request
+-- DEPRECATED PATCH FILE
+-- Keep this file safe if run manually: no expiry bypass and idempotent completion behavior.
 
 CREATE OR REPLACE FUNCTION claim_approved_registration(p_token VARCHAR(255), p_auth_user_id UUID)
 RETURNS TABLE (pin_number VARCHAR(255), name VARCHAR(255), email VARCHAR(255))
@@ -16,8 +13,11 @@ DECLARE
   v_existing_student students%ROWTYPE;
   v_auth_email TEXT;
 BEGIN
+  IF p_token IS NULL OR length(trim(p_token)) = 0 THEN
+    RAISE EXCEPTION 'Missing completion token';
+  END IF;
   IF p_auth_user_id IS NULL THEN
-    RAISE EXCEPTION 'Unauthorized';
+    RAISE EXCEPTION 'Missing auth user id';
   END IF;
 
   -- Normal client calls are authenticated; keep this guard for defense-in-depth.
@@ -35,11 +35,20 @@ BEGIN
 
   SELECT * INTO v_request
   FROM registration_requests
-  WHERE completion_token = p_token
-    AND status IN ('approved', 'completed');
+  WHERE completion_token = trim(p_token)
+    AND status = 'approved'
+    AND (token_expires_at IS NULL OR token_expires_at > NOW());
 
   IF NOT FOUND THEN
-    RAISE EXCEPTION 'Invalid link. Ask admin for a new approval link.';
+    -- Idempotent success path for already-completed claims.
+    SELECT * INTO v_request
+    FROM registration_requests
+    WHERE completion_token = trim(p_token)
+      AND status = 'completed';
+
+    IF NOT FOUND THEN
+      RAISE EXCEPTION 'Invalid or expired link. Ask admin for a new approval link.';
+    END IF;
   END IF;
 
   -- Critical ownership check: token and logged-in auth email must match.
@@ -47,19 +56,15 @@ BEGIN
     RAISE EXCEPTION 'This approval link does not belong to the signed-in email.';
   END IF;
 
-  -- If student row already exists for this email, make operation idempotent.
+  -- If student row already exists for this pin, make operation idempotent.
   SELECT * INTO v_existing_student
   FROM students s
-  WHERE lower(s.email) = lower(v_request.email)
+  WHERE s.pin_number = v_request.pin_number
   LIMIT 1;
 
   IF FOUND THEN
-    -- Ensure row is linked to current auth user (repair old mismatches).
     IF v_existing_student.auth_user_id IS DISTINCT FROM p_auth_user_id THEN
-      UPDATE students
-      SET auth_user_id = p_auth_user_id,
-          updated_at = NOW()
-      WHERE pin_number = v_existing_student.pin_number;
+      RAISE EXCEPTION 'This registration is already linked to another account.';
     END IF;
 
     UPDATE student_pins
@@ -76,6 +81,10 @@ BEGIN
     RETURN QUERY
     SELECT v_existing_student.pin_number, v_existing_student.name, v_existing_student.email;
     RETURN;
+  END IF;
+
+  IF EXISTS (SELECT 1 FROM students s WHERE s.auth_user_id = p_auth_user_id) THEN
+    RAISE EXCEPTION 'This account is already linked to another student profile.';
   END IF;
 
   -- For first-time claim, pin must still be reserved for this request.

@@ -64,14 +64,18 @@ export const getApprovedRequestByToken = async (token) => {
 /**
  * After user has signed up (Auth), claim the approved registration and create student record.
  */
-export const claimApprovedRegistration = async (token) => {
+export const claimApprovedRegistration = async (token, authUserId = null) => {
   try {
-    const { data: { user } } = await supabase.auth.getUser();
-    if (!user) return { success: false, error: 'You must be signed in', data: null };
+    let resolvedAuthUserId = authUserId;
+    if (!resolvedAuthUserId) {
+      const { data: { user } } = await supabase.auth.getUser();
+      resolvedAuthUserId = user?.id || null;
+    }
+    if (!resolvedAuthUserId) return { success: false, error: 'Missing auth user id for claim', data: null };
 
     const { data, error } = await supabase.rpc('claim_approved_registration', {
       p_token: token,
-      p_auth_user_id: user.id,
+      p_auth_user_id: resolvedAuthUserId,
     });
 
     if (error) {
