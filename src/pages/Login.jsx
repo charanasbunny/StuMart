@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { signIn, resendVerificationEmail, getCurrentUser } from '../services/authService';
+import { signIn, getCurrentUser } from '../services/authService';
 import { adminSignIn } from '../services/adminService';
 import { useNavigate, Link, useSearchParams, useLocation } from "react-router-dom";
 import { supabase } from '../services/supabaseClient';
@@ -23,9 +23,6 @@ export default function Login() {
   });
   const [errors, setErrors] = useState({});
   const [isLoading, setIsLoading] = useState(false);
-  const [showResendEmail, setShowResendEmail] = useState(false);
-  const [resendLoading, setResendLoading] = useState(false);
-  const [resendMessage, setResendMessage] = useState('');
   const successMessage = location.state?.message;
 
   useEffect(() => {
@@ -41,7 +38,7 @@ export default function Login() {
     (async () => {
       if (loginType !== 'student') return;
       const { data: { session } } = await supabase.auth.getSession();
-      if (!mounted || !session?.user?.email_confirmed_at) return;
+      if (!mounted || !session?.user) return;
 
       const current = await getCurrentUser();
       if (!mounted || !current?.user || !current?.student || current?.error) return;
@@ -103,11 +100,6 @@ export default function Login() {
         [name]: '',
       }));
     }
-    // Clear resend message when user changes email
-    if (name === 'email') {
-      setResendMessage('');
-      setShowResendEmail(false);
-    }
   };
 
   const [showPassword, setShowPassword] = useState(false);
@@ -118,8 +110,6 @@ export default function Login() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setErrors({});
-    setResendMessage('');
-    setShowResendEmail(false);
 
     // Validate form
     if (!validateForm()) {
@@ -152,11 +142,6 @@ export default function Login() {
           const path = returnUrl ? decodeURIComponent(returnUrl) : '/Profile';
           navigate(path, { replace: true });
         } else {
-          // Check if error is related to email verification
-          if (result.error && result.error.toLowerCase().includes('verify')) {
-            setShowResendEmail(true);
-          }
-          // Show error message
           setErrors({ submit: result.error });
         }
       }
@@ -164,33 +149,6 @@ export default function Login() {
       setErrors({ submit: error.message || 'An unexpected error occurred' });
     } finally {
       setIsLoading(false);
-    }
-  };
-
-  /**
-   * Handle resend verification email
-   */
-  const handleResendVerification = async () => {
-    if (!formData.email.trim() || !validateEmail(formData.email)) {
-      setResendMessage('Please enter a valid email address');
-      return;
-    }
-
-    setResendLoading(true);
-    setResendMessage('');
-
-    try {
-      const result = await resendVerificationEmail(formData.email.trim().toLowerCase());
-      
-      if (result.success) {
-        setResendMessage('Verification email sent! Please check your inbox.');
-      } else {
-        setResendMessage(result.error || 'Failed to resend verification email');
-      }
-    } catch (error) {
-      setResendMessage(error.message || 'An unexpected error occurred');
-    } finally {
-      setResendLoading(false);
     }
   };
 
@@ -247,8 +205,6 @@ export default function Login() {
               onClick={() => {
                 setLoginType('student');
                 setErrors({});
-                setShowResendEmail(false);
-                setResendMessage('');
               }}
               className={`px-4 py-2.5 text-sm font-semibold rounded-lg transition-all duration-200 ${
                 loginType === 'student'
@@ -265,8 +221,6 @@ export default function Login() {
               onClick={() => {
                 setLoginType('admin');
                 setErrors({});
-                setShowResendEmail(false);
-                setResendMessage('');
               }}
               className={`px-4 py-2.5 text-sm font-semibold rounded-lg transition-all duration-200 ${
                 loginType === 'admin'
@@ -381,52 +335,6 @@ export default function Login() {
     Forgot your password?
   </Link>
 </div>
-
-
-
-          {/* Resend Verification Email Section */}
-          {loginType === 'student' && showResendEmail && (
-            <div className="rounded-md bg-yellow-50 p-4 border border-yellow-200">
-              <div className="flex">
-                <div className="flex-shrink-0">
-                  <svg
-                    className="h-5 w-5 text-yellow-400"
-                    viewBox="0 0 20 20"
-                    fill="currentColor"
-                  >
-                    <path
-                      fillRule="evenodd"
-                      d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z"
-                      clipRule="evenodd"
-                    />
-                  </svg>
-                </div>
-                <div className="ml-3 flex-1">
-                  <p className="text-sm font-medium text-yellow-800 mb-2">
-                    Your email is not verified. Please verify your email to continue.
-                  </p>
-                  <button
-                    type="button"
-                    onClick={handleResendVerification}
-                    disabled={resendLoading}
-                    className="text-sm font-medium text-yellow-800 hover:text-yellow-900 underline disabled:opacity-50"
-                  >
-                    {resendLoading ? 'Sending...' : 'Resend verification email'}
-                  </button>
-                  {resendMessage && (
-                    <p className={`mt-2 text-sm ${
-                      resendMessage.includes('sent') 
-                        ? 'text-green-700' 
-                        : 'text-red-700'
-                    }`}>
-                      {resendMessage}
-                    </p>
-                  )}
-                </div>
-              </div>
-            </div>
-          )}
-
           {/* Error Message */}
           {errors.submit && (
             <div className="rounded-md bg-red-50 p-4">
