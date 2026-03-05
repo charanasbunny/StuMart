@@ -84,7 +84,7 @@ export default function AdminLayout({
       console.error('Logout error:', error);
     } finally {
       setIsLoggingOut(false);
-      navigate('/login');
+      navigate('/login?type=admin');
     }
   };
 

@@ -1,10 +1,12 @@
+@import url("https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Inter:wght@400;500;600;700;800&family=Manrope:wght@600;700;800&family=Poppins:wght@500;600;700&family=Sora:wght@500;600;700&display=swap");
 @import "tailwindcss";
 
 /* Font family configuration */
 @layer base {
   :root {
     --font-sans: 'Inter', sans-serif;
-    --font-heading: 'Poppins', sans-serif;
+    --font-heading: 'Manrope', sans-serif;
+    --font-display: 'Manrope', sans-serif;
     --font-brand: 'Cinzel', serif;
   }
   
@@ -20,6 +22,14 @@
   
   .font-poppins {
     font-family: 'Poppins', sans-serif;
+  }
+
+  .font-display {
+    font-family: 'Manrope', sans-serif;
+  }
+
+  .font-manrope {
+    font-family: 'Manrope', sans-serif;
   }
   
   .font-inter {

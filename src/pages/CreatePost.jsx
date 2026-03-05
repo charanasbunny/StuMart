@@ -258,7 +258,7 @@ export default function CreatePost() {
 
         // Redirect to Profile page after 2 seconds
         setTimeout(() => {
-          navigate('/Profile');
+          navigate('/profile');
         }, 2000);
       } else {
         setSubmitError(result.error || 'Failed to create post. Please try again.');
@@ -582,7 +582,7 @@ export default function CreatePost() {
           <div className="flex justify-end space-x-4 pt-4">
             <button
               type="button"
-              onClick={() => navigate('/Profile')}
+              onClick={() => navigate('/profile')}
               disabled={isSubmitting}
               className="px-6 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
             >

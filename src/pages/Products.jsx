@@ -162,7 +162,7 @@ export default function Products() {
     return (
       <div className="min-h-screen bg-gray-50 py-8 px-4">
         <div className="max-w-7xl mx-auto">
-          <h1 className="text-3xl font-bold text-gray-900 mb-8">
+          <h1 className="font-display text-3xl font-bold text-gray-900 mb-8">
             Browse Products
           </h1>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
@@ -188,7 +188,7 @@ export default function Products() {
     return (
       <div className="min-h-screen bg-gray-50 py-8 px-4">
         <div className="max-w-7xl mx-auto">
-          <h1 className="text-3xl font-bold text-gray-900 mb-8">
+          <h1 className="font-display text-3xl font-bold text-gray-900 mb-8">
             Browse Products
           </h1>
           <div className="bg-red-50 border border-red-200 rounded-lg p-6 text-center">
@@ -209,11 +209,11 @@ export default function Products() {
     return (
       <div className="min-h-screen bg-gray-50 py-8 px-4">
         <div className="max-w-7xl mx-auto">
-          <h1 className="text-3xl font-bold text-gray-900 mb-8">
+          <h1 className="font-display text-3xl font-bold text-gray-900 mb-8">
             Browse Products
           </h1>
           <div className="bg-white rounded-lg shadow-md p-12 text-center">
-            <h2 className="text-2xl font-semibold text-gray-900 mb-2">
+            <h2 className="font-display text-2xl font-semibold text-gray-900 mb-2">
               No Products Available
             </h2>
             <p className="text-gray-600">
@@ -323,7 +323,7 @@ export default function Products() {
                   </span>
                 )}
               </button>
-              <h2 className="text-xl font-semibold text-gray-900">
+              <h2 className="font-display text-xl font-semibold text-gray-900">
                 {filteredProducts.length} Product
                 {filteredProducts.length !== 1 ? "s" : ""}
               </h2>
@@ -452,7 +452,7 @@ export default function Products() {
               </div>
             ) : (
               <div className="bg-white rounded-lg shadow-md p-12 text-center">
-                <h2 className="text-2xl font-semibold text-gray-900 mb-2">
+                <h2 className="font-display text-2xl font-semibold text-gray-900 mb-2">
                   No Products Found
                 </h2>
                 <p className="text-gray-600 mb-6">

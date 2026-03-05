@@ -1,72 +1,89 @@
-import Home from "./pages/Home";
-import Login from "./pages/Login";
-import Register from "./pages/Register";
-import CreatePost from "./pages/CreatePost";
-import Products from "./pages/Products";
-import ProductDetail from "./pages/ProductDetail";
-import AdminDashboard from "./pages/AdminDashboard";
+import { lazy, Suspense } from "react";
 import ProtectedRoute from "./components/ProtectedRoute";
 import ProtectedAdminRoute from "./components/ProtectedAdminRoute";
-import ForgotPassword from "./pages/ForgotPassword";
-import Profile from "./pages/Profile";
-import MyPosts from "./pages/MyPosts";
-import CustomerFeedback from "./pages/CustomerFeedback";
-import AdminFeedbacks from "./pages/AdminFeedbacks";
-import AdminPINManagement from "./pages/AdminPINManagement";
-import AdminProducts from "./pages/AdminProducts";
-import AdminProductDetail from "./pages/AdminProductDetail";
-import AdminRegistrationRequests from "./pages/AdminRegistrationRequests";
-import AboutUs from "./pages/AboutUs";
-import ContactUs from "./pages/ContactUs";
-import CompleteSignup from "./pages/CompleteSignup";
 import { Navigate } from "react-router-dom";
 
+const Home = lazy(() => import("./pages/Home"));
+const Login = lazy(() => import("./pages/Login"));
+const Register = lazy(() => import("./pages/Register"));
+const CreatePost = lazy(() => import("./pages/CreatePost"));
+const Products = lazy(() => import("./pages/Products"));
+const ProductDetail = lazy(() => import("./pages/ProductDetail"));
+const AdminDashboard = lazy(() => import("./pages/AdminDashboard"));
+const ForgotPassword = lazy(() => import("./pages/ForgotPassword"));
+const Profile = lazy(() => import("./pages/Profile"));
+const MyPosts = lazy(() => import("./pages/MyPosts"));
+const CustomerFeedback = lazy(() => import("./pages/CustomerFeedback"));
+const AdminFeedbacks = lazy(() => import("./pages/AdminFeedbacks"));
+const AdminPINManagement = lazy(() => import("./pages/AdminPINManagement"));
+const AdminProducts = lazy(() => import("./pages/AdminProducts"));
+const AdminProductDetail = lazy(() => import("./pages/AdminProductDetail"));
+const AdminRegistrationRequests = lazy(() => import("./pages/AdminRegistrationRequests"));
+const AboutUs = lazy(() => import("./pages/AboutUs"));
+const ContactUs = lazy(() => import("./pages/ContactUs"));
+const CompleteSignup = lazy(() => import("./pages/CompleteSignup"));
+
+const RouteLoader = () => (
+  <div className="min-h-[50vh] flex items-center justify-center bg-slate-50">
+    <div className="text-sm text-slate-600">Loading page...</div>
+  </div>
+);
+
+const withRouteSuspense = (Component) => (
+  <Suspense fallback={<RouteLoader />}>
+    <Component />
+  </Suspense>
+);
+
 export const publicRoutes = [
-  { path: "/", element: <Home /> },
+  { path: "/", element: withRouteSuspense(Home) },
 
-  { path: "/about", element: <AboutUs /> },
-  { path: "/contact", element: <ContactUs /> },
+  { path: "/about", element: withRouteSuspense(AboutUs) },
+  { path: "/contact", element: withRouteSuspense(ContactUs) },
 
-  { path: "/products", element: <Products /> },
-  { path: "/products/:id", element: <ProductDetail /> },
+  { path: "/products", element: withRouteSuspense(Products) },
+  { path: "/products/:id", element: withRouteSuspense(ProductDetail) },
 
-  { path: "/login", element: <Login /> },
-  { path: "/register", element: <Register /> },
-  { path: "/complete-signup", element: <CompleteSignup /> },
+  { path: "/login", element: withRouteSuspense(Login) },
+  { path: "/register", element: withRouteSuspense(Register) },
+  { path: "/complete-signup", element: withRouteSuspense(CompleteSignup) },
 
   {
-    path: "/Profile",
+    path: "/profile",
     element: (
       <ProtectedRoute>
-        <Profile />
+        {withRouteSuspense(Profile)}
       </ProtectedRoute>
     ),
   },
+  { path: "/Profile", element: <Navigate to="/profile" replace /> },
 
   {
     path: "/create-post",
     element: (
       <ProtectedRoute>
-        <CreatePost />
+        {withRouteSuspense(CreatePost)}
       </ProtectedRoute>
     ),
   },
 
   {
-    path: "/MyPosts",
+    path: "/my-posts",
     element: (
       <ProtectedRoute>
-        <MyPosts />
+        {withRouteSuspense(MyPosts)}
       </ProtectedRoute>
     ),
   },
+  { path: "/MyPosts", element: <Navigate to="/my-posts" replace /> },
 
 
-  { path: "/forgot-password", element: <ForgotPassword /> },
+  { path: "/forgot-password", element: withRouteSuspense(ForgotPassword) },
   {
     path: "/customer-feedback",
-    element: <CustomerFeedback />,
+    element: withRouteSuspense(CustomerFeedback),
   },
+  { path: "*", element: <Navigate to="/" replace /> },
 
 ];
 
@@ -77,7 +94,7 @@ export const adminRoutes = [
     path: "/admin/dashboard",
     element: (
       <ProtectedAdminRoute>
-        <AdminDashboard />
+        {withRouteSuspense(AdminDashboard)}
       </ProtectedAdminRoute>
     ),
   },
@@ -86,7 +103,7 @@ export const adminRoutes = [
     path: "/admin/pin-management",
     element: (
       <ProtectedAdminRoute>
-        <AdminPINManagement />
+        {withRouteSuspense(AdminPINManagement)}
       </ProtectedAdminRoute>
     ),
   },
@@ -95,7 +112,7 @@ export const adminRoutes = [
     path: "/admin/registration-requests",
     element: (
       <ProtectedAdminRoute>
-        <AdminRegistrationRequests />
+        {withRouteSuspense(AdminRegistrationRequests)}
       </ProtectedAdminRoute>
     ),
   },
@@ -104,7 +121,7 @@ export const adminRoutes = [
     path: "/admin/products",
     element: (
       <ProtectedAdminRoute>
-        <AdminProducts />
+        {withRouteSuspense(AdminProducts)}
       </ProtectedAdminRoute>
     ),
   },
@@ -113,7 +130,7 @@ export const adminRoutes = [
     path: "/admin/products/:id",
     element: (
       <ProtectedAdminRoute>
-        <AdminProductDetail />
+        {withRouteSuspense(AdminProductDetail)}
       </ProtectedAdminRoute>
     ),
   },
@@ -122,8 +139,9 @@ export const adminRoutes = [
     path: "/admin/feedbacks",
     element: (
       <ProtectedAdminRoute>
-        <AdminFeedbacks />
+        {withRouteSuspense(AdminFeedbacks)}
       </ProtectedAdminRoute>
     ),
   },
+  { path: "/admin/*", element: <Navigate to="/admin/dashboard" replace /> },
 ];

@@ -43,7 +43,7 @@ export default function Hero({ showScrollIndicator }) {
           </span>
         </div>
         <p className="text-sm sm:text-base md:text-xl lg:text-2xl font-semibold text-gray-900 max-w-3xl mx-auto mb-1 sm:mb-2 md:mb-3 lg:mb-4 leading-relaxed animate-fade-in-up-delay-2">
-          Why to carry extra stuff when already carrying your emotional baggage?i
+          Why carry extra items when campus life is already busy? Sell what you no longer need in minutes.
         </p>
 
         {/* Scroll Indicator */}

@@ -55,17 +55,17 @@ function IconExternal() {
 export default function ContactUs() {
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-50 via-white to-indigo-50/40">
-      <div className="max-w-3xl mx-auto px-4 sm:px-6 py-16 md:py-24">
+      <div className="max-w-3xl mx-auto px-4 sm:px-6 py-12 sm:py-14 md:py-24">
         {/* Header */}
-        <header className="text-center mb-14 md:mb-16">
+        <header className="text-center mb-12 sm:mb-14 md:mb-16">
           <p className="text-sm font-medium uppercase tracking-widest text-indigo-600 mb-3">
             Contact
           </p>
-          <h1 className="text-4xl md:text-5xl font-bold text-gray-900 tracking-tight mb-4">
+          <h1 className="font-display text-3xl sm:text-4xl md:text-5xl font-bold text-gray-900 tracking-tight mb-3 sm:mb-4">
             Get in touch
           </h1>
-          <p className="text-lg text-gray-600 max-w-xl mx-auto">
-            Reach out for support, feedback, or partnership. StuMart is run by CSE 2023 batch final-year students at GVL Polytechnic.
+          <p className="text-base sm:text-lg text-gray-600 max-w-xl mx-auto leading-relaxed">
+            Reach out for support, feedback, or partnerships. StuMart is presented by Prakash & Team for AVISHKAR Hackathon at AANM & VVRSR Polytechnic.
           </p>
         </header>
 
@@ -84,7 +84,7 @@ export default function ContactUs() {
               </span>
               <div className="min-w-0">
                 <p className="text-xs font-medium uppercase tracking-wider text-gray-500">Phone / WhatsApp</p>
-                <p className="font-semibold text-gray-900 truncate">{PHONE}</p>
+                <p className="text-sm sm:text-base font-semibold text-gray-900 truncate">{PHONE}</p>
               </div>
             </a>
             <a
@@ -96,7 +96,7 @@ export default function ContactUs() {
               </span>
               <div className="min-w-0">
                 <p className="text-xs font-medium uppercase tracking-wider text-gray-500">Email</p>
-                <p className="font-semibold text-gray-900 truncate">{EMAIL}</p>
+                <p className="text-sm sm:text-base font-semibold text-gray-900 truncate">{EMAIL}</p>
               </div>
             </a>
           </div>
@@ -108,21 +108,13 @@ export default function ContactUs() {
             College address
           </h2>
           <div
-            className="bg-white rounded-xl border border-gray-100 shadow-sm p-6 flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4 cursor-pointer hover:border-indigo-100 hover:shadow-md transition-all"
-            role="link"
-            tabIndex={0}
-            onClick={() => window.open(COLLEGE_ADDRESS.mapUrl, "_blank", "noopener,noreferrer")}
-            onKeyDown={(event) => {
-              if (event.key === "Enter" || event.key === " ") {
-                window.open(COLLEGE_ADDRESS.mapUrl, "_blank", "noopener,noreferrer");
-              }
-            }}
+            className="bg-white rounded-xl border border-gray-100 shadow-sm p-6 flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4 hover:border-indigo-100 hover:shadow-md transition-all"
           >
             <div className="flex gap-4">
               <span className="flex-shrink-0 text-gray-300 mt-0.5">
                 <IconLocation />
               </span>
-              <address className="not-italic text-gray-700 space-y-1">
+              <address className="not-italic text-sm sm:text-base text-gray-700 space-y-1">
                 <p className="font-semibold text-gray-900">{COLLEGE_ADDRESS.name}</p>
                 <p>{COLLEGE_ADDRESS.line1}</p>
                 <p>{COLLEGE_ADDRESS.line2}</p>
@@ -181,7 +173,7 @@ export default function ContactUs() {
                       )}
                     </span>
                     <div>
-                      <p className="text-sm font-semibold text-gray-900">{item.name}</p>
+                      <p className="text-sm sm:text-base font-semibold text-gray-900">{item.name}</p>
                       <p className="text-xs text-gray-500">
                         {item.icon === "website" && "Visit the campus site"}
                         {item.icon === "linkedin" && "Connect with the institute"}
@@ -197,8 +189,8 @@ export default function ContactUs() {
 
         {/* Footer note */}
         <footer className="text-center pt-6 border-t border-gray-200">
-          <p className="text-gray-600 mb-5">
-            StuMart is designed by CSE students (2023 batch, final year) for GVL Polytechnic (AANM & VVRSR).
+          <p className="text-sm sm:text-base text-gray-600 mb-5 leading-relaxed">
+            StuMart is presented by Prakash & Team for AVISHKAR Hackathon, AANM & VVRSR Polytechnic.
           </p>
           <Link
             to="/about"

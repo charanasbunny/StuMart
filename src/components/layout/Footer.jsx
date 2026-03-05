@@ -24,7 +24,7 @@ export default function Footer() {
                 />
               </button>
               <div>
-                <h2 className="text-base md:text-xl font-semibold text-white mb-1 tracking-wide">
+                <h2 className="font-display text-base md:text-xl font-semibold text-white mb-1 tracking-wide">
                   Built for Students, by Students
                 </h2>
                 <p className="text-[11px] md:text-sm text-blue-100/90 leading-snug">
@@ -67,7 +67,9 @@ export default function Footer() {
                   </svg>
                 </a>
                 <a 
-                  href="#" 
+                  href="https://x.com" 
+                  target="_blank"
+                  rel="noopener noreferrer"
                   aria-label="X" 
                   className="p-2 rounded-lg border border-white/25 text-blue-100 hover:bg-white/10 hover:text-white transition-all duration-300"
                 >
@@ -93,7 +95,7 @@ export default function Footer() {
       {/* Copyright Bar */}
       <div className="border-t border-white/15 bg-black/10">
         <div className="w-full px-4 py-3 text-center text-[11px] md:text-sm text-blue-100/80">
-          © Designed by 2023 CME batch students · GVL Polytechnic
+          © Prakash & Team - AVISHKAR Hackathon · AANM & VVRSR Polytechnic
         </div>
       </div>
 

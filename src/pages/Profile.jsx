@@ -107,7 +107,7 @@ export default function Profile() {
         {/* ===== BUTTONS ===== */}
         <div className="bg-white rounded-xl shadow p-6 flex gap-4">
           <Link
-            to="/MyPosts"
+            to="/my-posts"
             className="flex-1 bg-indigo-600 text-white py-3 rounded-lg text-center font-medium hover:bg-indigo-700"
           >
             📄 Your Posts
