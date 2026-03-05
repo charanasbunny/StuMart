@@ -22,6 +22,9 @@ const AdminRegistrationRequests = lazy(() => import("./pages/AdminRegistrationRe
 const AboutUs = lazy(() => import("./pages/AboutUs"));
 const ContactUs = lazy(() => import("./pages/ContactUs"));
 const CompleteSignup = lazy(() => import("./pages/CompleteSignup"));
+const Checkout = lazy(() => import("./pages/Checkout"));
+const MyOrders = lazy(() => import("./pages/MyOrders"));
+const AdminOrders = lazy(() => import("./pages/AdminOrders"));
 
 const RouteLoader = () => (
   <div className="min-h-[50vh] flex items-center justify-center bg-slate-50">
@@ -43,6 +46,14 @@ export const publicRoutes = [
 
   { path: "/products", element: withRouteSuspense(Products) },
   { path: "/products/:id", element: withRouteSuspense(ProductDetail) },
+  {
+    path: "/checkout/:productId",
+    element: (
+      <ProtectedRoute>
+        {withRouteSuspense(Checkout)}
+      </ProtectedRoute>
+    ),
+  },
 
   { path: "/login", element: withRouteSuspense(Login) },
   { path: "/register", element: withRouteSuspense(Register) },
@@ -76,6 +87,14 @@ export const publicRoutes = [
     ),
   },
   { path: "/MyPosts", element: <Navigate to="/my-posts" replace /> },
+  {
+    path: "/my-orders",
+    element: (
+      <ProtectedRoute>
+        {withRouteSuspense(MyOrders)}
+      </ProtectedRoute>
+    ),
+  },
 
 
   { path: "/forgot-password", element: withRouteSuspense(ForgotPassword) },
@@ -134,7 +153,14 @@ export const adminRoutes = [
       </ProtectedAdminRoute>
     ),
   },
-
+  {
+    path: "/admin/orders",
+    element: (
+      <ProtectedAdminRoute>
+        {withRouteSuspense(AdminOrders)}
+      </ProtectedAdminRoute>
+    ),
+  },
   {
     path: "/admin/feedbacks",
     element: (

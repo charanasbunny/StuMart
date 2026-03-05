@@ -105,12 +105,18 @@ export default function Profile() {
         </div>
 
         {/* ===== BUTTONS ===== */}
-        <div className="bg-white rounded-xl shadow p-6 flex gap-4">
+        <div className="bg-white rounded-xl shadow p-6 flex flex-wrap gap-4">
           <Link
             to="/my-posts"
-            className="flex-1 bg-indigo-600 text-white py-3 rounded-lg text-center font-medium hover:bg-indigo-700"
+            className="flex-1 min-w-[140px] bg-indigo-600 text-white py-3 rounded-lg text-center font-medium hover:bg-indigo-700"
           >
             📄 Your Posts
+          </Link>
+          <Link
+            to="/my-orders"
+            className="flex-1 min-w-[140px] bg-indigo-600 text-white py-3 rounded-lg text-center font-medium hover:bg-indigo-700"
+          >
+            📦 My Orders
           </Link>
         </div>
 
