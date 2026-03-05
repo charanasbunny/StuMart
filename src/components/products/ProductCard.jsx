@@ -12,6 +12,8 @@ const getFirstImage = (imageUrls) => {
 };
 
 export default function ProductCard({ product, onClick }) {
+  const seller = product.students || {};
+
   return (
     <div
       onClick={onClick}
@@ -37,6 +39,16 @@ export default function ProductCard({ product, onClick }) {
         }`}>
           {formatPrice(product.price)}
         </p>
+        {(seller.name || seller.pin_number) && (
+          <div className="mt-3 text-sm text-gray-700">
+            <p className="font-medium">
+              {seller.name || 'Unknown seller'}
+            </p>
+            <p className="font-mono text-xs text-gray-500">
+              PIN: {seller.pin_number || 'N/A'}
+            </p>
+          </div>
+        )}
       </div>
     </div>
   );
