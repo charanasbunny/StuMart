@@ -16,7 +16,6 @@ import AdminPINManagement from "./pages/AdminPINManagement";
 import AdminProducts from "./pages/AdminProducts";
 import AdminProductDetail from "./pages/AdminProductDetail";
 import AdminRegistrationRequests from "./pages/AdminRegistrationRequests";
-import LikedPost from "./pages/Likedpost";
 import AboutUs from "./pages/AboutUs";
 import ContactUs from "./pages/ContactUs";
 import CompleteSignup from "./pages/CompleteSignup";
@@ -30,15 +29,6 @@ export const publicRoutes = [
 
   { path: "/products", element: <Products /> },
   { path: "/products/:id", element: <ProductDetail /> },
-
-  {
-    path: "/liked-post",
-    element: (
-      <ProtectedRoute>
-        <LikedPost />
-      </ProtectedRoute>
-    ),
-  },
 
   { path: "/login", element: <Login /> },
   { path: "/register", element: <Register /> },

@@ -1,10 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, useSearchParams } from "react-router";
 import { getProducts } from "../services/productService";
-import { getCurrentUser } from "../services/authService";
 import FilterSidebar from "../components/products/FilterSidebar";
 import ProductCard from "../components/products/ProductCard";
-import { useLocalStorage } from "../hooks/useLocalStorage";
 import { normalizeBranchCode } from "../utils/branchCodes";
 import {
   categoryOptions,
@@ -19,19 +17,9 @@ export default function Products() {
   const [searchParams] = useSearchParams();
   const [products, setProducts] = useState([]);
   const [filteredProducts, setFilteredProducts] = useState([]);
-  const [likedIds, setLikedIds] = useLocalStorage("likedPosts", []);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-
-  // Check auth so we only show Liked Posts button when logged in
-  useEffect(() => {
-    const checkAuth = async () => {
-      const { user, error: authError } = await getCurrentUser();
-      setIsAuthenticated(Boolean(user && !authError));
-    };
-    checkAuth();
-  }, []);
 
   // Filter states — category can be pre-filled from URL (e.g. /products?category=books)
   const [selectedCategories, setSelectedCategories] = useState([]);
@@ -170,37 +158,6 @@ export default function Products() {
     (selectedPriceRange !== "all" ? 1 : 0) +
     (showFreeOnly ? 1 : 0);
 
-  const toggleLike = (e, product) => {
-    e.stopPropagation();
-
-    // Check if the product is already liked
-    const isLiked = likedIds.some(
-      (item) => (typeof item === "object" ? item.id : item) === product.id,
-    );
-
-    let updatedLikedPosts;
-    if (isLiked) {
-      // Remove the product from liked list
-      updatedLikedPosts = likedIds.filter(
-        (item) => (typeof item === "object" ? item.id : item) !== product.id,
-      );
-    } else {
-      // Add the product to liked list
-      updatedLikedPosts = [...likedIds, product];
-    }
-
-    setLikedIds(updatedLikedPosts);
-  };
-
-  const getLikedIdsList = () => {
-    if (Array.isArray(likedIds)) {
-      return likedIds.map((item) =>
-        typeof item === "object" ? item.id : item,
-      );
-    }
-    return [];
-  };
-
   if (isLoading) {
     return (
       <div className="min-h-screen bg-gray-50 py-8 px-4">
@@ -316,22 +273,6 @@ export default function Products() {
                 </button>
               )}
             </div>
-            {isAuthenticated && (
-              <button
-                onClick={() => navigate("/liked-post")}
-                className="inline-flex items-center justify-center gap-1.5 px-2.5 py-2 bg-white text-sm rounded-md border border-gray-200 hover:border-red-200 shadow-sm hover:shadow-md transition"
-              >
-                <svg
-                  className="w-4 h-4 text-red-500"
-                  fill="currentColor"
-                  viewBox="0 0 24 24"
-                  aria-hidden="true"
-                >
-                  <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 6 4 4 6.5 4c1.74 0 3.41.81 4.5 2.09C12.09 4.81 13.76 4 15.5 4 18 4 20 6 20 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
-                </svg>
-                <span className="hidden sm:inline text-gray-700">Liked</span>
-              </button>
-            )}
           </div>
         </div>
       </div>
@@ -505,8 +446,6 @@ export default function Products() {
                   <ProductCard
                     key={product.id}
                     product={product}
-                    isLiked={getLikedIdsList().includes(product.id)}
-                    onToggleLike={toggleLike}
                     onClick={() => navigate(`/products/${product.id}`)}
                   />
                 ))}

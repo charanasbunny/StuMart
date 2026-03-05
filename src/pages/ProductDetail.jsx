@@ -2,8 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router';
 import { getProductById } from '../services/productService';
 import { normalizeBranchCode } from '../utils/branchCodes';
-import { useLocalStorage } from '../hooks/useLocalStorage';
-
 export default function ProductDetail() {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -12,7 +10,6 @@ export default function ProductDetail() {
   const [error, setError] = useState(null);
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const [shortImageUrl, setShortImageUrl] = useState(null);
-  const [likedIds, setLikedIds] = useLocalStorage("likedPosts", []);
   const [shareMessage, setShareMessage] = useState('');
   //zoom
   const [isZoomOpen, setIsZoomOpen] = useState(false);
@@ -94,28 +91,6 @@ export default function ProductDetail() {
   const formatBranch = (branch) => {
     if (!branch) return 'All Branches';
     return normalizeBranchCode(branch);
-  };
-
-  const isLiked = likedIds.some(
-    (item) => (typeof item === "object" ? item.id : item) === product?.id
-  );
-
-  const handleLikeClick = () => {
-    if (!product) return;
-
-    const isAlreadyLiked = likedIds.some(
-      (item) => (typeof item === "object" ? item.id : item) === product.id
-    );
-
-    if (isAlreadyLiked) {
-      setLikedIds(
-        likedIds.filter(
-          (item) => (typeof item === "object" ? item.id : item) !== product.id
-        )
-      );
-    } else {
-      setLikedIds([...likedIds, product]);
-    }
   };
 
   const handleShareClick = async () => {
@@ -264,30 +239,6 @@ export default function ProductDetail() {
                   {product.title}
                 </h1>
                 <div className="flex items-center gap-2">
-                  <button
-                    type="button"
-                    onClick={handleLikeClick}
-                    className={`inline-flex items-center justify-center w-9 h-9 rounded-lg border transition-all duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-200 ${
-                      isLiked
-                        ? 'border-red-300 bg-red-50 text-red-500 shadow-sm'
-                        : 'border-gray-200 bg-gray-50 text-red-500 hover:bg-white hover:shadow-sm'
-                    }`}
-                    aria-label={isLiked ? 'Remove from liked' : 'Like this product'}
-                  >
-                    <svg
-                      className="w-4.5 h-4.5"
-                      fill={isLiked ? 'currentColor' : 'none'}
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
-                      />
-                    </svg>
-                  </button>
                   <button
                     type="button"
                     onClick={handleShareClick}

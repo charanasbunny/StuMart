@@ -112,14 +112,6 @@ export default function Profile() {
           >
             📄 Your Posts
           </Link>
-
-          {/* ✅ FIXED PATH */}
-          <Link
-            to="/liked-post"
-            className="flex-1 bg-indigo-600 text-white py-3 rounded-lg text-center font-medium hover:bg-indigo-700"
-          >
-            ❤️ Liked Posts
-          </Link>
         </div>
 
         {/* ===== WELCOME ALERT ===== */}
