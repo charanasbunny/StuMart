@@ -126,7 +126,13 @@ export const getProducts = async (filters = {}) => {
   try {
     let query = supabase
       .from('products')
-      .select('*')
+      .select(`
+        *,
+        students:student_pin_number (
+          name,
+          pin_number
+        )
+      `)
       .eq('status', 'active')
       .order('created_at', { ascending: false });
 
@@ -189,8 +195,7 @@ export const getProductById = async (productId) => {
         *,
         students:student_pin_number (
           name,
-          pin_number,
-          email
+          pin_number
         )
       `)
       .eq('id', productId)

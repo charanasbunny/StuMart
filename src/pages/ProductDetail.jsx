@@ -282,10 +282,6 @@ export default function ProductDetail() {
                     <span className="text-sm text-gray-600">PIN Number:</span>
                     <p className="text-gray-900 font-mono">{seller.pin_number || 'N/A'}</p>
                   </div>
-                  <div>
-                    <span className="text-sm text-gray-600">Email:</span>
-                    <p className="text-gray-900">{seller.email || '--'}</p>
-                  </div>
                 </div>
               </div>
 
