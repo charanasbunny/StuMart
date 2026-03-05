@@ -302,7 +302,7 @@ export default function Register() {
               </svg>
             </div>
             <div>
-              <h2 className="text-2xl font-bold text-gray-900">
+              <h2 className="font-display text-2xl font-bold text-gray-900">
                 Request submitted
               </h2>
               <p className="mt-2 text-gray-700">
@@ -334,7 +334,7 @@ export default function Register() {
           </div>
         ) : (
           <>
-        <h2 className="text-center text-3xl font-bold text-gray-900">
+        <h2 className="font-display text-center text-3xl font-bold text-gray-900">
           Create Student Account
         </h2>
 

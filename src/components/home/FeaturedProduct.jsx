@@ -42,12 +42,12 @@ export default function FeaturedProduct({ product, index, currentIndex }) {
       </div>
 
       <div className="p-4">
-        <h3 className="text-lg font-semibold text-gray-900 mb-2 line-clamp-2">
+        <h3 className="font-display text-lg font-semibold text-gray-900 mb-2 line-clamp-2">
           {product.title}
         </h3>
 
         <p
-          className={`text-xl font-bold ${
+          className={`font-display text-xl font-bold ${
             parseInt(product.price, 10) === 0
               ? "text-green-600"
               : "text-indigo-600"

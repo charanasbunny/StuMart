@@ -235,7 +235,7 @@ export default function ProductDetail() {
 
               {/* Title + Actions */}
               <div className="flex flex-wrap items-start justify-between gap-3 mb-4">
-                <h1 className="text-3xl md:text-4xl font-bold text-gray-900">
+                <h1 className="font-display text-3xl md:text-4xl font-bold text-gray-900">
                   {product.title}
                 </h1>
                 <div className="flex items-center gap-2">
@@ -257,14 +257,14 @@ export default function ProductDetail() {
 
               {/* Price */}
               <div className="mb-6">
-              <p className={`text-4xl font-bold ${parseInt(product.price, 10) === 0 ? 'text-green-600' : 'text-indigo-600'}`}>
+              <p className={`font-display text-4xl font-bold ${parseInt(product.price, 10) === 0 ? 'text-green-600' : 'text-indigo-600'}`}>
   {formatPrice(product.price)}
 </p>
               </div>
 
               {/* Description */}
               <div className="mb-6">
-                <h2 className="text-lg font-semibold text-gray-900 mb-2">Description</h2>
+                <h2 className="font-display text-lg font-semibold text-gray-900 mb-2">Description</h2>
                 <p className="text-gray-700 leading-relaxed whitespace-pre-wrap">
                   {product.description}
                 </p>
@@ -272,7 +272,7 @@ export default function ProductDetail() {
 
               {/* Seller Information */}
               <div className="border-t border-gray-200 pt-6">
-                <h2 className="text-lg font-semibold text-gray-900 mb-4">Seller Information</h2>
+                <h2 className="font-display text-lg font-semibold text-gray-900 mb-4">Seller Information</h2>
                 <div className="space-y-3">
                   <div>
                     <span className="text-sm text-gray-600">Name:</span>

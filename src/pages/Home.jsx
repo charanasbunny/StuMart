@@ -142,12 +142,9 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-blue-50 to-purple-100 overflow-x-hidden">
       <h1 className="sr-only">
-        GVL Poly Student Marketplace – AANM & VVRSR Polytechnic
+        AANM & VVRSR Student Marketplace
       </h1>
-      <div className="mx-auto max-w-4xl px-4 pt-0 text-center text-xs md:text-sm text-slate-600 bg-white/70 md:bg-white/50 rounded-xl md:rounded-lg py-2 md:py-2 border border-slate-100 mb-0">
-        <p>Official student marketplace for GVL Polytechnic (AANM & VVRSR). Not affiliated with any commercial store.</p>
-      </div>
-      <section className="w-full relative overflow-hidden min-h-0 md:min-h-[60vh] flex items-center pt-0 pb-4 md:py-0">
+      <section className="w-full relative overflow-hidden min-h-0 md:min-h-[60vh] flex items-center pt-2 pb-4 md:pt-3 md:pb-0">
         <div
           className="absolute inset-0 z-0 bg-center bg-no-repeat"
           style={{
@@ -168,7 +165,7 @@ export default function Home() {
         </div>
 
         <div className="relative z-30 max-w-6xl mx-auto px-4 py-4 sm:py-12 md:py-20 lg:py-28 text-center">
-          <h1 className="text-xl sm:text-4xl md:text-5xl lg:text-7xl xl:text-8xl font-extrabold text-gray-900 mb-0.5 sm:mb-3 md:mb-4 lg:mb-5 leading-tight md:animate-fade-in-up">
+          <h1 className="font-display text-xl sm:text-4xl md:text-5xl lg:text-7xl xl:text-8xl font-extrabold text-gray-900 mb-0.5 sm:mb-3 md:mb-4 lg:mb-5 leading-tight md:animate-fade-in-up">
             <span className="block sm:inline">Welcome to</span>
           </h1>
           <div className="mb-2 sm:mb-6 md:mb-7 lg:mb-8 md:animate-fade-in-up md:animate-fade-in-up-delay-1">
@@ -178,8 +175,8 @@ export default function Home() {
               <span className="text-7xl sm:text-8xl md:text-9xl lg:text-[110px] xl:text-[180px]">t</span>
             </span>
           </div>
-          <p className="text-[11px] sm:text-base md:text-xl lg:text-2xl font-semibold text-gray-900 max-w-3xl mx-auto mb-1 sm:mb-2 md:mb-3 lg:mb-4 leading-snug md:leading-relaxed md:animate-fade-in-up md:animate-fade-in-up-delay-2">
-            <span className="hidden sm:inline">Why to carry extra stuff when already carrying your emotional baggage? Sell your extra items now</span>
+          <p className="font-display text-sm sm:text-base md:text-xl lg:text-2xl font-semibold text-gray-900 max-w-3xl mx-auto mb-1 sm:mb-2 md:mb-3 lg:mb-4 leading-snug md:leading-relaxed md:animate-fade-in-up md:animate-fade-in-up-delay-2">
+            <span className="hidden sm:inline">Why carry extra items when campus life is already busy? Sell what you no longer need in minutes.</span>
             <span className="sm:hidden">Sell your extra items. Lighten the load.</span>
           </p>
 
@@ -213,19 +210,19 @@ export default function Home() {
             </button>
           )}
 
-          <p className="text-[10px] sm:text-sm md:text-base text-gray-500 max-w-xl mx-auto mb-1.5 sm:mb-3 md:animate-fade-in-up md:animate-fade-in-up-delay-2">
+          <p className="text-xs sm:text-sm md:text-base text-gray-500 max-w-xl mx-auto mb-1.5 sm:mb-3 md:animate-fade-in-up md:animate-fade-in-up-delay-2">
             <Link to="/about" className="text-indigo-600 hover:text-indigo-700 font-medium">
               By students, for students
             </Link>
           </p>
-          <p className="text-[11px] sm:text-sm md:text-base lg:text-lg font-normal text-gray-600 max-w-2xl mx-auto mb-3 sm:mb-6 md:mb-8 lg:mb-10 md:animate-fade-in-up md:animate-fade-in-up-delay-3 hidden sm:block">
-            A trusted platform connecting students to exchange academic essentials
-            safely within your college community.
+          <p className="text-sm sm:text-sm md:text-base lg:text-lg font-normal text-gray-600 max-w-2xl mx-auto mb-3 sm:mb-6 md:mb-8 lg:mb-10 md:animate-fade-in-up md:animate-fade-in-up-delay-3 hidden sm:block">
+            A trusted platform where students exchange academic essentials safely
+            within their college community.
           </p>
           <div className="flex flex-row justify-center items-center gap-2 sm:gap-3 w-full sm:w-auto md:animate-fade-in-up md:animate-fade-in-up-delay-4">
             <Link
               to="/products"
-              className="cta-hero cta-hero-pulse inline-flex items-center justify-center gap-1.5 sm:gap-2 flex-1 sm:flex-initial px-4 sm:px-8 py-2.5 sm:py-4 bg-gradient-to-r from-indigo-600 via-fuchsia-500 to-blue-600 text-white text-sm sm:text-lg font-semibold rounded-lg sm:rounded-xl transition-all duration-300 shadow-[0_10px_30px_rgba(79,70,229,0.45)] hover:shadow-[0_16px_40px_rgba(99,102,241,0.6)] ring-2 ring-indigo-300/70 hover:ring-indigo-200/90 hover:scale-[1.03]"
+              className="font-display cta-hero cta-hero-pulse inline-flex items-center justify-center gap-1.5 sm:gap-2 flex-1 sm:flex-initial px-4 sm:px-8 py-2.5 sm:py-4 bg-gradient-to-r from-indigo-600 via-fuchsia-500 to-blue-600 text-white text-sm sm:text-lg font-semibold rounded-lg sm:rounded-xl transition-all duration-300 shadow-[0_10px_30px_rgba(79,70,229,0.45)] hover:shadow-[0_16px_40px_rgba(99,102,241,0.6)] ring-2 ring-indigo-300/70 hover:ring-indigo-200/90 hover:scale-[1.03]"
               aria-label="Browse all products"
             >
               <svg className="w-4 h-4 sm:w-5 sm:h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -236,7 +233,7 @@ export default function Home() {
             </Link>
             <Link
               to="/create-post"
-              className="inline-flex items-center justify-center gap-1.5 sm:gap-2 flex-1 sm:flex-initial px-4 sm:px-8 py-2.5 sm:py-4 bg-gradient-to-r from-indigo-50 via-white to-indigo-100 text-indigo-700 text-sm sm:text-lg font-semibold rounded-lg sm:rounded-xl border-2 border-indigo-300/90 hover:border-indigo-400 transition-all duration-300 shadow-[0_12px_32px_rgba(99,102,241,0.35)] hover:shadow-[0_18px_44px_rgba(99,102,241,0.55)] ring-2 ring-indigo-200/80 hover:bg-white hover:scale-[1.03]"
+              className="font-display inline-flex items-center justify-center gap-1.5 sm:gap-2 flex-1 sm:flex-initial px-4 sm:px-8 py-2.5 sm:py-4 bg-gradient-to-r from-indigo-50 via-white to-indigo-100 text-indigo-700 text-sm sm:text-lg font-semibold rounded-lg sm:rounded-xl border-2 border-indigo-300/90 hover:border-indigo-400 transition-all duration-300 shadow-[0_12px_32px_rgba(99,102,241,0.35)] hover:shadow-[0_18px_44px_rgba(99,102,241,0.55)] ring-2 ring-indigo-200/80 hover:bg-white hover:scale-[1.03]"
               aria-label="Sell an item"
             >
               <svg className="w-4 h-4 sm:w-5 sm:h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -256,7 +253,7 @@ export default function Home() {
         <div className="flex items-center justify-between mb-3 md:mb-6 lg:mb-8">
           <div>
             <p className="text-xs sm:text-sm font-semibold uppercase tracking-wider text-indigo-600 mb-0.5 sm:mb-1">Campus listings</p>
-            <h2 className="text-xl sm:text-3xl md:text-4xl font-bold text-gray-900">
+            <h2 className="font-display text-xl sm:text-3xl md:text-4xl font-bold text-gray-900">
               Featured Products
             </h2>
           </div>
@@ -394,7 +391,7 @@ export default function Home() {
             </div>
             <h3 className="text-sm md:text-xl font-semibold mb-2 md:mb-3 text-gray-900 text-center">Campus-Based Exchange</h3>
             <p className="text-gray-600 text-center text-sm md:text-base leading-relaxed">
-              Simple, safe, and designed exclusively for GVL Polytechnic students.
+              Simple, safe, and designed exclusively for AANM & VVRSR Polytechnic students.
             </p>
           </div>
           <div className="bg-white rounded-xl shadow-lg p-4 md:p-8 hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">

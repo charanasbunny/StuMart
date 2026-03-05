@@ -44,7 +44,7 @@ export default function Login() {
       if (!mounted || !current?.user || !current?.student || current?.error) return;
 
       const returnUrl = searchParams.get('returnUrl');
-      const path = returnUrl ? decodeURIComponent(returnUrl) : '/Profile';
+      const path = returnUrl ? decodeURIComponent(returnUrl) : '/profile';
       navigate(path, { replace: true });
     })();
     return () => { mounted = false; };
@@ -139,7 +139,7 @@ export default function Login() {
 
         if (result.success) {
           const returnUrl = searchParams.get('returnUrl');
-          const path = returnUrl ? decodeURIComponent(returnUrl) : '/Profile';
+          const path = returnUrl ? decodeURIComponent(returnUrl) : '/profile';
           navigate(path, { replace: true });
         } else {
           setErrors({ submit: result.error });
@@ -167,7 +167,7 @@ export default function Login() {
 
       <div className="relative z-10 max-w-md w-full space-y-8">
         <div>
-          <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
+          <h2 className="font-display mt-6 text-center text-3xl font-extrabold text-gray-900">
             Sign in to your account
           </h2>
           {successMessage && (
@@ -255,86 +255,83 @@ export default function Login() {
             )}
           </div>
 
-            {/* Password */}
-            {/* Password */}
-<div className="relative">
-  <label htmlFor="password" className="sr-only">
-    Password
-  </label>
+          {/* Password */}
+          <div className="relative">
+            <label htmlFor="password" className="sr-only">
+              Password
+            </label>
 
-  <div className='flex'>
-    <input
-      type={showPassword ? 'text' : 'password'}
-      id="password"
-      name="password"
-      autoComplete="current-password"
-      required
-      value={formData.password}
-      onChange={handleChange}
-      className="appearance-none rounded-md relative block w-full px-3 py-2 pr-10 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
-      placeholder="Password"
-    />
-    {/* Eye Icon */}
-    <button
-      type="button"
-      onClick={() => setShowPassword(!showPassword)}
-      className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-indigo-600"
-      aria-label={showPassword ? 'Hide password' : 'Show password'}
-    >
-      {showPassword ? (
-        /* Eye Off Icon */
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          className="h-5 w-5"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-          strokeWidth={2.4}
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            d="M13.875 18.825A10.05 10.05 0 0112 19c-5.523 0-10-4.477-10-10 0-1.02.152-2.004.437-2.93M6.343 6.343A9.956 9.956 0 0112 5c5.523 0 10 4.477 10 10a9.956 9.956 0 01-1.343 5.657M15 12a3 3 0 11-6 0 3 3 0 016 0z"
-          />
-          <path strokeLinecap="round" strokeLinejoin="round" d="M3 3l18 18" />
-        </svg>
-      ) : (
-        /* Eye Icon */
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          className="h-5 w-5"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-          strokeWidth={2.4}
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
-          />
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
-          />
-        </svg>
-      )}
-    </button>
-  </div>
+            <input
+              type={showPassword ? 'text' : 'password'}
+              id="password"
+              name="password"
+              autoComplete="current-password"
+              required
+              value={formData.password}
+              onChange={handleChange}
+              className="appearance-none rounded-md relative block w-full px-3 py-2 pr-11 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+              placeholder="Password"
+            />
 
-  {errors.password && (
-    <p className="mt-1 text-sm text-red-600">{errors.password}</p>
-  )}
-</div>
-<div className="text-sm text-right mt-2">
-  <Link
-    to="/forgot-password"
-    className="font-medium text-indigo-600 hover:text-indigo-500"
-  >
-    Forgot your password?
-  </Link>
-</div>
+            <button
+              type="button"
+              onMouseDown={(event) => event.preventDefault()}
+              onClick={() => setShowPassword((prev) => !prev)}
+              className="absolute right-2 top-1/2 -translate-y-1/2 z-10 rounded-md p-1.5 text-gray-500 hover:text-indigo-600 focus:outline-none focus:ring-2 focus:ring-indigo-400"
+              aria-label={showPassword ? 'Hide password' : 'Show password'}
+              aria-pressed={showPassword}
+            >
+              {showPassword ? (
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-5 w-5"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  strokeWidth={2.4}
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M13.875 18.825A10.05 10.05 0 0112 19c-5.523 0-10-4.477-10-10 0-1.02.152-2.004.437-2.93M6.343 6.343A9.956 9.956 0 0112 5c5.523 0 10 4.477 10 10a9.956 9.956 0 01-1.343 5.657M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+                  />
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M3 3l18 18" />
+                </svg>
+              ) : (
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-5 w-5"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  strokeWidth={2.4}
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+                  />
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
+                  />
+                </svg>
+              )}
+            </button>
+
+            {errors.password && (
+              <p className="mt-1 text-sm text-red-600">{errors.password}</p>
+            )}
+          </div>
+          <div className="text-sm text-right mt-2">
+            <Link
+              to="/forgot-password"
+              className="font-medium text-indigo-600 hover:text-indigo-500"
+            >
+              Forgot your password?
+            </Link>
+          </div>
           {/* Error Message */}
           {errors.submit && (
             <div className="rounded-md bg-red-50 p-4">

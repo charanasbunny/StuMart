@@ -123,7 +123,7 @@ export default function Navbar() {
               className="flex flex-col justify-center min-w-0"
               onClick={closeMobileMenu}
             >
-              <span className="text-lg sm:text-xl md:text-2xl font-extrabold text-white leading-tight whitespace-nowrap tracking-wide drop-shadow-sm">
+              <span className="font-display text-base sm:text-xl md:text-2xl font-extrabold text-white leading-tight whitespace-nowrap tracking-wide drop-shadow-sm">
                 AANM & VVRSR
               </span>
               <span className="text-xs sm:text-sm md:text-base text-blue-100 leading-tight whitespace-nowrap uppercase tracking-widest">
@@ -142,7 +142,7 @@ export default function Navbar() {
                   : "hover:text-white"
               }`}
             >
-              Home
+              <span className="font-display">Home</span>
             </Link>
             <Link
               to="/contact"
@@ -152,7 +152,7 @@ export default function Navbar() {
                   : "hover:text-white"
               }`}
             >
-              Contact Us
+              <span className="font-display">Contact Us</span>
             </Link>
             <Link
               to="/about"
@@ -162,7 +162,7 @@ export default function Navbar() {
                   : "hover:text-white"
               }`}
             >
-              About Us
+              <span className="font-display">About Us</span>
             </Link>
             <Link
               to="/customer-feedback"
@@ -172,7 +172,7 @@ export default function Navbar() {
                   : "hover:text-white"
               }`}
             >
-              Feedback
+              <span className="font-display">Feedback</span>
             </Link>
           </div>
 
@@ -185,7 +185,7 @@ export default function Navbar() {
                 {/* Profile Avatar */}
                 {student && (
                   <Link
-                    to="/Profile"
+                    to="/profile"
                     title={student.name}
                     className="w-9 h-9 flex items-center justify-center rounded-full 
                                bg-white text-blue-700 font-semibold
@@ -275,7 +275,7 @@ export default function Navbar() {
                 />
               </button>
               <div className="flex flex-col">
-                <span className="text-base font-extrabold text-white leading-tight tracking-wide">
+                <span className="font-display text-base font-extrabold text-white leading-tight tracking-wide">
                   AANM & VVRSR
                 </span>
                 <span className="text-xs text-blue-100 leading-tight uppercase tracking-widest">
@@ -338,7 +338,7 @@ export default function Navbar() {
               <>
                 {student && (
                   <Link
-                    to="/Profile"
+                    to="/profile"
                     onClick={closeMobileMenu}
                     className="flex items-center gap-3 py-3 px-3 hover:bg-gray-50 rounded-lg transition"
                   >
@@ -387,7 +387,7 @@ export default function Navbar() {
           <div className="absolute inset-0 bg-black opacity-50"></div>
 
           <div className="relative bg-white rounded-lg shadow-lg p-6 max-w-sm w-full mx-4">
-            <h2 className="text-xl font-semibold text-gray-900 mb-4">
+            <h2 className="font-display text-xl font-semibold text-gray-900 mb-4">
               Confirm Logout
             </h2>
             <p className="text-gray-600 mb-6">

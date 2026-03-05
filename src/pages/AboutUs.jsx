@@ -3,17 +3,17 @@ import { Link } from "react-router";
 export default function AboutUs() {
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-50 via-white to-indigo-50/40">
-      <div className="max-w-3xl mx-auto px-4 sm:px-6 py-16 md:py-24">
+      <div className="max-w-3xl mx-auto px-4 sm:px-6 py-12 sm:py-14 md:py-24">
         {/* Hero */}
-        <header className="text-center mb-16 md:mb-20">
+        <header className="text-center mb-12 sm:mb-14 md:mb-20">
           <p className="text-sm font-medium uppercase tracking-widest text-indigo-600 mb-3">
             About StuMart
           </p>
-          <h1 className="text-4xl md:text-5xl font-bold text-gray-900 tracking-tight mb-4">
+          <h1 className="font-display text-3xl sm:text-4xl md:text-5xl font-bold text-gray-900 tracking-tight mb-3 sm:mb-4">
             Built by students, for students
           </h1>
-          <p className="text-lg text-gray-600 max-w-xl mx-auto">
-            The official campus marketplace for GVL Polytechnic (AANM & VVRSR), designed and developed by CSE final-year students.
+          <p className="text-base sm:text-lg text-gray-600 max-w-xl mx-auto leading-relaxed">
+            The official campus marketplace for AANM & VVRSR Polytechnic, presented by Prakash & Team at AVISHKAR Hackathon.
           </p>
         </header>
 
@@ -23,18 +23,17 @@ export default function AboutUs() {
             <h2 className="text-sm font-semibold uppercase tracking-wider text-gray-500">
               Our story
             </h2>
-            <h3 className="text-2xl font-bold text-gray-900 mt-1">
-              Designed by CSE students — 2023 batch, final year
+            <h3 className="font-display text-xl sm:text-2xl font-bold text-gray-900 mt-1">
+              Prakash & Team — AVISHKAR Hackathon
             </h3>
           </div>
           <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 md:p-8">
-            <p className="text-gray-700 leading-relaxed mb-4">
-              StuMart was conceived, designed, and developed by{" "}
-              <strong className="text-gray-900">Computer Science & Engineering (CSE) students</strong> of the{" "}
-              <strong className="text-gray-900">2023
-                 batch</strong> in their final year—a real-world project that serves their own campus community.
+            <p className="text-sm sm:text-base text-gray-700 leading-relaxed mb-4">
+              StuMart is being showcased by{" "}
+              <strong className="text-gray-900">Prakash & Team</strong> at{" "}
+              <strong className="text-gray-900">AVISHKAR Hackathon</strong> as a practical solution to real campus marketplace needs.
             </p>
-            <p className="text-gray-700 leading-relaxed">
+            <p className="text-sm sm:text-base text-gray-700 leading-relaxed">
               We believe in <strong className="text-gray-900">students helping students</strong>. Whether it’s books, stationery, electronics, or other essentials, StuMart makes it simple to buy and sell within the college community in a safe, trusted environment.
             </p>
           </div>
@@ -46,28 +45,28 @@ export default function AboutUs() {
             <h2 className="text-sm font-semibold uppercase tracking-wider text-gray-500">
               What we bring
             </h2>
-            <h3 className="text-2xl font-bold text-gray-900 mt-1">
+            <h3 className="font-display text-xl sm:text-2xl font-bold text-gray-900 mt-1">
               Student strengths
             </h3>
           </div>
           <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 md:p-8">
-            <p className="text-gray-600 mb-6">
-              The team combined technical skills and dedication to deliver a full marketplace from concept to launch.
+            <p className="text-sm sm:text-base text-gray-600 mb-6 leading-relaxed">
+              Prakash & Team combines technical depth with user-first thinking to deliver a practical and reliable marketplace experience for campus users.
             </p>
             <ul className="space-y-4">
               {[
-                { title: "Full-stack development", desc: "Design, frontend, backend, and database" },
-                { title: "Problem-solving", desc: "Understanding campus needs and turning them into features" },
-                { title: "Collaboration", desc: "Working as a team to ship on time" },
-                { title: "Initiative", desc: "Building a platform for the entire polytechnic community" },
+                { title: "Full-stack execution", desc: "Product design, frontend, backend, and database delivery" },
+                { title: "Problem-solving", desc: "Turning real student pain points into useful product features" },
+                { title: "Team collaboration", desc: "Coordinated execution by Prakash & Team for AVISHKAR Hackathon" },
+                { title: "Campus impact", desc: "Building a platform that creates value across the polytechnic community" },
               ].map((item, i) => (
                 <li key={i} className="flex gap-4">
                   <span className="flex-shrink-0 w-8 h-8 rounded-lg bg-indigo-50 text-indigo-600 flex items-center justify-center text-sm font-semibold">
                     {i + 1}
                   </span>
                   <div>
-                    <span className="font-semibold text-gray-900">{item.title}</span>
-                    <span className="text-gray-600"> — {item.desc}</span>
+                    <span className="text-sm sm:text-base font-semibold text-gray-900">{item.title}</span>
+                    <span className="text-sm sm:text-base text-gray-600"> — {item.desc}</span>
                   </div>
                 </li>
               ))}
@@ -81,12 +80,12 @@ export default function AboutUs() {
             <h2 className="text-sm font-semibold uppercase tracking-wider text-gray-500">
               Acknowledgement
             </h2>
-            <h3 className="text-2xl font-bold text-gray-900 mt-1">
+            <h3 className="font-display text-xl sm:text-2xl font-bold text-gray-900 mt-1">
               Department support
             </h3>
           </div>
           <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 md:p-8">
-            <p className="text-gray-700 leading-relaxed">
+            <p className="text-sm sm:text-base text-gray-700 leading-relaxed">
               This project would not have been possible without the guidance and support of our department. From concept to deployment, the encouragement and mentorship provided helped us stay on track and deliver a platform we are proud to offer to AANM & VVRSR Polytechnic students.
             </p>
           </div>
@@ -94,7 +93,7 @@ export default function AboutUs() {
 
         {/* CTA */}
         <footer className="text-center pt-4 border-t border-gray-200">
-          <p className="text-gray-600 mb-5">Questions or feedback? We’d like to hear from you.</p>
+          <p className="text-sm sm:text-base text-gray-600 mb-5">Questions or feedback? We’d like to hear from you.</p>
           <Link
             to="/contact"
             className="inline-flex items-center gap-2 px-6 py-3 rounded-lg bg-indigo-600 text-white font-medium hover:bg-indigo-700 transition-colors shadow-sm"
