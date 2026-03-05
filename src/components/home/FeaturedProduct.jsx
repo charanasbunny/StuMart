@@ -1,18 +1,14 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router";
-import { useLocalStorage } from "../../hooks/useLocalStorage";
 
 export default function FeaturedProduct({ product, index, currentIndex }) {
   const navigate = useNavigate();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [likedPosts, setLikedPosts] = useLocalStorage("likedPosts", []);
   const imageRef = useRef(null);
   const imageWrapperRef = useRef(null);
   const lastTouchRef = useRef(0);
-  const productId = String(product.id);
   const menuOffsetY = 6;
   const menuRadii = {
-    like: 64,
     share: 72,
     details: 64,
   };
@@ -20,10 +16,6 @@ export default function FeaturedProduct({ product, index, currentIndex }) {
   const hitRadiusTolerance = 26;
 
   const isRecentTouch = () => Date.now() - lastTouchRef.current < 450;
-
-  const isLiked = Array.isArray(likedPosts)
-    ? likedPosts.some((item) => String(typeof item === "object" ? item.id : item) === productId)
-    : false;
 
   const formatPrice = (price) => {
     const numPrice = parseInt(price, 10);
@@ -39,24 +31,6 @@ export default function FeaturedProduct({ product, index, currentIndex }) {
   };
 
   const productUrl = `${window.location.origin}/products/${product.id}`;
-
-  const handleToggleLike = (e) => {
-    if (e?.type === "click" && isRecentTouch()) {
-      return;
-    }
-    e?.stopPropagation?.();
-
-    let updatedLikedPosts = [];
-    if (isLiked) {
-      updatedLikedPosts = likedPosts.filter(
-        (item) => String(typeof item === "object" ? item.id : item) !== productId,
-      );
-    } else {
-      updatedLikedPosts = [...likedPosts, product];
-    }
-
-    setLikedPosts(updatedLikedPosts);
-  };
 
   const handleShare = async (e) => {
     if (e?.type === "click" && isRecentTouch()) {
@@ -130,9 +104,8 @@ export default function FeaturedProduct({ product, index, currentIndex }) {
           const angleFromTop = ((rawAngle + 90 + 180) % 360) - 180;
 
           const targets = [
-            { angle: -50, radius: menuRadii.like, action: () => handleToggleLike() },
-            { angle: 0, radius: menuRadii.share, action: () => handleShare() },
-            { angle: 50, radius: menuRadii.details, action: () => navigate(`/products/${product.id}`) },
+            { angle: -45, radius: menuRadii.share, action: () => handleShare() },
+            { angle: 45, radius: menuRadii.details, action: () => navigate(`/products/${product.id}`) },
           ];
 
           const hit = targets.find((target) => {
@@ -172,24 +145,8 @@ export default function FeaturedProduct({ product, index, currentIndex }) {
           <div className="radial-menu__items">
             <button
               type="button"
-              className={`radial-menu__item radial-menu__item--like ${isLiked ? "is-active" : ""}`}
-              style={{ "--angle": "-50deg", "--radius": `${menuRadii.like}px` }}
-              onClick={handleToggleLike}
-              aria-label={isLiked ? "Unlike" : "Like"}
-            >
-              <svg className="w-5 h-5" fill={isLiked ? "currentColor" : "none"} stroke="currentColor" viewBox="0 0 24 24">
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={1.9}
-                  d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
-                />
-              </svg>
-            </button>
-            <button
-              type="button"
               className="radial-menu__item radial-menu__item--share"
-              style={{ "--angle": "0deg", "--radius": `${menuRadii.share}px` }}
+              style={{ "--angle": "-45deg", "--radius": `${menuRadii.share}px` }}
               onClick={handleShare}
               aria-label="Share"
             >
@@ -211,7 +168,7 @@ export default function FeaturedProduct({ product, index, currentIndex }) {
             <button
               type="button"
               className="radial-menu__item radial-menu__item--details"
-              style={{ "--angle": "50deg", "--radius": `${menuRadii.details}px` }}
+              style={{ "--angle": "45deg", "--radius": `${menuRadii.details}px` }}
               onClick={(e) => {
                 e.stopPropagation();
                 navigate(`/products/${product.id}`);

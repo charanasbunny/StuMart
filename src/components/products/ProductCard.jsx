@@ -11,7 +11,7 @@ const getFirstImage = (imageUrls) => {
   return 'https://via.placeholder.com/400x300?text=No+Image';
 };
 
-export default function ProductCard({ product, isLiked, onToggleLike, onClick }) {
+export default function ProductCard({ product, onClick }) {
   return (
     <div
       onClick={onClick}
@@ -27,28 +27,6 @@ export default function ProductCard({ product, isLiked, onToggleLike, onClick })
             e.target.src = 'https://via.placeholder.com/400x300?text=No+Image'; 
           }}
         />
-        <button
-          onClick={(e) => onToggleLike(e, product)}
-          className={`absolute top-2 right-2 p-2 rounded-full transition ${
-            isLiked
-              ? 'bg-white shadow-md ring-2 ring-red-200'
-              : 'bg-white/90 shadow-sm'
-          }`}
-        >
-          <svg
-            className="w-5 h-5 text-red-500"
-            fill={isLiked ? 'currentColor' : 'none'}
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={1.8}
-              d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
-            />
-          </svg>
-        </button>
       </div>
       <div className="p-4">
         <h3 className="text-lg font-semibold text-gray-900 mb-2 line-clamp-2 min-h-[3rem]">
