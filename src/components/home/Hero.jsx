@@ -27,12 +27,12 @@ export default function Hero({ showScrollIndicator }) {
         <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-blue-200 rounded-full mix-blend-multiply filter blur-xl opacity-40 animate-blob animation-delay-4000"></div>
       </div>
 
-      <div className="relative z-30 max-w-6xl mx-auto px-4 py-10 sm:py-12 md:py-20 lg:py-28 text-center">
-        <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-7xl xl:text-8xl font-extrabold text-gray-900 mb-1 sm:mb-3 md:mb-4 lg:mb-5 leading-tight animate-fade-in-up">
-          <span className="block sm:inline">Welcome to</span>
-        </h1>
-        <div className="mb-3 sm:mb-6 md:mb-7 lg:mb-8 animate-fade-in-up-delay-1">
-          <span className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-[120px] font-cinzel font-bold block bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 bg-clip-text text-transparent animate-gradient leading-none">
+      <div className="relative z-30 max-w-6xl mx-auto px-5 py-10 sm:py-12 md:py-20 lg:py-28 text-center w-full min-w-0">
+        <p className="font-cinzel text-xs sm:text-sm md:text-base lg:text-lg uppercase tracking-[0.2em] sm:tracking-[0.3em] text-slate-600 mb-1 sm:mb-2 md:mb-3 animate-fade-in-up">
+          Welcome to
+        </p>
+        <div className="mb-3 sm:mb-6 md:mb-7 lg:mb-8 animate-fade-in-up-delay-1 w-full overflow-hidden">
+          <span className="text-[2rem] sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-cinzel font-bold block bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 bg-clip-text text-transparent animate-gradient leading-none break-words mx-auto max-w-full">
             GvlPolyMart
           </span>
         </div>

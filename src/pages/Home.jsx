@@ -144,7 +144,7 @@ export default function Home() {
       <h1 className="sr-only">
         AANM & VVRSR Student Marketplace
       </h1>
-      <section className="w-full relative overflow-hidden min-h-0 md:min-h-[60vh] flex items-center pt-2 pb-4 md:pt-3 md:pb-0">
+      <section className="w-full relative overflow-hidden min-h-[50vh] sm:min-h-[55vh] md:min-h-[60vh] flex items-center pt-8 pb-12 sm:pt-6 sm:pb-8 md:pt-3 md:pb-0">
         <div
           className="absolute inset-0 z-0 bg-center bg-no-repeat"
           style={{
@@ -164,16 +164,16 @@ export default function Home() {
           <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-blue-200 rounded-full mix-blend-multiply filter blur-xl opacity-40 animate-blob animation-delay-4000"></div>
         </div>
 
-        <div className="relative z-30 max-w-6xl mx-auto px-4 py-4 sm:py-12 md:py-20 lg:py-28 text-center">
-          <h1 className="font-display text-xl sm:text-4xl md:text-5xl lg:text-7xl xl:text-8xl font-extrabold text-gray-900 mb-0.5 sm:mb-3 md:mb-4 lg:mb-5 leading-tight md:animate-fade-in-up">
-            <span className="block sm:inline">Welcome to</span>
-          </h1>
-          <div className="mb-2 sm:mb-6 md:mb-7 lg:mb-8 md:animate-fade-in-up md:animate-fade-in-up-delay-1">
-            <span className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-[120px] font-cinzel font-bold block bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 bg-clip-text text-transparent md:animate-gradient leading-none">
+        <div className="relative z-30 max-w-6xl mx-auto px-5 py-8 sm:py-12 md:py-20 lg:py-28 text-center w-full min-w-0">
+          <p className="font-cinzel text-xs sm:text-sm md:text-base lg:text-lg uppercase tracking-[0.2em] sm:tracking-[0.3em] text-slate-600 mb-3 sm:mb-2 md:mb-3 md:animate-fade-in-up">
+            Welcome to
+          </p>
+          <div className="mb-4 sm:mb-6 md:mb-7 lg:mb-8 md:animate-fade-in-up md:animate-fade-in-up-delay-1 w-full overflow-hidden">
+            <span className="text-[2rem] sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-cinzel font-bold block bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 bg-clip-text text-transparent md:animate-gradient leading-none break-words mx-auto max-w-full">
               GvlPolyMart
             </span>
           </div>
-          <p className="font-display text-sm sm:text-base md:text-xl lg:text-2xl font-semibold text-gray-900 max-w-3xl mx-auto mb-1 sm:mb-2 md:mb-3 lg:mb-4 leading-snug md:leading-relaxed md:animate-fade-in-up md:animate-fade-in-up-delay-2">
+          <p className="font-display text-sm sm:text-base md:text-xl lg:text-2xl font-semibold text-gray-900 max-w-3xl mx-auto mb-4 sm:mb-2 md:mb-3 lg:mb-4 leading-snug md:leading-relaxed md:animate-fade-in-up md:animate-fade-in-up-delay-2">
             <span className="hidden sm:inline">Why carry extra items when campus life is already busy? Sell what you no longer need in minutes.</span>
             <span className="sm:hidden">Sell your extra items. Lighten the load.</span>
           </p>
@@ -208,7 +208,7 @@ export default function Home() {
             </button>
           )}
 
-          <p className="text-xs sm:text-sm md:text-base text-gray-500 max-w-xl mx-auto mb-1.5 sm:mb-3 md:animate-fade-in-up md:animate-fade-in-up-delay-2">
+          <p className="text-xs sm:text-sm md:text-base text-gray-500 max-w-xl mx-auto mb-5 sm:mb-3 md:animate-fade-in-up md:animate-fade-in-up-delay-2">
             <Link to="/about" className="text-indigo-600 hover:text-indigo-700 font-medium">
               By students, for students
             </Link>
@@ -217,7 +217,7 @@ export default function Home() {
             A trusted platform where students exchange academic essentials safely
             within their college community.
           </p>
-          <div className="flex flex-row justify-center items-center gap-2 sm:gap-3 w-full sm:w-auto md:animate-fade-in-up md:animate-fade-in-up-delay-4">
+          <div className="flex flex-row justify-center items-center gap-3 sm:gap-3 w-full sm:w-auto md:animate-fade-in-up md:animate-fade-in-up-delay-4 mt-1">
             <Link
               to="/products"
               className="font-display cta-hero cta-hero-pulse inline-flex items-center justify-center gap-1.5 sm:gap-2 flex-1 sm:flex-initial px-4 sm:px-8 py-2.5 sm:py-4 bg-gradient-to-r from-indigo-600 via-fuchsia-500 to-blue-600 text-white text-sm sm:text-lg font-semibold rounded-lg sm:rounded-xl transition-all duration-300 shadow-[0_10px_30px_rgba(79,70,229,0.45)] hover:shadow-[0_16px_40px_rgba(99,102,241,0.6)] ring-2 ring-indigo-300/70 hover:ring-indigo-200/90 hover:scale-[1.03]"
@@ -413,11 +413,11 @@ export default function Home() {
       </section>
 
       {/* Browse by category */}
-      <section className="max-w-6xl mx-auto px-4 py-10 md:py-14">
-        <div className="text-center mb-8">
+      <section className="max-w-6xl mx-auto px-5 py-12 pb-16 md:py-14 md:pb-16 w-full min-w-0 overflow-x-hidden">
+        <div className="text-center mb-8 w-full min-w-0">
           <p className="text-xs font-semibold uppercase tracking-[0.3em] text-indigo-600 mb-2">Browse</p>
-          <h2 className="text-2xl md:text-3xl font-bold text-gray-900">Shop by category</h2>
-          <p className="text-sm md:text-base text-gray-600 mt-2">
+          <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-gray-900 break-words px-1">Shop by category</h2>
+          <p className="text-sm md:text-base text-gray-600 mt-2 break-words px-1 max-w-xl mx-auto">
             Find what you need fast, curated for campus life.
           </p>
         </div>
