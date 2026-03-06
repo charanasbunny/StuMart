@@ -90,6 +90,26 @@ export default function AboutUs() {
             </p>
           </div>
         </section>
+        <div className="border-l-4 border-indigo-600 pl-6 mb-6">
+            <h2 className="text-sm font-semibold uppercase tracking-wider text-gray-500">
+              OUR CAMPUS
+            </h2>
+            <h3 className="font-display text-xl sm:text-2xl font-bold text-gray-900 mt-1">
+              Location
+            </h3>
+          </div>
+        <div className="relative w-full h-96 rounded-2xl overflow-hidden shadow-xl border border-gray-200">
+      <iframe
+        className="w-full h-full"
+        frameBorder="0"
+        scrolling="no"
+        marginHeight="0"
+        marginWidth="0"
+        src="https://maps.google.com/maps?width=600&height=400&hl=en&q=AANM+and+VVRSR+Polytechnic&t=&z=14&ie=UTF8&iwloc=B&output=embed"
+        title="AANM and VVRSR Polytechnic"
+        allowFullScreen
+      />
+    </div>
 
         {/* CTA */}
         <footer className="text-center pt-4 border-t border-gray-200">
