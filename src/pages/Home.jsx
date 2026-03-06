@@ -6,7 +6,6 @@ import FeaturedProduct from "../components/home/FeaturedProduct";
 const CARD_WIDTH = 324; // 300px card + 24px margin (mx-3)
 
 export default function Home() {
-  const [showScrollIndicator, setShowScrollIndicator] = useState(false);
   const [featuredProducts, setFeaturedProducts] = useState([]);
   const [isLoadingProducts, setIsLoadingProducts] = useState(true);
   const [currentIndex, setCurrentIndex] = useState(1);
@@ -81,24 +80,6 @@ export default function Home() {
 
     return () => clearInterval(interval);
   }, [n, isHovering, isMobile, clampIndex]);
-
-  useEffect(() => {
-    const updateScrollIndicator = () => {
-      const scrollPosition = window.scrollY + window.innerHeight;
-      const pageHeight = document.documentElement.scrollHeight;
-      const isAtBottom = scrollPosition >= pageHeight - 8;
-      setShowScrollIndicator(!isAtBottom);
-    };
-
-    updateScrollIndicator();
-    window.addEventListener("scroll", updateScrollIndicator, { passive: true });
-    window.addEventListener("resize", updateScrollIndicator);
-
-    return () => {
-      window.removeEventListener("scroll", updateScrollIndicator);
-      window.removeEventListener("resize", updateScrollIndicator);
-    };
-  }, []);
 
   // After sliding to a clone, snap to the real position without animation (seamless loop)
   const handleCarouselTransitionEnd = () => {
@@ -177,45 +158,15 @@ export default function Home() {
             </span>
           </h1>
           <p className="font-display text-sm sm:text-base md:text-xl lg:text-2xl font-semibold text-gray-900 max-w-3xl mx-auto mb-2 sm:mb-3 md:mb-4 leading-snug md:leading-relaxed md:animate-fade-in-up md:animate-fade-in-up-delay-2">
-            <span className="hidden sm:inline">Why carry extra items when campus life is already busy? Sell what you no longer need in minutes.</span>
-            <span className="sm:hidden">Sell your extra items. Lighten the load.</span>
+            <span className="hidden sm:inline">A campus marketplace with PIN verification. Secure peer-to-peer exchange, designed for trust.</span>
+            <span className="sm:hidden">Secure campus marketplace. Buy, sell, connect.</span>
           </p>
-
-          {showScrollIndicator && (
-            <button
-              type="button"
-              className="fixed left-1/2 bottom-6 -translate-x-1/2 flex items-center justify-center w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-white shadow-md hover:shadow-lg transition-all z-50"
-              onClick={() => {
-                window.scrollBy({
-                  top: window.innerHeight * 0.8,
-                  behavior: "smooth",
-                });
-              }}
-              aria-label="Scroll down"
-            >
-              <div className="animate-bounce">
-                <svg
-                  className="w-6 h-6 sm:w-7 sm:h-7 text-indigo-500"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2.4}
-                    d="M19 14l-7 7m0 0l-7-7m7 7V3"
-                  />
-                </svg>
-              </div>
-            </button>
-          )}
 
           <p className="text-xs sm:text-sm md:text-base text-gray-500/90 max-w-xl mx-auto mt-1 sm:mt-2 md:mt-3 md:animate-fade-in-up md:animate-fade-in-up-delay-3">
-            <span className="text-indigo-600 font-medium">By students, for students</span>
+            <span className="text-indigo-600 font-medium">Built by students. Trusted by the community.</span>
           </p>
           <p className="text-sm sm:text-sm md:text-base lg:text-lg font-normal text-gray-600 max-w-2xl mx-auto mt-2 mb-3 sm:mb-6 md:mb-8 lg:mb-10 md:animate-fade-in-up md:animate-fade-in-up-delay-3 hidden sm:block">
-            A trusted platform where students exchange academic essentials safely within their college community.
+            Books, electronics, stationery, and essentials — trusted exchanges within your college community.
           </p>
           <div className="flex flex-row justify-center items-center gap-3 sm:gap-3 w-full sm:w-auto md:animate-fade-in-up md:animate-fade-in-up-delay-4 mt-1">
             <Link
