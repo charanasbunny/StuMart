@@ -45,7 +45,10 @@ export default function AdminRegistrationRequests() {
   );
 
   useEffect(() => {
-    loadRequests();
+    const timer = setTimeout(() => {
+      loadRequests();
+    }, 0);
+    return () => clearTimeout(timer);
   }, [loadRequests]);
 
   const handleApprove = async (request) => {

@@ -162,13 +162,28 @@ export default function AdminLayout({
                       </svg>
                     </button>
                   )}
-                  <h1 className="admin-title">{title}</h1>
+                  <div>
+                    <h1 className="admin-title">{title}</h1>
+                    {subtitle ? (
+                      <p className="admin-subtitle">{subtitle}</p>
+                    ) : null}
+                  </div>
                 </div>
               </div>
               <div className="admin-header-actions flex items-center gap-2">
                 {updatedLabel && (
                   <span className="admin-updated">Updated {updatedLabel}</span>
                 )}
+                {onRefresh ? (
+                  <button
+                    type="button"
+                    onClick={onRefresh}
+                    disabled={isRefreshing}
+                    className="admin-button admin-button--ghost"
+                  >
+                    {isRefreshing ? 'Refreshing...' : 'Refresh'}
+                  </button>
+                ) : null}
                 <button
                   type="button"
                   onClick={handleLogout}
