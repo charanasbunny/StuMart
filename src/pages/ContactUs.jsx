@@ -65,7 +65,7 @@ export default function ContactUs() {
             Get in touch
           </h1>
           <p className="text-base sm:text-lg text-gray-600 max-w-xl mx-auto leading-relaxed">
-            Reach out for support, feedback, or partnerships. StuMart is presented by Prakash & Team for AVISHKAR Hackathon at AANM & VVRSR Polytechnic.
+            Reach out for support, feedback, or partnerships. GvlPolyMart serves AANM & VVRSR Polytechnic.
           </p>
         </header>
 
@@ -190,7 +190,7 @@ export default function ContactUs() {
         {/* Footer note */}
         <footer className="text-center pt-6 border-t border-gray-200">
           <p className="text-sm sm:text-base text-gray-600 mb-5 leading-relaxed">
-            StuMart is presented by Prakash & Team for AVISHKAR Hackathon, AANM & VVRSR Polytechnic.
+            The official campus marketplace for AANM & VVRSR Polytechnic.
           </p>
           <Link
             to="/about"

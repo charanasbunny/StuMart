@@ -155,7 +155,7 @@ export default function CustomerFeedback() {
             <div className="mx-auto mb-4 w-14 h-14 rounded-2xl border border-slate-200 bg-white shadow-sm flex items-center justify-center overflow-hidden">
               <img
                 src="/newlogo.jpeg"
-                alt="StuMart"
+                alt="GvlPolyMart"
                 className="w-10 h-10 object-contain"
               />
             </div>

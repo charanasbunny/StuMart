@@ -1,8 +1,8 @@
 -- ============================================
--- StumartDevHub Database Schema
+-- gvlpolymart Database Schema
 -- ============================================
 -- 
--- This SQL script creates the required database schema for StumartDevHub.
+-- This SQL script creates the required database schema for gvlpolymart.
 -- Run this in your Supabase SQL Editor: https://app.supabase.com/project/_/sql
 --
 -- ============================================

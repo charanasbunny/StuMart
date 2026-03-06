@@ -234,7 +234,7 @@ export default function AdminDashboard() {
             Welcome, Admin!
           </h2>
           <p className="text-sm sm:text-base text-gray-600">
-            This admin space is for AANM &amp; VVRSR StuMart. You can manage listings,
+            This admin space is for AANM &amp; VVRSR GvlPolyMart. You can manage listings,
             student access, and feedback from here.
           </p>
         </div>

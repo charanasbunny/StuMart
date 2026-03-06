@@ -111,7 +111,7 @@ export default function Navbar() {
             >
               <img
                 src="/newlogotransparent.png"
-                alt="AANM & VVRSR StuMart Logo"
+                alt="AANM & VVRSR GvlPolyMart Logo"
                 className="h-full w-full object-contain"
                 width={64}
                 height={64}
@@ -267,7 +267,7 @@ export default function Navbar() {
               >
                 <img
                   src="/newlogotransparent.png"
-                  alt="StuMart Logo"
+                  alt="GvlPolyMart Logo"
                   className="h-full w-full object-cover scale-105"
                   width={56}
                   height={56}
@@ -416,7 +416,7 @@ export default function Navbar() {
 
       <ImageLightbox
         src="/newlogotransparent.png"
-        alt="StuMart Logo"
+        alt="GvlPolyMart Logo"
         isOpen={isLogoLightboxOpen}
         onClose={() => setIsLogoLightboxOpen(false)}
       />

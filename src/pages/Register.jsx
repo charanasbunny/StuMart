@@ -379,7 +379,7 @@ export default function Register() {
               </li>
               <li className="flex items-center gap-2">
                 <span className="flex-shrink-0 w-5 h-5 rounded-full bg-emerald-500 text-white flex items-center justify-center text-xs font-bold">3</span>
-                Set your password and confirm your email to start using StuMart
+                Set your password and confirm your email to start using GvlPolyMart
               </li>
             </ul>
             <div className="space-y-3">

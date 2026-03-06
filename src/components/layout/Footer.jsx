@@ -19,7 +19,7 @@ export default function Footer() {
               >
                 <img
                   src="/newlogo.jpeg"
-                  alt="StuMart Logo"
+                  alt="GvlPolyMart Logo"
                   className="h-[52px] w-[52px] md:h-[64px] md:w-[64px] object-contain"
                 />
               </button>
@@ -95,13 +95,13 @@ export default function Footer() {
       {/* Copyright Bar */}
       <div className="border-t border-white/15 bg-black/10">
         <div className="w-full px-4 py-3 text-center text-[11px] md:text-sm text-blue-100/80">
-          © Prakash & Team - AVISHKAR Hackathon · AANM & VVRSR Polytechnic
+          © Prakash & Team - AANM & VVRSR Polytechnic
         </div>
       </div>
 
       <ImageLightbox
         src="/newlogo.jpeg"
-        alt="StuMart Logo"
+        alt="GvlPolyMart Logo"
         isOpen={isLogoLightboxOpen}
         onClose={() => setIsLogoLightboxOpen(false)}
       />

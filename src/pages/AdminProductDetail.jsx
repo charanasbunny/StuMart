@@ -77,7 +77,7 @@ export default function AdminProductDetail() {
 
   const handleShare = async () => {
     const shareData = {
-      title: product.title || 'StuMart Product',
+      title: product.title || 'GvlPolyMart Product',
       text: product.title || 'Product details',
       url: window.location.href,
     };
