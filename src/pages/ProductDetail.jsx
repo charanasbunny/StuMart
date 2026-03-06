@@ -2,6 +2,11 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router';
 import { getProductById } from '../services/productService';
 import { normalizeBranchCode } from '../utils/branchCodes';
+
+const ADMIN_PHONE = '9392668228';
+const ADMIN_PHONE_LINK = `tel:+91${ADMIN_PHONE}`;
+const ADMIN_WHATSAPP_LINK = `https://wa.me/91${ADMIN_PHONE}`;
+
 export default function ProductDetail() {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -340,7 +345,7 @@ export default function ProductDetail() {
 
                   {/* WhatsApp Button */}
                   <a
-                    href={`https://wa.me/919392668228?text=${encodeURIComponent(
+                    href={`${ADMIN_WHATSAPP_LINK}?text=${encodeURIComponent(
                       `Hello! 👋\n\nI need help regarding this product:\n\n📦 Product: ${product.title}\n\n💰 Price: ${formatPrice(product.price)}\n\n🖼️ Product Image: ${imageUrlForWhatsApp}`
                     )}`}
                     target="_blank"

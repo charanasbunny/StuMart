@@ -147,7 +147,7 @@ export default function Home() {
       <h1 className="sr-only">
         AANM & VVRSR Student Marketplace
       </h1>
-      <section className="w-full relative overflow-hidden min-h-0 md:min-h-[60vh] flex items-center pt-2 pb-4 md:pt-3 md:pb-0">
+      <section className="w-full relative overflow-hidden min-h-[50vh] sm:min-h-[55vh] md:min-h-[60vh] flex items-center pt-8 pb-12 sm:pt-6 sm:pb-8 md:pt-3 md:pb-0">
         <div
           className="absolute inset-0 z-0 bg-center bg-no-repeat"
           style={{
@@ -217,7 +217,7 @@ export default function Home() {
           <p className="text-sm sm:text-sm md:text-base lg:text-lg font-normal text-gray-600 max-w-2xl mx-auto mt-2 mb-3 sm:mb-6 md:mb-8 lg:mb-10 md:animate-fade-in-up md:animate-fade-in-up-delay-3 hidden sm:block">
             A trusted platform where students exchange academic essentials safely within their college community.
           </p>
-          <div className="flex flex-row justify-center items-center gap-2 sm:gap-3 w-full sm:w-auto md:animate-fade-in-up md:animate-fade-in-up-delay-4">
+          <div className="flex flex-row justify-center items-center gap-3 sm:gap-3 w-full sm:w-auto md:animate-fade-in-up md:animate-fade-in-up-delay-4 mt-1">
             <Link
               to="/products"
               className="font-display cta-hero cta-hero-pulse inline-flex items-center justify-center gap-1.5 sm:gap-2 flex-1 sm:flex-initial px-4 sm:px-8 py-2.5 sm:py-4 bg-gradient-to-r from-indigo-600 via-fuchsia-500 to-blue-600 text-white text-sm sm:text-lg font-semibold rounded-lg sm:rounded-xl transition-all duration-300 shadow-[0_10px_30px_rgba(79,70,229,0.45)] hover:shadow-[0_16px_40px_rgba(99,102,241,0.6)] ring-2 ring-indigo-300/70 hover:ring-indigo-200/90 hover:scale-[1.03]"
@@ -413,11 +413,11 @@ export default function Home() {
       </section>
 
       {/* Browse by category */}
-      <section className="max-w-6xl mx-auto px-4 py-10 md:py-14">
-        <div className="text-center mb-8">
+      <section className="max-w-6xl mx-auto px-5 py-12 pb-16 md:py-14 md:pb-16 w-full min-w-0 overflow-x-hidden">
+        <div className="text-center mb-8 w-full min-w-0">
           <p className="text-xs font-semibold uppercase tracking-[0.3em] text-indigo-600 mb-2">Browse</p>
-          <h2 className="text-2xl md:text-3xl font-bold text-gray-900">Shop by category</h2>
-          <p className="text-sm md:text-base text-gray-600 mt-2">
+          <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-gray-900 break-words px-1">Shop by category</h2>
+          <p className="text-sm md:text-base text-gray-600 mt-2 break-words px-1 max-w-xl mx-auto">
             Find what you need fast, curated for campus life.
           </p>
         </div>

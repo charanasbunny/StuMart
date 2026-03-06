@@ -98,7 +98,7 @@ export default function Navbar() {
   return (
     <>
       {/* Navbar */}
-      <nav className= "w-full  top-0 z-30 bg-purple-600 py-1 border-white/10">
+      <nav className="w-full top-0 z-30 bg-purple-600 py-2 sm:py-1 border-white/10">
         <div className="max-w-6xl mx-auto px-4 min-h-[4rem] sm:min-h-[4.5rem] flex items-center justify-between">
           
           {/* Logo and College Name */}
