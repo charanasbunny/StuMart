@@ -1,7 +1,7 @@
 import { Link } from "react-router";
 
 const PHONE = "9392668228";
-const EMAIL = "gvlpolymart@gmail.com";
+const EMAIL = "gandhamprakashtech@gmail.com";
 const PHONE_LINK = `tel:+91${PHONE}`;
 const EMAIL_LINK = `mailto:${EMAIL}`;
 

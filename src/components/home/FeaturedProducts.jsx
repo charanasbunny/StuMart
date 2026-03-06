@@ -172,7 +172,7 @@ export default function FeaturedProducts({ setShowScrollIndicator }) {
               {/* Previous Button */}
               <button
                 onClick={() => setCurrentIndex((prev) => prev - 1)}
-                className="absolute left-4 top-1/2 transform -translate-y-1/2 z-20 bg-white/80 hover:bg-white rounded-full p-3 shadow-lg transition-all duration-300"
+                className="absolute left-4 top-1/2 transform -translate-y-1/2 z-20 bg-white rounded-full p-3 shadow-lg hover:shadow-xl transition-all duration-300"
                 aria-label="Previous product"
               >
                 <svg
@@ -219,7 +219,7 @@ export default function FeaturedProducts({ setShowScrollIndicator }) {
               {/* Next Button */}
               <button
                 onClick={() => setCurrentIndex((prev) => prev + 1)}
-                className="absolute right-4 top-1/2 transform -translate-y-1/2 z-20 bg-white/80 hover:bg-white rounded-full p-3 shadow-lg transition-all duration-300"
+                className="absolute right-4 top-1/2 transform -translate-y-1/2 z-20 bg-white rounded-full p-3 shadow-lg hover:shadow-xl transition-all duration-300"
                 aria-label="Next product"
               >
                 <svg

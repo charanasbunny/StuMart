@@ -16,7 +16,7 @@ export default function Hero({ showScrollIndicator }) {
 
       {/* Soft white overlay for readability (40-50% opacity on mobile, 60-70% on desktop) */}
       <div
-        className="absolute inset-0 bg-white/40 md:bg-white/70 z-10 pointer-events-none"
+        className="absolute inset-0 bg-white/90 md:bg-white/85 z-10 pointer-events-none"
         aria-hidden="true"
       />
 
@@ -44,7 +44,7 @@ export default function Hero({ showScrollIndicator }) {
         {showScrollIndicator && (
           <button
             type="button"
-            className="fixed left-1/2 bottom-6 -translate-x-1/2 flex items-center justify-center w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-white/80 shadow-md hover:shadow-lg hover:opacity-90 transition-all z-50"
+            className="fixed left-1/2 bottom-6 -translate-x-1/2 flex items-center justify-center w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-white shadow-md hover:shadow-lg transition-all z-50"
             onClick={() => {
               window.scrollBy({
                 top: window.innerHeight * 0.8,
