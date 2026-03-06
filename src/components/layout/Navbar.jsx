@@ -98,7 +98,7 @@ export default function Navbar() {
   return (
     <>
       {/* Navbar */}
-      <nav className="w-full bg-gradient-to-r from-blue-700 via-purple-600 to-purple-700 relative">
+      <nav className= "w-full  top-0 z-30 bg-purple-600 py-1 border-white/10">
         <div className="max-w-6xl mx-auto px-4 min-h-[4rem] sm:min-h-[4.5rem] flex items-center justify-between">
           
           {/* Logo and College Name */}
@@ -133,7 +133,7 @@ export default function Navbar() {
           </div>
 
           {/* Desktop Navigation - Hidden on mobile */}
-          <div className="hidden md:flex items-center justify-center gap-4 lg:gap-6 text-blue-100 flex-1">
+          <div className="hidden md:flex items-center text-lg justify-center gap-4 lg:gap-6 text-blue-100 flex-1">
             <Link
               to="/"
               className={`relative px-2 py-1 transition ${
