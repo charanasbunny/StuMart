@@ -237,7 +237,15 @@ export default function MyPosts() {
             </h1>
             <p className="text-sm sm:text-base text-gray-600">Manage and view all your product posts</p>
           </div>
-         
+          <Link
+            to="/create-post"
+            className="inline-flex items-center justify-center px-4 py-2.5 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors font-medium text-sm sm:text-base"
+          >
+            <svg className="w-4 h-4 sm:w-5 sm:h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+            </svg>
+            Create Post
+          </Link>
         </div>
 
         {/* Products Grid */}
