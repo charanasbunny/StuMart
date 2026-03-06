@@ -126,7 +126,7 @@ export default function CompleteSignup() {
     <div className="min-h-screen flex items-center justify-center px-4 py-10 bg-gray-50">
       <div className="max-w-md w-full bg-white rounded-2xl shadow-lg p-8">
         <h1 className="text-2xl font-bold text-gray-900 text-center">Complete your registration</h1>
-        <p className="mt-2 text-gray-600 text-center text-sm">Set a password for your StuMart account.</p>
+        <p className="mt-2 text-gray-600 text-center text-sm">Set a password for your GvlPolyMart account.</p>
 
         <form onSubmit={handleSubmit} className="mt-6 space-y-4">
           <div>

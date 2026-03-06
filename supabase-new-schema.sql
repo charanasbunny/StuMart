@@ -1,5 +1,5 @@
 -- ============================================
--- NEW StumartDevHub Database Schema
+-- NEW gvlpolymart Database Schema
 -- PIN Management System
 -- ============================================
 -- 

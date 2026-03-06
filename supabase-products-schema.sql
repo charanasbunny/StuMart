@@ -1,5 +1,5 @@
 -- ============================================
--- Products Table Schema for StumartDevHub
+-- Products Table Schema for gvlpolymart
 -- ============================================
 -- 
 -- This SQL script creates the products table and related infrastructure.

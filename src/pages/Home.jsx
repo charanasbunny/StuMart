@@ -169,10 +169,8 @@ export default function Home() {
             <span className="block sm:inline">Welcome to</span>
           </h1>
           <div className="mb-2 sm:mb-6 md:mb-7 lg:mb-8 md:animate-fade-in-up md:animate-fade-in-up-delay-1">
-            <span className="text-6xl sm:text-7xl md:text-8xl lg:text-9xl xl:text-[150px] font-cinzel font-bold block bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 bg-clip-text text-transparent md:animate-gradient leading-none">
-              <span className="text-7xl sm:text-8xl md:text-9xl lg:text-[110px] xl:text-[180px]">S</span>
-              tuMar
-              <span className="text-7xl sm:text-8xl md:text-9xl lg:text-[110px] xl:text-[180px]">t</span>
+            <span className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-[120px] font-cinzel font-bold block bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 bg-clip-text text-transparent md:animate-gradient leading-none">
+              GvlPolyMart
             </span>
           </div>
           <p className="font-display text-sm sm:text-base md:text-xl lg:text-2xl font-semibold text-gray-900 max-w-3xl mx-auto mb-1 sm:mb-2 md:mb-3 lg:mb-4 leading-snug md:leading-relaxed md:animate-fade-in-up md:animate-fade-in-up-delay-2">
@@ -353,7 +351,7 @@ export default function Home() {
       <section className="hidden md:block max-w-6xl mx-auto px-4 py-8 md:py-12 lg:py-16">
         <p className="text-sm font-semibold uppercase tracking-wider text-indigo-600 text-center mb-2">Why us</p>
         <h2 className="text-3xl md:text-4xl font-bold text-gray-900 text-center mb-2 md:mb-3 lg:mb-4">
-          Why Choose StuMart?
+          Why Choose GvlPolyMart?
         </h2>
         <p className="text-center text-gray-600 mb-6 md:mb-12 max-w-2xl mx-auto">
           A trusted, campus-only marketplace built by students — for students.

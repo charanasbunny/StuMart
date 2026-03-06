@@ -7,13 +7,13 @@ export default function AboutUs() {
         {/* Hero */}
         <header className="text-center mb-12 sm:mb-14 md:mb-20">
           <p className="text-sm font-medium uppercase tracking-widest text-indigo-600 mb-3">
-            About StuMart
+            About GvlPolyMart
           </p>
           <h1 className="font-display text-3xl sm:text-4xl md:text-5xl font-bold text-gray-900 tracking-tight mb-3 sm:mb-4">
             Built by students, for students
           </h1>
           <p className="text-base sm:text-lg text-gray-600 max-w-xl mx-auto leading-relaxed">
-            The official campus marketplace for AANM & VVRSR Polytechnic, presented by Prakash & Team at AVISHKAR Hackathon.
+            The official campus marketplace for AANM & VVRSR Polytechnic.
           </p>
         </header>
 
@@ -24,17 +24,15 @@ export default function AboutUs() {
               Our story
             </h2>
             <h3 className="font-display text-xl sm:text-2xl font-bold text-gray-900 mt-1">
-              Prakash & Team — AVISHKAR Hackathon
+              Our journey
             </h3>
           </div>
           <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 md:p-8">
             <p className="text-sm sm:text-base text-gray-700 leading-relaxed mb-4">
-              StuMart is being showcased by{" "}
-              <strong className="text-gray-900">Prakash & Team</strong> at{" "}
-              <strong className="text-gray-900">AVISHKAR Hackathon</strong> as a practical solution to real campus marketplace needs.
+              GvlPolyMart is a practical solution to real campus marketplace needs.
             </p>
             <p className="text-sm sm:text-base text-gray-700 leading-relaxed">
-              We believe in <strong className="text-gray-900">students helping students</strong>. Whether it’s books, stationery, electronics, or other essentials, StuMart makes it simple to buy and sell within the college community in a safe, trusted environment.
+              We believe in <strong className="text-gray-900">students helping students</strong>. Whether it’s books, stationery, electronics, or other essentials, GvlPolyMart makes it simple to buy and sell within the college community in a safe, trusted environment.
             </p>
           </div>
         </section>
@@ -51,13 +49,13 @@ export default function AboutUs() {
           </div>
           <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 md:p-8">
             <p className="text-sm sm:text-base text-gray-600 mb-6 leading-relaxed">
-              Prakash & Team combines technical depth with user-first thinking to deliver a practical and reliable marketplace experience for campus users.
+              We combine technical depth with user-first thinking to deliver a practical and reliable marketplace experience for campus users.
             </p>
             <ul className="space-y-4">
               {[
                 { title: "Full-stack execution", desc: "Product design, frontend, backend, and database delivery" },
                 { title: "Problem-solving", desc: "Turning real student pain points into useful product features" },
-                { title: "Team collaboration", desc: "Coordinated execution by Prakash & Team for AVISHKAR Hackathon" },
+                { title: "Team collaboration", desc: "Coordinated execution as a team" },
                 { title: "Campus impact", desc: "Building a platform that creates value across the polytechnic community" },
               ].map((item, i) => (
                 <li key={i} className="flex gap-4">

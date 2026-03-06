@@ -109,11 +109,11 @@ export default function AdminLayout({
             >
               <img
                 src="/newlogotransparent.png"
-                alt="StuMart Logo"
+                alt="GvlPolyMart Logo"
                 className="w-[84px] h-[84px] object-contain mb-5"
               />
             </button>
-            <div className="admin-brand">StuMart Admin</div>
+            <div className="admin-brand">GvlPolyMart Admin</div>
             <p className="admin-brand-sub">Operations console</p>
           </div>
           <nav className="admin-nav">
@@ -145,7 +145,7 @@ export default function AdminLayout({
                 >
                   <img
                     src="/newlogotransparent.png"
-                    alt="StuMart Logo"
+                    alt="GvlPolyMart Logo"
                     className="h-[84px] w-[84px] object-contain"
                   />
                 </button>
@@ -202,7 +202,7 @@ export default function AdminLayout({
 
       <ImageLightbox
         src="/newlogotransparent.png"
-        alt="StuMart Logo"
+        alt="GvlPolyMart Logo"
         isOpen={isLogoLightboxOpen}
         onClose={() => setIsLogoLightboxOpen(false)}
       />

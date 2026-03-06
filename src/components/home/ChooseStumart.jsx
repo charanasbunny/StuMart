@@ -1,11 +1,11 @@
 import React from 'react'
 import { MdVerified } from 'react-icons/md'
 
-export default function ChooseStumart() {
+export default function ChooseGvlpolymart() {
   return (
     <section className="max-w-6xl mx-auto px-4 py-8 md:py-12 lg:py-16">
         <h2 className="text-3xl md:text-4xl font-bold text-gray-900 text-center mb-2 md:mb-3 lg:mb-4">
-          Why Choose StuMart?
+          Why Choose GvlPolyMart?
         </h2>
         <p className="text-center text-gray-600 mb-6 md:mb-12 max-w-2xl mx-auto">
           A trusted platform that connects verified students within the campus.

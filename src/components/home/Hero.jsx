@@ -32,14 +32,8 @@ export default function Hero({ showScrollIndicator }) {
           <span className="block sm:inline">Welcome to</span>
         </h1>
         <div className="mb-3 sm:mb-6 md:mb-7 lg:mb-8 animate-fade-in-up-delay-1">
-          <span className="text-6xl sm:text-7xl md:text-8xl lg:text-9xl xl:text-[150px] font-cinzel font-bold block bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 bg-clip-text text-transparent animate-gradient leading-none">
-            <span className="text-7xl sm:text-8xl md:text-9xl lg:text-[110px] xl:text-[180px]">
-              S
-            </span>
-            tuMar
-            <span className="text-7xl sm:text-8xl md:text-9xl lg:text-[110px] xl:text-[180px]">
-              t
-            </span>
+          <span className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-[120px] font-cinzel font-bold block bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 bg-clip-text text-transparent animate-gradient leading-none">
+            GvlPolyMart
           </span>
         </div>
         <p className="text-sm sm:text-base md:text-xl lg:text-2xl font-semibold text-gray-900 max-w-3xl mx-auto mb-1 sm:mb-2 md:mb-3 lg:mb-4 leading-relaxed animate-fade-in-up-delay-2">

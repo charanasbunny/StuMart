@@ -1,5 +1,5 @@
 -- ============================================
--- StumartDevHub Complete Database Schema
+-- gvlpolymart Complete Database Schema
 -- ============================================
 -- 
 -- This script creates the complete database schema from scratch.

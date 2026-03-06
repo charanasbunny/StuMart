@@ -70,7 +70,7 @@ Deno.serve(async (req) => {
       });
     }
 
-    const subject = "Your StuMart Account is Approved";
+    const subject = "Your GvlPolyMart Account is Approved";
     const safeName = studentName || "Student";
     const expiresText = tokenExpiresAt
       ? new Date(tokenExpiresAt).toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })
@@ -78,7 +78,7 @@ Deno.serve(async (req) => {
 
     const html = `
       <div style="font-family: Arial, sans-serif; line-height: 1.5; color: #111827;">
-        <h2 style="margin-bottom: 8px;">Your StuMart account is approved</h2>
+        <h2 style="margin-bottom: 8px;">Your GvlPolyMart account is approved</h2>
         <p>Hi ${safeName},</p>
         <p>Your registration has been approved by admin.</p>
         <p>Please complete signup by setting your password:</p>
