@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router';
-import { getMyProducts, deleteProduct } from '../services/productService';
+import { getMyProducts, deleteProduct, updateProduct } from '../services/productService';
 import { getCurrentUser } from '../services/authService';
 
 export default function MyPosts() {
@@ -9,6 +9,7 @@ export default function MyPosts() {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
   const [deletingId, setDeletingId] = useState(null);
+  const [markingSoldId, setMarkingSoldId] = useState(null);
 
   useEffect(() => {
     const fetchMyProducts = async () => {
@@ -42,6 +43,47 @@ export default function MyPosts() {
 
     fetchMyProducts();
   }, [navigate]);
+
+  // Handle mark as sold (seller manually marks product sold)
+  const handleMarkAsSold = async (productId) => {
+    const confirmSold = window.confirm(
+      'Mark this item as sold? It will be removed from the product listing and other users won\'t see it.'
+    );
+    if (!confirmSold) return;
+
+    setMarkingSoldId(productId);
+    try {
+      const result = await updateProduct(productId, { status: 'sold' });
+      if (result.success) {
+        setProducts(prev => prev.map(p => p.id === productId ? { ...p, status: 'sold' } : p));
+      } else {
+        alert(result.error || 'Failed to mark as sold');
+      }
+    } catch (err) {
+      console.error('Error marking as sold:', err);
+      alert('Something went wrong');
+    } finally {
+      setMarkingSoldId(null);
+    }
+  };
+
+  // Handle relist (mark sold product as active again)
+  const handleRelist = async (productId) => {
+    setMarkingSoldId(productId);
+    try {
+      const result = await updateProduct(productId, { status: 'active' });
+      if (result.success) {
+        setProducts(prev => prev.map(p => p.id === productId ? { ...p, status: 'active' } : p));
+      } else {
+        alert(result.error || 'Failed to relist');
+      }
+    } catch (err) {
+      console.error('Error relisting:', err);
+      alert('Something went wrong');
+    } finally {
+      setMarkingSoldId(null);
+    }
+  };
 
   // Handle product deletion
   const handleDelete = async (productId) => {
@@ -97,9 +139,8 @@ export default function MyPosts() {
 
   // Get status badge color
   const getStatusBadge = (status) => {
-    if (status === 'active') {
-      return 'bg-green-100 text-green-800';
-    }
+    if (status === 'active') return 'bg-green-100 text-green-800';
+    if (status === 'sold') return 'bg-amber-100 text-amber-800';
     return 'bg-gray-100 text-gray-800';
   };
 
@@ -245,10 +286,42 @@ export default function MyPosts() {
 
                 {/* Action Buttons */}
                 <div className="flex gap-2">
+                  {product.status === 'active' && (
+                    <button
+                      onClick={() => handleMarkAsSold(product.id)}
+                      disabled={markingSoldId === product.id}
+                      className="flex-1 px-3 py-2 bg-amber-500 text-white rounded-lg hover:bg-amber-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors text-sm font-medium"
+                    >
+                      {markingSoldId === product.id ? (
+                        <svg className="animate-spin h-4 w-4 mx-auto" fill="none" viewBox="0 0 24 24">
+                          <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                          <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                        </svg>
+                      ) : (
+                        'Mark Sold'
+                      )}
+                    </button>
+                  )}
+                  {product.status === 'sold' && (
+                    <button
+                      onClick={() => handleRelist(product.id)}
+                      disabled={markingSoldId === product.id}
+                      className="flex-1 px-3 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors text-sm font-medium"
+                    >
+                      {markingSoldId === product.id ? (
+                        <svg className="animate-spin h-4 w-4 mx-auto" fill="none" viewBox="0 0 24 24">
+                          <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                          <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                        </svg>
+                      ) : (
+                        'Relist'
+                      )}
+                    </button>
+                  )}
                   <button
                     onClick={() => handleDelete(product.id)}
                     disabled={deletingId === product.id}
-                    className="w-full px-3 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors text-sm font-medium"
+                    className="flex-1 px-3 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors text-sm font-medium"
                   >
                     {deletingId === product.id ? (
                       <svg className="animate-spin h-4 w-4 mx-auto" fill="none" viewBox="0 0 24 24">

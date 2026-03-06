@@ -224,7 +224,12 @@ export default function ProductDetail() {
             {/* Product Details */}
             <div>
               {/* Category & Branch Badges */}
-              <div className="flex gap-2 mb-4">
+              <div className="flex flex-wrap gap-2 mb-4">
+                {product.status === 'sold' && (
+                  <span className="px-3 py-1 bg-amber-100 text-amber-800 rounded-full text-sm font-semibold">
+                    Sold
+                  </span>
+                )}
                 <span className="px-3 py-1 bg-indigo-100 text-indigo-800 rounded-full text-sm font-medium">
                   {formatCategory(product.category)}
                 </span>
@@ -285,21 +290,37 @@ export default function ProductDetail() {
                 </div>
               </div>
 
-              {/* Buy via QR / Request Delivery */}
+              {/* Buy via QR / Request Delivery - or Sold state */}
               <div className="mt-6 pt-6 border-t border-gray-200">
-                <button
-                  type="button"
-                  onClick={() => navigate(`/checkout/${product.id}`)}
-                  className="w-full inline-flex items-center justify-center px-4 py-3 bg-gradient-to-br from-green-600 to-green-500 text-white font-medium rounded-lg hover:from-green-500 hover:to-green-400 transition-colors duration-200 shadow-md hover:shadow-lg"
-                >
-                  <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                  </svg>
-                  Buy via QR &amp; Request Delivery
-                </button>
-                <p className="mt-2 text-xs text-gray-500">
-                  You will pay by scanning a QR code, then submit payment details so admin can verify and arrange delivery.
-                </p>
+                {product.status === 'sold' ? (
+                  <div className="rounded-lg bg-amber-50 border border-amber-200 p-5 text-center">
+                    <p className="text-amber-800 font-semibold mb-1">This item has been sold</p>
+                    <p className="text-amber-700 text-sm mb-4">It is no longer available for purchase.</p>
+                    <button
+                      type="button"
+                      onClick={() => navigate('/products')}
+                      className="inline-flex items-center justify-center px-4 py-2 bg-indigo-600 text-white font-medium rounded-lg hover:bg-indigo-700"
+                    >
+                      Browse more products
+                    </button>
+                  </div>
+                ) : (
+                  <>
+                    <button
+                      type="button"
+                      onClick={() => navigate(`/checkout/${product.id}`)}
+                      className="w-full inline-flex items-center justify-center px-4 py-3 bg-gradient-to-br from-green-600 to-green-500 text-white font-medium rounded-lg hover:from-green-500 hover:to-green-400 transition-colors duration-200 shadow-md hover:shadow-lg"
+                    >
+                      <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                      </svg>
+                      Buy via QR &amp; Request Delivery
+                    </button>
+                    <p className="mt-2 text-xs text-gray-500">
+                      You will pay by scanning a QR code, then submit payment details so admin can verify and arrange delivery.
+                    </p>
+                  </>
+                )}
               </div>
 
               {/* Contact Admin Buttons */}

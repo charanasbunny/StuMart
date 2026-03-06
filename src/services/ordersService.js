@@ -86,12 +86,20 @@ export async function getOrders({ status } = {}) {
 
 /**
  * Admin: update order status (verified / delivered).
+ * When status is 'delivered', the associated product is auto-marked as 'sold'.
  */
 export async function updateOrderStatus(orderId, status) {
   if (!['verified', 'delivered'].includes(status)) {
     return { success: false, error: 'Invalid status' };
   }
   try {
+    // Fetch order first to get product_id (needed when marking delivered)
+    const { data: order } = await supabase
+      .from('orders')
+      .select('id, product_id')
+      .eq('id', orderId)
+      .single();
+
     const { data, error } = await supabase
       .from('orders')
       .update({ status })
@@ -102,6 +110,12 @@ export async function updateOrderStatus(orderId, status) {
     if (error) {
       return { success: false, data: null, error: error.message };
     }
+
+    // When delivered, mark product as sold (out of stock)
+    if (status === 'delivered' && order?.product_id) {
+      await supabase.from('products').update({ status: 'sold' }).eq('id', order.product_id);
+    }
+
     return { success: true, data, error: null };
   } catch (e) {
     return { success: false, data: null, error: e.message || 'Failed to update order' };
