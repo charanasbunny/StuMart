@@ -48,11 +48,7 @@ export const publicRoutes = [
   { path: "/products/:id", element: withRouteSuspense(ProductDetail) },
   {
     path: "/checkout/:productId",
-    element: (
-      <ProtectedRoute>
-        {withRouteSuspense(Checkout)}
-      </ProtectedRoute>
-    ),
+    element: withRouteSuspense(Checkout),
   },
 
   { path: "/login", element: withRouteSuspense(Login) },

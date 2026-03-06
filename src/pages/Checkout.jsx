@@ -29,6 +29,7 @@ export default function Checkout() {
   const navigate = useNavigate();
   const [product, setProduct] = useState(null);
   const [student, setStudent] = useState(null);
+  const [isGuestRestricted, setIsGuestRestricted] = useState(false);
   const [loading, setLoading] = useState(true);
   const [submitLoading, setSubmitLoading] = useState(false);
   const [error, setError] = useState('');
@@ -47,13 +48,7 @@ export default function Checkout() {
 
     async function load() {
       const { user, student: s, error: userError } = await getCurrentUser();
-      if (userError || !user || !s) {
-        if (!cancelled) {
-          setError('Please log in to place an order.');
-          setLoading(false);
-        }
-        return;
-      }
+      const isEligibleStudent = Boolean(user && s && !userError);
 
       const res = await getProductById(productId);
       if (!res.success || !res.data) {
@@ -74,7 +69,8 @@ export default function Checkout() {
 
       if (!cancelled) {
         setProduct(res.data);
-        setStudent(s);
+        setStudent(isEligibleStudent ? s : null);
+        setIsGuestRestricted(!isEligibleStudent);
         const { total } = getPaymentBreakdown(res.data.price);
         setForm((prev) => ({ ...prev, amount_paid: String(total) }));
         setLoading(false);
@@ -94,6 +90,11 @@ export default function Checkout() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
+
+    if (isGuestRestricted) {
+      setError('Only registered students can make payments and submit orders.');
+      return;
+    }
 
     if (!product || !student) {
       setError('Session or product unavailable. Please go back to the product and try again.');
@@ -147,7 +148,7 @@ export default function Checkout() {
     );
   }
 
-  if (!product || !student) {
+  if (!product) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
         <div className="text-center">
@@ -208,6 +209,17 @@ export default function Checkout() {
           Back
         </button>
 
+        {isGuestRestricted && (
+          <div className="mb-6 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3">
+            <h1 className="text-sm sm:text-base font-semibold text-amber-900">
+              Payment access is limited to registered students.
+            </h1>
+            <p className="mt-1 text-xs sm:text-sm text-amber-800">
+              Please sign in with a registered student account to complete payment submission and order confirmation.
+            </p>
+          </div>
+        )}
+
         <div className="flex items-center gap-2 mb-6">
           <span className="flex items-center justify-center w-7 h-7 rounded-full bg-indigo-100 text-indigo-600 text-xs font-semibold">1</span>
           <span className="text-gray-400 text-sm">Pay</span>
@@ -265,13 +277,16 @@ export default function Checkout() {
 
             <div className="bg-white rounded-xl border border-gray-200 p-5">
               <div className="flex flex-col items-center">
-                <div className="p-2 bg-white rounded-lg border border-gray-200 inline-block">
+                <div
+                  className={`p-2 bg-white rounded-lg border border-gray-200 inline-block ${isGuestRestricted ? 'blur-sm pointer-events-none select-none' : ''}`}
+                  aria-hidden={isGuestRestricted}
+                >
                   <img src={qrUrl} alt="Pay with UPI" className="w-40 h-40 object-contain" />
                 </div>
-                <p className="mt-3 text-lg font-bold text-indigo-600">
+                <p className={`mt-3 text-lg font-bold text-indigo-600 ${isGuestRestricted ? 'blur-sm select-none' : ''}`}>
                   {total > 0 ? `₹${total}` : 'FREE'}
                 </p>
-                <p className="text-xs text-gray-400 mt-1">{UPI_ID}</p>
+                <p className={`text-xs text-gray-400 mt-1 ${isGuestRestricted ? 'blur-sm select-none' : ''}`}>{UPI_ID}</p>
               </div>
             </div>
           </div>
@@ -301,6 +316,7 @@ export default function Checkout() {
                   value={form.amount_paid}
                   onChange={handleChange}
                   required
+                  disabled={isGuestRestricted}
                   readOnly={total > 0}
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 bg-gray-50 read-only:bg-gray-100 read-only:cursor-default text-gray-900"
                 />
@@ -314,6 +330,7 @@ export default function Checkout() {
                   onChange={handleChange}
                   placeholder="From UPI app"
                   required
+                  disabled={isGuestRestricted}
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
                 />
               </div>
@@ -323,6 +340,7 @@ export default function Checkout() {
                   name="payment_method"
                   value={form.payment_method}
                   onChange={handleChange}
+                  disabled={isGuestRestricted}
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
                 >
                   {PAYMENT_APPS.map((app) => (
@@ -338,6 +356,7 @@ export default function Checkout() {
                   value={form.delivery_preference}
                   onChange={handleChange}
                   placeholder="e.g. Library"
+                  disabled={isGuestRestricted}
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
                 />
               </div>
@@ -349,6 +368,7 @@ export default function Checkout() {
                   value={form.notes}
                   onChange={handleChange}
                   placeholder="Optional"
+                  disabled={isGuestRestricted}
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
                 />
               </div>
@@ -359,10 +379,10 @@ export default function Checkout() {
 
               <button
                 type="submit"
-                disabled={submitLoading}
+                disabled={submitLoading || isGuestRestricted}
                 className="w-full py-3 bg-indigo-600 text-white font-semibold rounded-lg hover:bg-indigo-700 disabled:opacity-50 transition-colors mt-2"
               >
-                {submitLoading ? 'Submitting…' : 'Submit'}
+                {submitLoading ? 'Submitting…' : isGuestRestricted ? 'Registered Students Only' : 'Submit'}
               </button>
             </form>
           </div>
