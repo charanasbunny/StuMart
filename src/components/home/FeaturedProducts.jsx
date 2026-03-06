@@ -1,11 +1,10 @@
-import { Link, useNavigate } from "react-router";
+import { Link } from "react-router";
 import { useEffect, useState, useRef } from "react";
 import { getProducts } from "../../services/productService";
 import FeaturedProduct from "./FeaturedProduct";
 const CARD_WIDTH = 324; // 300px card + 24px margin (mx-3)
 
 export default function FeaturedProducts({ setShowScrollIndicator }) {
-  const navigate = useNavigate();
   const [featuredProducts, setFeaturedProducts] = useState([]);
   const [isLoadingProducts, setIsLoadingProducts] = useState(true);
   const [currentIndex, setCurrentIndex] = useState(1);
@@ -40,7 +39,7 @@ export default function FeaturedProducts({ setShowScrollIndicator }) {
       }
     };
     fetchFeaturedProducts();
-  }, []);
+  }, [setShowScrollIndicator]);
 
   useEffect(() => {
     if (n === 0 || isHovering) return;
@@ -68,7 +67,7 @@ export default function FeaturedProducts({ setShowScrollIndicator }) {
       window.removeEventListener("scroll", updateScrollIndicator);
       window.removeEventListener("resize", updateScrollIndicator);
     };
-  }, []);
+  }, [setShowScrollIndicator]);
 
   // After sliding to a clone, snap to the real position without animation (seamless loop)
   const handleCarouselTransitionEnd = () => {

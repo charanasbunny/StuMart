@@ -52,12 +52,11 @@ export default function AdminFeedbacks() {
   );
 
   useEffect(() => {
-    loadFeedbacks();
+    const timer = setTimeout(() => {
+      loadFeedbacks();
+    }, 0);
+    return () => clearTimeout(timer);
   }, [loadFeedbacks]);
-
-  useEffect(() => {
-    setCurrentPage(1);
-  }, [debouncedSearch]);
 
 
   const handleDelete = async (feedbackId) => {
@@ -101,12 +100,6 @@ export default function AdminFeedbacks() {
     clampedPage * pageSize
   );
 
-  useEffect(() => {
-    if (currentPage > totalPages) {
-      setCurrentPage(totalPages);
-    }
-  }, [currentPage, totalPages]);
-
   const getPreview = (text, max = 140) => {
     if (!text) return '';
     return text.length > max ? `${text.slice(0, max)}...` : text;
@@ -144,7 +137,10 @@ export default function AdminFeedbacks() {
               <label className="text-xs uppercase tracking-wide text-gray-500">Search</label>
               <input
                 value={searchQuery}
-                onChange={(event) => setSearchQuery(event.target.value)}
+                onChange={(event) => {
+                  setSearchQuery(event.target.value);
+                  setCurrentPage(1);
+                }}
                 placeholder="Search by name, PIN, email, or text"
                 className="mt-2 w-full border rounded-lg px-3 py-2 text-sm"
               />

@@ -38,7 +38,8 @@ export default function AdminProductDetail() {
           setError(result.error || 'Failed to load product');
         }
         setLastUpdated(new Date());
-      } catch (err) {
+      } catch (error) {
+        console.error('Failed to load product detail:', error);
         setError('Unexpected error');
       } finally {
         if (isRefresh) {

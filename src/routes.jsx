@@ -26,40 +26,39 @@ const Checkout = lazy(() => import("./pages/Checkout"));
 const MyOrders = lazy(() => import("./pages/MyOrders"));
 const AdminOrders = lazy(() => import("./pages/AdminOrders"));
 
-const RouteLoader = () => (
+const routeFallback = (
   <div className="min-h-[50vh] flex items-center justify-center bg-slate-50">
     <div className="text-sm text-slate-600">Loading page...</div>
   </div>
 );
 
-const withRouteSuspense = (Component) => (
-  <Suspense fallback={<RouteLoader />}>
-    <Component />
+const withRouteSuspense = (element) => (
+  <Suspense fallback={routeFallback}>
+    {element}
   </Suspense>
 );
-
 export const publicRoutes = [
-  { path: "/", element: withRouteSuspense(Home) },
+  { path: "/", element: withRouteSuspense(<Home />) },
 
-  { path: "/about", element: withRouteSuspense(AboutUs) },
-  { path: "/contact", element: withRouteSuspense(ContactUs) },
+  { path: "/about", element: withRouteSuspense(<AboutUs />) },
+  { path: "/contact", element: withRouteSuspense(<ContactUs />) },
 
-  { path: "/products", element: withRouteSuspense(Products) },
-  { path: "/products/:id", element: withRouteSuspense(ProductDetail) },
+  { path: "/products", element: withRouteSuspense(<Products />) },
+  { path: "/products/:id", element: withRouteSuspense(<ProductDetail />) },
   {
     path: "/checkout/:productId",
-    element: withRouteSuspense(Checkout),
+    element: withRouteSuspense(<Checkout />),
   },
 
-  { path: "/login", element: withRouteSuspense(Login) },
-  { path: "/register", element: withRouteSuspense(Register) },
-  { path: "/complete-signup", element: withRouteSuspense(CompleteSignup) },
+  { path: "/login", element: withRouteSuspense(<Login />) },
+  { path: "/register", element: withRouteSuspense(<Register />) },
+  { path: "/complete-signup", element: withRouteSuspense(<CompleteSignup />) },
 
   {
     path: "/profile",
     element: (
       <ProtectedRoute>
-        {withRouteSuspense(Profile)}
+        {withRouteSuspense(<Profile />)}
       </ProtectedRoute>
     ),
   },
@@ -69,7 +68,7 @@ export const publicRoutes = [
     path: "/create-post",
     element: (
       <ProtectedRoute>
-        {withRouteSuspense(CreatePost)}
+        {withRouteSuspense(<CreatePost />)}
       </ProtectedRoute>
     ),
   },
@@ -78,7 +77,7 @@ export const publicRoutes = [
     path: "/my-posts",
     element: (
       <ProtectedRoute>
-        {withRouteSuspense(MyPosts)}
+        {withRouteSuspense(<MyPosts />)}
       </ProtectedRoute>
     ),
   },
@@ -87,16 +86,16 @@ export const publicRoutes = [
     path: "/my-orders",
     element: (
       <ProtectedRoute>
-        {withRouteSuspense(MyOrders)}
+        {withRouteSuspense(<MyOrders />)}
       </ProtectedRoute>
     ),
   },
 
 
-  { path: "/forgot-password", element: withRouteSuspense(ForgotPassword) },
+  { path: "/forgot-password", element: withRouteSuspense(<ForgotPassword />) },
   {
     path: "/customer-feedback",
-    element: withRouteSuspense(CustomerFeedback),
+    element: withRouteSuspense(<CustomerFeedback />),
   },
   { path: "*", element: <Navigate to="/" replace /> },
 
@@ -109,7 +108,7 @@ export const adminRoutes = [
     path: "/admin/dashboard",
     element: (
       <ProtectedAdminRoute>
-        {withRouteSuspense(AdminDashboard)}
+        {withRouteSuspense(<AdminDashboard />)}
       </ProtectedAdminRoute>
     ),
   },
@@ -118,7 +117,7 @@ export const adminRoutes = [
     path: "/admin/pin-management",
     element: (
       <ProtectedAdminRoute>
-        {withRouteSuspense(AdminPINManagement)}
+        {withRouteSuspense(<AdminPINManagement />)}
       </ProtectedAdminRoute>
     ),
   },
@@ -127,7 +126,7 @@ export const adminRoutes = [
     path: "/admin/registration-requests",
     element: (
       <ProtectedAdminRoute>
-        {withRouteSuspense(AdminRegistrationRequests)}
+        {withRouteSuspense(<AdminRegistrationRequests />)}
       </ProtectedAdminRoute>
     ),
   },
@@ -136,7 +135,7 @@ export const adminRoutes = [
     path: "/admin/products",
     element: (
       <ProtectedAdminRoute>
-        {withRouteSuspense(AdminProducts)}
+        {withRouteSuspense(<AdminProducts />)}
       </ProtectedAdminRoute>
     ),
   },
@@ -145,7 +144,7 @@ export const adminRoutes = [
     path: "/admin/products/:id",
     element: (
       <ProtectedAdminRoute>
-        {withRouteSuspense(AdminProductDetail)}
+        {withRouteSuspense(<AdminProductDetail />)}
       </ProtectedAdminRoute>
     ),
   },
@@ -153,7 +152,7 @@ export const adminRoutes = [
     path: "/admin/orders",
     element: (
       <ProtectedAdminRoute>
-        {withRouteSuspense(AdminOrders)}
+        {withRouteSuspense(<AdminOrders />)}
       </ProtectedAdminRoute>
     ),
   },
@@ -161,7 +160,7 @@ export const adminRoutes = [
     path: "/admin/feedbacks",
     element: (
       <ProtectedAdminRoute>
-        {withRouteSuspense(AdminFeedbacks)}
+        {withRouteSuspense(<AdminFeedbacks />)}
       </ProtectedAdminRoute>
     ),
   },

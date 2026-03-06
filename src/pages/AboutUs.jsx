@@ -112,6 +112,7 @@ export default function AboutUs() {
         {/* CTA */}
         <footer className="text-center pt-4 border-t border-gray-200">
           <p className="text-sm sm:text-base text-gray-600 mb-5">Questions or feedback? We’d like to hear from you.</p>
+          <p className="text-xs sm:text-sm text-gray-500 mb-4">Done by Prakash & Team.</p>
           <Link
             to="/contact"
             className="inline-flex items-center gap-2 px-6 py-3 rounded-lg bg-indigo-600 text-white font-medium hover:bg-indigo-700 transition-colors shadow-sm"

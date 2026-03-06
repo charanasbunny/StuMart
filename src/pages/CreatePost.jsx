@@ -105,7 +105,7 @@ export default function CreatePost() {
     return () => {
       imagePreviews.forEach((preview) => revokeImagePreview(preview));
     };
-  }, []);
+  }, [imagePreviews]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;

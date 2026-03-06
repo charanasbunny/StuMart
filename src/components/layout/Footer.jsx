@@ -28,7 +28,7 @@ export default function Footer() {
                   Built for Students, by Students
                 </h2>
                 <p className="text-[11px] md:text-sm text-blue-100/90 leading-snug">
-                  Sell your extra items now.
+                  List and discover campus essentials.
                 </p>
               </div>
             </div>

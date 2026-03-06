@@ -41,7 +41,10 @@ export default function AdminOrders() {
   );
 
   useEffect(() => {
-    loadOrders();
+    const timer = setTimeout(() => {
+      loadOrders();
+    }, 0);
+    return () => clearTimeout(timer);
   }, [loadOrders]);
 
   const handleStatusUpdate = async (orderId, newStatus) => {
