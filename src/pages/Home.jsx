@@ -147,7 +147,7 @@ export default function Home() {
       <h1 className="sr-only">
         AANM & VVRSR Student Marketplace
       </h1>
-      <section className="w-full relative overflow-hidden min-h-[50vh] sm:min-h-[55vh] md:min-h-[60vh] flex items-center pt-8 pb-12 sm:pt-6 sm:pb-8 md:pt-3 md:pb-0">
+      <section className="w-full relative overflow-hidden min-h-[50vh] sm:min-h-[55vh] md:min-h-[60vh] flex items-start pt-4 pb-12 sm:pt-3 sm:pb-8 md:pt-2 md:pb-0">
         <div
           className="absolute inset-0 z-0 bg-center bg-no-repeat"
           style={{
@@ -167,7 +167,7 @@ export default function Home() {
           <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-blue-200 rounded-full mix-blend-multiply filter blur-xl opacity-40 animate-blob animation-delay-4000"></div>
         </div>
 
-        <div className="relative z-30 max-w-6xl mx-auto px-4 py-8 sm:py-14 md:py-20 lg:py-28 text-center">
+        <div className="relative z-30 max-w-6xl mx-auto px-4 pt-4 pb-8 sm:pt-6 sm:pb-12 md:pt-8 md:pb-16 lg:pt-10 lg:pb-20 text-center">
           <p className="inline-flex items-center rounded-full border border-indigo-200/80 bg-white/70 px-3 py-1 text-xs sm:text-sm uppercase tracking-[0.3em] text-gray-600 font-medium mb-3 sm:mb-4 md:mb-5 md:animate-fade-in-up">
             CAMPUS MARKETPLACE
           </p>
