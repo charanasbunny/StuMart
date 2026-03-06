@@ -2,6 +2,11 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router';
 import { getProductById } from '../services/productService';
 import { normalizeBranchCode } from '../utils/branchCodes';
+
+const ADMIN_PHONE = '9392668228';
+const ADMIN_PHONE_LINK = `tel:+91${ADMIN_PHONE}`;
+const ADMIN_WHATSAPP_LINK = `https://wa.me/91${ADMIN_PHONE}`;
+
 export default function ProductDetail() {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -329,7 +334,7 @@ export default function ProductDetail() {
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   {/* Phone Call Button */}
                   <a
-                    href="tel:not available now"
+                    href={ADMIN_PHONE_LINK}
                     className="inline-flex items-center justify-center px-4 py-3 bg-gradient-to-br from-indigo-600 to-indigo-500 text-white font-medium rounded-lg hover:from-indigo-500 hover:to-indigo-400 transition-colors duration-200 shadow-md hover:shadow-lg"
                   >
                     <svg className="w-5 h-5 mr-2 text-white/90" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -340,7 +345,7 @@ export default function ProductDetail() {
 
                   {/* WhatsApp Button */}
                   <a
-                    href={`https://wa.me/919392668228?text=${encodeURIComponent(
+                    href={`${ADMIN_WHATSAPP_LINK}?text=${encodeURIComponent(
                       `Hello! 👋\n\nI need help regarding this product:\n\n📦 Product: ${product.title}\n\n💰 Price: ${formatPrice(product.price)}\n\n🖼️ Product Image: ${imageUrlForWhatsApp}`
                     )}`}
                     target="_blank"
