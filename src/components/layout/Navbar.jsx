@@ -8,7 +8,7 @@ import {
 } from "../../services/authService";
 
 export default function Navbar() {
-  const navigate = useNavigate();
+  const navigate = useNavigate(); 
   const location = useLocation();
 
   const [isAuthenticated, setIsAuthenticated] = useState(false);

@@ -8,7 +8,7 @@ import {
 export default function FilterSidebar({
   expandedSections,
   setExpandedSections,
-  selectedCategories,
+  selectedCategories, 
   selectedBranches,
   selectedPriceRange,
   showFreeOnly,

@@ -4,7 +4,7 @@ import { adminSignOut } from '../../services/adminService';
 import ImageLightbox from '../ui/ImageLightbox';
 
 const navItems = [
-  {
+  { 
     to: '/admin/dashboard',
     label: 'Dashboard',
     icon: (

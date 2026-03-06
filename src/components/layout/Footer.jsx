@@ -4,7 +4,7 @@ import ImageLightbox from "../ui/ImageLightbox";
 
 export default function Footer() {
   const [isLogoLightboxOpen, setIsLogoLightboxOpen] = useState(false);
-
+ 
   return (
     <footer className="w-full bg-gradient-to-r from-blue-900 via-purple-800 to-purple-900">
       <div className="w-full py-5 md:py-6 lg:py-8 px-5 md:px-8 lg:px-12 max-w-7xl mx-auto">
