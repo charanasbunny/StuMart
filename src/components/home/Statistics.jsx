@@ -2,7 +2,7 @@ import React from 'react'
 
 export default function Statistics() {
   return (
-    <section className="bg-white/50 backdrop-blur-sm py-8 md:py-12 lg:py-16">
+    <section className="bg-white py-8 md:py-12 lg:py-16 border-y border-slate-100">
         <div className="max-w-6xl mx-auto px-4">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-8 text-center">
             <div className="transform hover:scale-105 transition-transform">

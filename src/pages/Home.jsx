@@ -155,7 +155,7 @@ export default function Home() {
           aria-hidden="true"
         />
         <div
-          className="absolute inset-0 bg-white/75 md:bg-white/60 z-10 pointer-events-none"
+          className="absolute inset-0 bg-white/90 md:bg-white/85 z-10 pointer-events-none"
           aria-hidden="true"
         />
         <div className="absolute inset-0 overflow-hidden pointer-events-none z-20 hidden md:block">
@@ -181,7 +181,7 @@ export default function Home() {
           {showScrollIndicator && (
             <button
               type="button"
-              className="fixed left-1/2 bottom-6 -translate-x-1/2 flex items-center justify-center w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-white/80 shadow-md hover:shadow-lg hover:opacity-90 transition-all z-50"
+              className="fixed left-1/2 bottom-6 -translate-x-1/2 flex items-center justify-center w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-white shadow-md hover:shadow-lg transition-all z-50"
               onClick={() => {
                 window.scrollBy({
                   top: window.innerHeight * 0.8,
@@ -278,7 +278,7 @@ export default function Home() {
             ))}
           </div>
         ) : featuredProducts.length === 0 ? (
-          <div className="bg-white/80 rounded-2xl border border-slate-100 p-10 md:p-16 text-center">
+          <div className="bg-white rounded-2xl border border-slate-200 p-10 md:p-16 text-center shadow-md">
             <p className="text-gray-600 mb-4">No listings yet. Be the first to list an item.</p>
             <Link
               to="/create-post"
@@ -302,7 +302,7 @@ export default function Home() {
             >
               <button
                 onClick={() => setCurrentIndex((prev) => clampIndex(prev - 1))}
-                className="absolute left-4 top-1/2 transform -translate-y-1/2 z-20 bg-white/80 hover:bg-white rounded-full p-3 shadow-lg transition-all duration-300 flex items-center justify-center"
+                className="absolute left-4 top-1/2 transform -translate-y-1/2 z-20 bg-white rounded-full p-3 shadow-lg hover:shadow-xl transition-all duration-300 flex items-center justify-center"
                 aria-label="Previous product"
               >
                 <svg className="w-6 h-6 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -323,7 +323,7 @@ export default function Home() {
               </div>
               <button
                 onClick={() => setCurrentIndex((prev) => clampIndex(prev + 1))}
-                className="absolute right-4 top-1/2 transform -translate-y-1/2 z-20 bg-white/80 hover:bg-white rounded-full p-3 shadow-lg transition-all duration-300 flex items-center justify-center"
+                className="absolute right-4 top-1/2 transform -translate-y-1/2 z-20 bg-white rounded-full p-3 shadow-lg hover:shadow-xl transition-all duration-300 flex items-center justify-center"
                 aria-label="Next product"
               >
                 <svg className="w-6 h-6 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
