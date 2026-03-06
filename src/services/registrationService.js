@@ -16,6 +16,10 @@ export const submitRegistrationRequest = async ({
   branch,
   year,
   section,
+  studentIdCardUrl = null,
+  studentIdCardPath = null,
+  studentIdCardMimeType = null,
+  studentIdCardFileName = null,
 }) => {
   try {
     const { data, error } = await supabase.rpc('submit_registration_request', {
@@ -26,6 +30,10 @@ export const submitRegistrationRequest = async ({
       p_branch: String(branch).trim(),
       p_year: parseInt(year, 10),
       p_section: String(section).trim(),
+      p_student_id_card_url: studentIdCardUrl,
+      p_student_id_card_path: studentIdCardPath,
+      p_student_id_card_mime_type: studentIdCardMimeType,
+      p_student_id_card_file_name: studentIdCardFileName,
     });
 
     if (error) {

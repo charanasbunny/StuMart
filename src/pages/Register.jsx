@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router';
 import { submitRegistrationRequest } from '../services/registrationService';
+import { uploadStudentIdFile, validateStudentIdFile } from '../services/studentIdUploadService';
 import { 
   getAvailableJoiningYears,
   getAvailableBranches,
@@ -35,6 +36,8 @@ export default function Register() {
   const [isLoading, setIsLoading] = useState(false);
   const [successMessage, setSuccessMessage] = useState('');
   const [shake, setShake] = useState(false);
+  const [studentIdFile, setStudentIdFile] = useState(null);
+  const [dragActive, setDragActive] = useState(false);
 
   // Fetch available joining years on mount
   useEffect(() => {
@@ -189,6 +192,14 @@ export default function Register() {
     } else if (!validateEmail(formData.email)) {
       newErrors.email = 'Invalid email format';
     }
+    if (!studentIdFile) {
+      newErrors.studentIdCard = 'Student ID card is required';
+    } else {
+      const fileValidation = validateStudentIdFile(studentIdFile);
+      if (!fileValidation.valid) {
+        newErrors.studentIdCard = fileValidation.error;
+      }
+    }
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -249,6 +260,13 @@ export default function Register() {
     setIsLoading(true);
 
     try {
+      const uploadResult = await uploadStudentIdFile(studentIdFile, formData.pinNumber.trim());
+      if (!uploadResult.success || !uploadResult.data?.url) {
+        setErrors({ studentIdCard: uploadResult.error || 'Failed to upload student ID card.' });
+        setShake(true);
+        return;
+      }
+
       const result = await submitRegistrationRequest({
         pinNumber: formData.pinNumber.trim(),
         name: formData.name.trim(),
@@ -257,6 +275,10 @@ export default function Register() {
         branch: formData.branch.trim(),
         year: parseInt(formData.year, 10),
         section: formData.section.trim(),
+        studentIdCardUrl: uploadResult.data.url,
+        studentIdCardPath: uploadResult.data.path,
+        studentIdCardMimeType: uploadResult.data.mimeType,
+        studentIdCardFileName: uploadResult.data.fileName,
       });
 
       if (result.success) {
@@ -272,6 +294,43 @@ export default function Register() {
       setTimeout(() => setShake(false), 400);
       setIsLoading(false);
     }
+  };
+
+  const handleIdFileSelection = (file) => {
+    if (!file) return;
+    const validation = validateStudentIdFile(file);
+    if (!validation.valid) {
+      setErrors((prev) => ({ ...prev, studentIdCard: validation.error }));
+      return;
+    }
+
+    setStudentIdFile(file);
+    setErrors((prev) => ({ ...prev, studentIdCard: '' }));
+  };
+
+  const handleIdInputChange = (e) => {
+    const file = e.target.files?.[0];
+    handleIdFileSelection(file);
+  };
+
+  const handleDragOver = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setDragActive(true);
+  };
+
+  const handleDragLeave = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setDragActive(false);
+  };
+
+  const handleDrop = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setDragActive(false);
+    const file = e.dataTransfer?.files?.[0];
+    handleIdFileSelection(file);
   };
 
   /* ---------- UI ---------- */
@@ -585,6 +644,42 @@ export default function Register() {
             {errors.email && (
               <div className="absolute left-4 top-full mt-3 z-50 bg-red-200 border border-red-400 text-red-900 text-sm px-3 py-1 rounded shadow-md animate-popup">
                 {errors.email}
+              </div>
+            )}
+          </div>
+
+          {/* Student ID Card Upload */}
+          <div className="relative">
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Student ID Card <span className="text-red-500">*</span>
+            </label>
+            <label
+              onDragOver={handleDragOver}
+              onDragLeave={handleDragLeave}
+              onDrop={handleDrop}
+              className={`flex flex-col items-center justify-center w-full min-h-[120px] px-4 py-4 rounded-xl border-2 border-dashed cursor-pointer transition
+              ${errors.studentIdCard ? 'border-red-500 bg-red-50' : dragActive ? 'border-indigo-500 bg-indigo-50' : 'border-white/40 bg-indigo-50/80 hover:bg-indigo-50'}`}
+            >
+              <input
+                type="file"
+                accept="image/jpeg,image/jpg,image/png,image/webp,application/pdf"
+                className="hidden"
+                onChange={handleIdInputChange}
+                disabled={isLoading}
+              />
+              <p className="text-sm font-medium text-gray-700 text-center">
+                Drag and drop your ID card here, or click to browse
+              </p>
+              <p className="text-xs text-gray-500 mt-1">JPG, PNG, WEBP, PDF (max 10MB)</p>
+              {studentIdFile && (
+                <p className="mt-2 text-xs text-emerald-700 font-medium text-center">
+                  Selected: {studentIdFile.name}
+                </p>
+              )}
+            </label>
+            {errors.studentIdCard && (
+              <div className="absolute left-0 top-full mt-2 z-50 bg-red-200 border border-red-400 text-red-900 text-sm px-3 py-1 rounded shadow-md animate-popup">
+                {errors.studentIdCard}
               </div>
             )}
           </div>

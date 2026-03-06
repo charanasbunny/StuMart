@@ -93,6 +93,8 @@ export default function AdminRegistrationRequests() {
   };
 
   const formatDate = (d) => (d ? new Date(d).toLocaleString() : '–');
+  const isImageType = (mimeType = '') => String(mimeType).startsWith('image/');
+  const isPdfType = (mimeType = '') => String(mimeType).toLowerCase() === 'application/pdf';
 
   if (isLoading) {
     return (
@@ -149,6 +151,7 @@ export default function AdminRegistrationRequests() {
                     <th className="px-4 py-3 text-xs font-semibold text-gray-600 uppercase">Name</th>
                     <th className="px-4 py-3 text-xs font-semibold text-gray-600 uppercase">Email</th>
                     <th className="px-4 py-3 text-xs font-semibold text-gray-600 uppercase">Branch / Year / Section</th>
+                    <th className="px-4 py-3 text-xs font-semibold text-gray-600 uppercase">ID Card</th>
                     <th className="px-4 py-3 text-xs font-semibold text-gray-600 uppercase">Requested</th>
                     <th className="px-4 py-3 text-xs font-semibold text-gray-600 uppercase">Actions</th>
                   </tr>
@@ -161,6 +164,38 @@ export default function AdminRegistrationRequests() {
                       <td className="px-4 py-3 text-sm text-gray-600">{r.email}</td>
                       <td className="px-4 py-3 text-sm text-gray-600">
                         {r.branch} / {r.year} / {r.section}
+                      </td>
+                      <td className="px-4 py-3 text-sm text-gray-600">
+                        {r.student_id_card_url ? (
+                          <div className="flex items-center gap-2">
+                            {isImageType(r.student_id_card_mime_type) ? (
+                              <a
+                                href={r.student_id_card_url}
+                                target="_blank"
+                                rel="noreferrer"
+                                className="inline-flex items-center gap-2 text-indigo-600 hover:underline"
+                              >
+                                <img
+                                  src={r.student_id_card_url}
+                                  alt={`${r.name} ID card`}
+                                  className="h-12 w-12 rounded-md object-cover border border-gray-200"
+                                />
+                                View image
+                              </a>
+                            ) : (
+                              <a
+                                href={r.student_id_card_url}
+                                target="_blank"
+                                rel="noreferrer"
+                                className="inline-flex items-center gap-2 text-indigo-600 hover:underline"
+                              >
+                                {isPdfType(r.student_id_card_mime_type) ? 'View PDF' : 'Open file'}
+                              </a>
+                            )}
+                          </div>
+                        ) : (
+                          <span className="text-gray-400">Not uploaded</span>
+                        )}
                       </td>
                       <td className="px-4 py-3 text-sm text-gray-500">{formatDate(r.requested_at)}</td>
                       <td className="px-4 py-3">
