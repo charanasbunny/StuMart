@@ -175,10 +175,10 @@ export default function Home() {
               <span className="text-7xl sm:text-8xl md:text-9xl lg:text-[110px] xl:text-[180px]">t</span>
             </span>
           </div>
-          <p className="font-display text-sm sm:text-base md:text-xl lg:text-2xl font-semibold text-gray-900 max-w-3xl mx-auto mb-1 sm:mb-2 md:mb-3 lg:mb-4 leading-snug md:leading-relaxed md:animate-fade-in-up md:animate-fade-in-up-delay-2">
+          {/* <p className="font-display text-sm sm:text-base md:text-xl lg:text-2xl font-semibold text-gray-900 max-w-3xl mx-auto mb-1 sm:mb-2 md:mb-3 lg:mb-4 leading-snug md:leading-relaxed md:animate-fade-in-up md:animate-fade-in-up-delay-2">
             <span className="hidden sm:inline">Why carry extra items when campus life is already busy? Sell what you no longer need in minutes.</span>
             <span className="sm:hidden">Sell your extra items. Lighten the load.</span>
-          </p>
+          </p> */}
 
           {showScrollIndicator && (
             <button
@@ -262,7 +262,7 @@ export default function Home() {
             className="text-indigo-600 hover:text-indigo-700 font-semibold flex items-center gap-2 transition-colors"
           >
             View All
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg className="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.4} d="M9 5l7 7-7 7" />
             </svg>
           </Link>
@@ -351,159 +351,153 @@ export default function Home() {
       </section>
 
       <section className="hidden md:block max-w-6xl mx-auto px-4 py-8 md:py-12 lg:py-16">
-        <p className="text-sm font-semibold uppercase tracking-wider text-indigo-600 text-center mb-2">Why us</p>
-        <h2 className="text-3xl md:text-4xl font-bold text-gray-900 text-center mb-2 md:mb-3 lg:mb-4">
-          Why Choose StuMart?
-        </h2>
-        <p className="text-center text-gray-600 mb-6 md:mb-12 max-w-2xl mx-auto">
-          A trusted, campus-only marketplace built by students — for students.
-        </p>
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 md:gap-8">
-          <div className="bg-white rounded-xl shadow-lg p-4 md:p-8 hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
-            <div
-              className="premium-icon premium-icon--filled w-10 h-10 md:w-14 md:h-14 rounded-xl flex items-center justify-center mb-3 md:mb-4 mx-auto"
-              style={{
-                "--premium-glow": "79 70 229",
-                "--premium-fill": "linear-gradient(135deg, #6366f1, #8b5cf6)",
-              }}
-            >
-              <svg className="w-5 h-5 md:w-7 md:h-7 text-white/95" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
-              </svg>
-            </div>
-            <h3 className="text-sm md:text-xl font-semibold mb-2 md:mb-3 text-gray-900 text-center">Verified Student Network</h3>
-            <p className="text-gray-600 text-center text-sm md:text-base leading-relaxed">
-              Only PIN-verified students can list and buy. A safe, trusted environment for the campus.
-            </p>
-          </div>
-          <div className="bg-white rounded-xl shadow-lg p-4 md:p-8 hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
-            <div
-              className="premium-icon premium-icon--filled w-10 h-10 md:w-14 md:h-14 rounded-xl flex items-center justify-center mb-3 md:mb-4 mx-auto"
-              style={{
-                "--premium-glow": "168 85 247",
-                "--premium-fill": "linear-gradient(135deg, #a855f7, #ec4899)",
-              }}
-            >
-              <svg className="w-5 h-5 md:w-7 md:h-7 text-white/95" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-              </svg>
-            </div>
-            <h3 className="text-sm md:text-xl font-semibold mb-2 md:mb-3 text-gray-900 text-center">Campus-Based Exchange</h3>
-            <p className="text-gray-600 text-center text-sm md:text-base leading-relaxed">
-              Simple, safe, and designed exclusively for AANM & VVRSR Polytechnic students.
-            </p>
-          </div>
-          <div className="bg-white rounded-xl shadow-lg p-4 md:p-8 hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
-            <div
-              className="premium-icon premium-icon--filled w-10 h-10 md:w-14 md:h-14 rounded-xl flex items-center justify-center mb-3 md:mb-4 mx-auto"
-              style={{
-                "--premium-glow": "16 185 129",
-                "--premium-fill": "linear-gradient(135deg, #10b981, #22c55e)",
-              }}
-            >
-              <svg className="w-5 h-5 md:w-7 md:h-7 text-white/95" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-              </svg>
-            </div>
-            <h3 className="text-sm md:text-xl font-semibold mb-2 md:mb-3 text-gray-900 text-center">Affordable & Sustainable</h3>
-            <p className="text-gray-600 text-center text-sm md:text-base leading-relaxed">
-              Save money on used books and essentials; reuse within campus and reduce waste.
-            </p>
-          </div>
+  <p className="text-sm font-semibold uppercase tracking-wider text-indigo-600 text-center mb-2">Why us</p>
+  <h2 className="text-3xl md:text-4xl font-bold text-gray-900 text-center mb-2 md:mb-3 lg:mb-4">
+    Why Choose StuMart?
+  </h2>
+  <p className="text-center text-gray-600 mb-10 md:mb-14 max-w-2xl mx-auto">
+    A trusted, campus-only marketplace built by students — for students.
+  </p>
+  <div className="divide-y divide-gray-100">
+    {[
+      {
+        num: "01",
+        title: "Verified Student Network",
+        desc: "Only PIN-verified students can list and buy. A safe, trusted environment for the campus.",
+        icon: (
+          <svg className="w-7 h-7 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+          </svg>
+        ),
+        accent: "text-indigo-500",
+      },
+      {
+        num: "02",
+        title: "Campus-Based Exchange",
+        desc: "Simple, safe, and designed exclusively for AANM & VVRSR Polytechnic students.",
+        icon: (
+          <svg className="w-7 h-7 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+          </svg>
+        ),
+        accent: "text-purple-500",
+      },
+      {
+        num: "03",
+        title: "Affordable & Sustainable",
+        desc: "Save money on used books and essentials; reuse within campus and reduce waste.",
+        icon: (
+          <svg className="w-7 h-7 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+        ),
+        accent: "text-emerald-500",
+      },
+    ].map((item) => (
+      <div key={item.num} className="group flex items-center gap-8 py-6 md:py-8 hover:bg-white/40 transition-colors duration-200 rounded-xl px-4 -mx-4 cursor-default">
+        <span className="text-5xl md:text-6xl font-bold text-gray-100 group-hover:text-gray-200 transition-colors select-none w-16 shrink-0 text-right leading-none">
+          {item.num}
+        </span>
+        <div className="flex items-center gap-3 shrink-0">
+          {item.icon}
         </div>
-      </section>
+        <div className="flex-1">
+          <h3 className="text-base md:text-lg font-semibold text-gray-900 mb-0.5">{item.title}</h3>
+          <p className="text-sm md:text-base text-gray-500 leading-relaxed">{item.desc}</p>
+        </div>
+        <svg className="w-4 h-4 text-gray-200 group-hover:text-indigo-300 transition-colors shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+        </svg>
+      </div>
+    ))}
+  </div>
+</section>
 
       {/* Browse by category */}
       <section className="max-w-6xl mx-auto px-4 py-10 md:py-14">
-        <div className="text-center mb-8">
-          <p className="text-xs font-semibold uppercase tracking-[0.3em] text-indigo-600 mb-2">Browse</p>
-          <h2 className="text-2xl md:text-3xl font-bold text-gray-900">Shop by category</h2>
-          <p className="text-sm md:text-base text-gray-600 mt-2">
-            Find what you need fast, curated for campus life.
-          </p>
+  <div className="text-center mb-8">
+    <p className="text-xs font-semibold uppercase tracking-[0.3em] text-indigo-600 mb-2">Browse</p>
+    <h2 className="text-2xl md:text-3xl font-bold text-gray-900">Shop by category</h2>
+    <p className="text-sm md:text-base text-gray-600 mt-2">
+      Find what you need fast, curated for campus life.
+    </p>
+  </div>
+  <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4">
+    {[
+      {
+        value: "books",
+        label: "Books",
+        detail: "Notes, guides & manuals",
+        bg: "bg-indigo-50",
+        iconColor: "text-indigo-500",
+        bar: "before:bg-indigo-400",
+        icon: (
+          <svg className="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8} d="M4 5a2 2 0 012-2h10a2 2 0 012 2v15a1 1 0 01-1.447.894L12 18.118l-4.553 2.776A1 1 0 016 20V5a2 2 0 00-2-2z" />
+          </svg>
+        ),
+      },
+      {
+        value: "stationary",
+        label: "Stationery",
+        detail: "Supplies & essentials",
+        bg: "bg-purple-50",
+        iconColor: "text-purple-500",
+        bar: "before:bg-purple-400",
+        icon: (
+          <svg className="w-10 h-14" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8} d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+          </svg>
+        ),
+      },
+      {
+        value: "electronics",
+        label: "Electronics",
+        detail: "Gadgets & accessories",
+        bg: "bg-emerald-50",
+        iconColor: "text-emerald-500",
+        bar: "before:bg-emerald-400",
+        icon: (
+          <svg className="w-10 h-14" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8} d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z" />
+          </svg>
+        ),
+      },
+      {
+        value: "others",
+        label: "Others",
+        detail: "Anything & everything",
+        bg: "bg-rose-50",
+        iconColor: "text-rose-400",
+        bar: "before:bg-rose-400",
+        icon: (
+          <svg className="w-10 h-14" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8} d="M20 7H4a2 2 0 00-2 2v6a2 2 0 002 2h16a2 2 0 002-2V9a2 2 0 00-2-2z" />
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8} d="M16 7V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v2" />
+          </svg>
+        ),
+      },
+    ].map((cat) => (
+      <Link
+        key={cat.value}
+        to={`/products?category=${cat.value}`}
+        className={`group relative bg-white rounded-2xl p-5 md:p-6 border border-gray-100 flex flex-col gap-4 shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-1 overflow-hidden before:absolute before:inset-x-0 before:top-0 before:h-0.5 before:scale-x-0 group-hover:before:scale-x-100 before:transition-transform before:duration-300 before:origin-left ${cat.bar}`}
+      >
+        <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${cat.bg} ${cat.iconColor}`}>
+          {cat.icon}
         </div>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-          {[
-            {
-              value: "books",
-              label: "Books",
-              detail: "Notes, guides, manuals",
-              glow: "79 70 229",
-              fill: "linear-gradient(135deg, #6366f1, #8b5cf6)",
-              icon: (
-                <svg className="w-5 h-5 text-white/95" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 5a2 2 0 012-2h10a2 2 0 012 2v15a1 1 0 01-1.447.894L12 18.118l-4.553 2.776A1 1 0 016 20V5a2 2 0 00-2-2z" />
-                </svg>
-              ),
-            },
-            {
-              value: "stationary",
-              label: "Stationery",
-              detail: "Essentials & supplies",
-              glow: "168 85 247",
-              fill: "linear-gradient(135deg, #a855f7, #ec4899)",
-              icon: (
-                <svg className="w-5 h-5 text-white/95" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7l-1-4H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V9a2 2 0 00-2-2h-1z" />
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 13h6m-6 4h6" />
-                </svg>
-              ),
-            },
-            {
-              value: "electronics",
-              label: "Electronics",
-              detail: "Gadgets & accessories",
-              glow: "16 185 129",
-              fill: "linear-gradient(135deg, #10b981, #22c55e)",
-              icon: (
-                <svg className="w-5 h-5 text-white/95" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.75 3h4.5a1.5 1.5 0 011.5 1.5v15a1.5 1.5 0 01-1.5 1.5h-4.5a1.5 1.5 0 01-1.5-1.5v-15A1.5 1.5 0 019.75 3z" />
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 18h.01" />
-                </svg>
-              ),
-            },
-            {
-              value: "others",
-              label: "Others",
-              detail: "Any other items",
-              tone: "from-rose-500 to-pink-500",
-              icon: (
-                <svg className="w-5 h-5 text-white/95" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v12m6-6H6" />
-                </svg>
-              ),
-            },
-          ].map((cat) => (
-            <Link
-              key={cat.value}
-              to={`/products?category=${cat.value}`}
-              className="group category-card-premium rounded-2xl px-4 py-5 transition-all hover:-translate-y-0.5"
-            >
-              <div className="flex items-center justify-between">
-                <div
-                  className="premium-icon premium-icon--filled w-10 h-10 rounded-xl flex items-center justify-center"
-                  style={{
-                    "--premium-glow": cat.glow,
-                    "--premium-fill": cat.fill,
-                  }}
-                >
-                  {cat.icon}
-                </div>
-                <svg className="w-4 h-4 text-slate-300 group-hover:text-indigo-500 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.4} d="M9 5l7 7-7 7" />
-                </svg>
-              </div>
-              <div className="mt-4">
-                <p className="text-sm md:text-base font-semibold text-gray-900">
-                  {cat.label}
-                </p>
-                <p className="text-xs md:text-sm text-gray-500 mt-1">{cat.detail}</p>
-              </div>
-            </Link>
-          ))}
+        <div>
+          <p className="font-semibold text-gray-900 text-xl md:text-xl leading-snug">{cat.label}</p>
+          <p className="text-sm text-gray-400 mt-1 leading-relaxed">{cat.detail}</p>
         </div>
-      </section>
+        <svg className="w-4 h-4 text-gray-600 group-hover:text-gray-900 transition-colors mt-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+        </svg>
+      </Link>
+    ))}
+  </div>
+</section>
 
       {/* <section className="max-w-6xl mx-auto px-4 py-8 md:py-12 lg:py-16">
         <p className="text-sm font-semibold uppercase tracking-wider text-indigo-600 text-center mb-2">Get started</p>
