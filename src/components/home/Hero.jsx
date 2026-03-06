@@ -1,4 +1,4 @@
-import { Link, useNavigate } from "react-router";
+import { Link } from "react-router";
 
 export default function Hero({ showScrollIndicator }) {
   return (
@@ -29,11 +29,11 @@ export default function Hero({ showScrollIndicator }) {
 
       <div className="relative z-30 max-w-6xl mx-auto px-4 py-10 sm:py-12 md:py-20 lg:py-28 text-center">
         <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-7xl xl:text-8xl font-extrabold text-gray-900 mb-1 sm:mb-3 md:mb-4 lg:mb-5 leading-tight animate-fade-in-up">
-          <span className="block sm:inline">Welcome to</span>
+          <span className="block sm:inline">Smart Trade. Campus First.</span>
         </h1>
         <div className="mb-3 sm:mb-6 md:mb-7 lg:mb-8 animate-fade-in-up-delay-1">
-          <span className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-[120px] font-cinzel font-bold block bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 bg-clip-text text-transparent animate-gradient leading-none">
-            GvlPolyMart
+          <span className="inline-block text-5xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-[120px] font-space-grotesk font-extrabold tracking-[0.06em] bg-gradient-to-r from-indigo-600 via-fuchsia-500 to-blue-600 bg-clip-text text-transparent leading-none drop-shadow-[0_6px_20px_rgba(99,102,241,0.35)]">
+            GVLPOLYMART
           </span>
         </div>
         <p className="text-sm sm:text-base md:text-xl lg:text-2xl font-semibold text-gray-900 max-w-3xl mx-auto mb-1 sm:mb-2 md:mb-3 lg:mb-4 leading-relaxed animate-fade-in-up-delay-2">

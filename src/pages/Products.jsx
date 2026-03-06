@@ -19,7 +19,6 @@ export default function Products() {
   const [filteredProducts, setFilteredProducts] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   // Filter states — category can be pre-filled from URL (e.g. /products?category=books)
   const [selectedCategories, setSelectedCategories] = useState([]);

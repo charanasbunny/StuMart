@@ -9,7 +9,6 @@ import AdminLayout from "../components/admin/AdminLayout";
 export default function AdminProducts() {
   const navigate = useNavigate();
 
-  const [admin, setAdmin] = useState(null);
   const [products, setProducts] = useState([]);
   const [filteredProducts, setFilteredProducts] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
@@ -72,8 +71,6 @@ export default function AdminProducts() {
           navigate("/login?type=admin");
           return;
         }
-
-        setAdmin(admin);
 
         const res = await getAllProductsForAdmin();
         if (!res.success) {

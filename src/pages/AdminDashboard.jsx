@@ -11,6 +11,13 @@ import { getAllProductsForAdmin } from '../services/productService';
 import { getFeedbackForAdmin } from '../services/feedbackService';
 import AdminLayout from '../components/admin/AdminLayout';
 
+const CATEGORY_LABELS = {
+  books: 'Books',
+  stationary: 'Stationery',
+  electronics: 'Electronics',
+  others: 'Others',
+};
+
 export default function AdminDashboard() {
   const navigate = useNavigate();
   const [admin, setAdmin] = useState(null);
@@ -50,15 +57,6 @@ export default function AdminDashboard() {
     unresolved: 0,
     latest: null,
   });
-
-  const categoryLabels = {
-    books: 'Books',
-    stationary: 'Stationery',
-    electronics: 'Electronics',
-    others: 'Others',
-  };
-
-
 
   /**
    * Load current admin data and statistics
@@ -154,7 +152,7 @@ export default function AdminDashboard() {
         const topCategoryKey = Object.entries(categoryCounts).sort(
           (a, b) => b[1] - a[1]
         )[0]?.[0];
-        const topCategory = categoryLabels[topCategoryKey] || topCategoryKey || 'N/A';
+        const topCategory = CATEGORY_LABELS[topCategoryKey] || topCategoryKey || 'N/A';
         const highestPriced = products.reduce((max, item) => {
           if (!item) return max;
           const price = parseInt(item.price, 10) || 0;
@@ -216,11 +214,6 @@ export default function AdminDashboard() {
     return null;
   }
 
-  const totalRecords =
-    (studentStats.total || 0) +
-    (productStats.total || 0) +
-    (pinStats.totalPINs || 0) +
-    (feedbackStats.total || 0);
   return (
     <AdminLayout
       title="Admin Dashboard"

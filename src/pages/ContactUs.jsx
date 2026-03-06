@@ -192,6 +192,7 @@ export default function ContactUs() {
           <p className="text-sm sm:text-base text-gray-600 mb-5 leading-relaxed">
             The official campus marketplace for AANM & VVRSR Polytechnic.
           </p>
+          <p className="text-xs sm:text-sm text-gray-500 mb-4">Done by Prakash & Team.</p>
           <Link
             to="/about"
             className="inline-flex items-center gap-2 text-indigo-600 font-medium hover:text-indigo-700"

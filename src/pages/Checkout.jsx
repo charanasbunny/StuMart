@@ -189,7 +189,7 @@ export default function Checkout() {
   }
 
   const breakdown = getPaymentBreakdown(product.price);
-  const { basePrice, feePercent, feeAmount, total } = breakdown;
+  const { basePrice, feeAmount, total } = breakdown;
   const seller = product.students || {};
   const qrAmount = total > 0 ? total : 1;
   const upiPayload = `upi://pay?pa=${encodeURIComponent(UPI_ID)}&pn=GVL%20Polymart&am=${qrAmount}&tn=${encodeURIComponent(product.title || 'Order')}`;

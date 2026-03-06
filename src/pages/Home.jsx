@@ -1,5 +1,5 @@
 import { Link } from "react-router";
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, useCallback } from "react";
 import { getProducts } from "../services/productService";
 import FeaturedProduct from "../components/home/FeaturedProduct";
 
@@ -32,7 +32,10 @@ export default function Home() {
       : [];
 
   const maxIndex = n + cloneCount;
-  const clampIndex = (value) => Math.max(cloneCount - 1, Math.min(value, maxIndex));
+  const clampIndex = useCallback(
+    (value) => Math.max(cloneCount - 1, Math.min(value, maxIndex)),
+    [cloneCount, maxIndex]
+  );
 
   useEffect(() => {
     const fetchFeaturedProducts = async () => {
@@ -77,7 +80,7 @@ export default function Home() {
     }, autoScrollDelay);
 
     return () => clearInterval(interval);
-  }, [n, isHovering, isMobile, cloneCount]);
+  }, [n, isHovering, isMobile, clampIndex]);
 
   useEffect(() => {
     const updateScrollIndicator = () => {
@@ -164,16 +167,16 @@ export default function Home() {
           <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-blue-200 rounded-full mix-blend-multiply filter blur-xl opacity-40 animate-blob animation-delay-4000"></div>
         </div>
 
-        <div className="relative z-30 max-w-6xl mx-auto px-4 py-4 sm:py-12 md:py-20 lg:py-28 text-center">
-          <h1 className="font-display text-xl sm:text-4xl md:text-5xl lg:text-7xl xl:text-8xl font-extrabold text-gray-900 mb-0.5 sm:mb-3 md:mb-4 lg:mb-5 leading-tight md:animate-fade-in-up">
-            <span className="block sm:inline">Welcome to</span>
-          </h1>
-          <div className="mb-2 sm:mb-6 md:mb-7 lg:mb-8 md:animate-fade-in-up md:animate-fade-in-up-delay-1">
-            <span className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-[120px] font-cinzel font-bold block bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 bg-clip-text text-transparent md:animate-gradient leading-none">
+        <div className="relative z-30 max-w-6xl mx-auto px-4 py-8 sm:py-14 md:py-20 lg:py-28 text-center">
+          <p className="inline-flex items-center rounded-full border border-indigo-200/80 bg-white/70 px-3 py-1 text-xs sm:text-sm uppercase tracking-[0.3em] text-gray-600 font-medium mb-3 sm:mb-4 md:mb-5 md:animate-fade-in-up">
+            CAMPUS MARKETPLACE
+          </p>
+          <h1 className="mb-4 sm:mb-6 md:mb-7 lg:mb-8 md:animate-fade-in-up md:animate-fade-in-up-delay-1">
+            <span className="inline-block text-[2.6rem] sm:text-7xl md:text-[96px] lg:text-[118px] xl:text-[132px] font-cinzel font-bold tracking-[0.02em] bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 bg-clip-text text-transparent leading-[0.9]">
               GvlPolyMart
             </span>
-          </div>
-          <p className="font-display text-sm sm:text-base md:text-xl lg:text-2xl font-semibold text-gray-900 max-w-3xl mx-auto mb-1 sm:mb-2 md:mb-3 lg:mb-4 leading-snug md:leading-relaxed md:animate-fade-in-up md:animate-fade-in-up-delay-2">
+          </h1>
+          <p className="font-display text-sm sm:text-base md:text-xl lg:text-2xl font-semibold text-gray-900 max-w-3xl mx-auto mb-2 sm:mb-3 md:mb-4 leading-snug md:leading-relaxed md:animate-fade-in-up md:animate-fade-in-up-delay-2">
             <span className="hidden sm:inline">Why carry extra items when campus life is already busy? Sell what you no longer need in minutes.</span>
             <span className="sm:hidden">Sell your extra items. Lighten the load.</span>
           </p>
@@ -208,14 +211,11 @@ export default function Home() {
             </button>
           )}
 
-          <p className="text-xs sm:text-sm md:text-base text-gray-500 max-w-xl mx-auto mb-1.5 sm:mb-3 md:animate-fade-in-up md:animate-fade-in-up-delay-2">
-            <Link to="/about" className="text-indigo-600 hover:text-indigo-700 font-medium">
-              By students, for students
-            </Link>
+          <p className="text-xs sm:text-sm md:text-base text-gray-500/90 max-w-xl mx-auto mt-1 sm:mt-2 md:mt-3 md:animate-fade-in-up md:animate-fade-in-up-delay-3">
+            <span className="text-indigo-600 font-medium">By students, for students</span>
           </p>
-          <p className="text-sm sm:text-sm md:text-base lg:text-lg font-normal text-gray-600 max-w-2xl mx-auto mb-3 sm:mb-6 md:mb-8 lg:mb-10 md:animate-fade-in-up md:animate-fade-in-up-delay-3 hidden sm:block">
-            A trusted platform where students exchange academic essentials safely
-            within their college community.
+          <p className="text-sm sm:text-sm md:text-base lg:text-lg font-normal text-gray-600 max-w-2xl mx-auto mt-2 mb-3 sm:mb-6 md:mb-8 lg:mb-10 md:animate-fade-in-up md:animate-fade-in-up-delay-3 hidden sm:block">
+            A trusted platform where students exchange academic essentials safely within their college community.
           </p>
           <div className="flex flex-row justify-center items-center gap-2 sm:gap-3 w-full sm:w-auto md:animate-fade-in-up md:animate-fade-in-up-delay-4">
             <Link

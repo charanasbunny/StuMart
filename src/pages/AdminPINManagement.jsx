@@ -6,7 +6,6 @@ import {
   createPINsIndividual, 
   getAllPINs, 
   deletePIN,
-  updatePINStatus,
   getPINStatistics 
 } from '../services/pinService';
 import { formatPinNumber, normalizeBranchCode } from '../utils/branchCodes';
@@ -378,8 +377,6 @@ export default function AdminPINManagement() {
     if (!formData.branch || !formData.year || !formData.section) {
       return [];
     }
-
-    const section = formData.section.toUpperCase();
 
     if (!formData.joiningYear || !formData.branch) {
       return [];
