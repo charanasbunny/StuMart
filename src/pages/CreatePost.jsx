@@ -680,7 +680,8 @@ Details:
                 {errors.price && <p className="mt-1 text-sm text-red-600">{errors.price}</p>}
               </div>
 
-              {/* Price Predictor Panel */}
+              {/* Price Predictor Panel - only shown when API key is set (use backend in production to avoid exposing key) */}
+              {import.meta.env.VITE_GEMINI_API_KEY && (
               <div className="border border-gray-200 rounded-lg p-4 bg-gray-50">
                 <div className="flex items-start justify-between gap-3">
                   <div>
@@ -872,6 +873,7 @@ Details:
                   </div>
                 )}
               </div>
+              )}
             </div>
           </div>
 

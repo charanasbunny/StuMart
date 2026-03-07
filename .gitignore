@@ -6,6 +6,9 @@ node_modules/
 .env.local
 .env.production
 
+# SQL schema / migrations (keep private or in separate repo)
+*.sql
+
 # Build output
 dist/
 build/

@@ -120,8 +120,8 @@ export const adminApproveRequest = async (requestId) => {
     });
     if (error) return { success: false, error: error.message, data: null };
     const row = Array.isArray(data) && data.length ? data[0] : data;
-    const baseUrl = import.meta.env.VITE_APP_URL || 'https://gvlpolymart.app';
-    const completionUrl = row?.completion_url ? `${baseUrl}${row.completion_url}` : null;
+    const baseUrl = import.meta.env.VITE_APP_URL || (typeof window !== 'undefined' && window.location?.origin) || '';
+    const completionUrl = baseUrl && row?.completion_url ? `${baseUrl}${row.completion_url}` : null;
     return {
       success: true,
       error: null,

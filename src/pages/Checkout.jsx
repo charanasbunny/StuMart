@@ -4,8 +4,8 @@ import { getProductById } from '../services/productService';
 import { getCurrentUser } from '../services/authService';
 import { createOrder } from '../services/ordersService';
 
-// Replace with your actual UPI ID or set via env (e.g. import.meta.env.VITE_UPI_ID)
-const UPI_ID = import.meta.env.VITE_UPI_ID || 'gvlpolymart@upi';
+// Set in .env / Vercel: VITE_UPI_ID (no fallback in repo for security)
+const UPI_ID = import.meta.env.VITE_UPI_ID ?? '';
 
 const PAYMENT_APPS = ['GPay', 'PhonePe', 'Paytm', 'Other'];
 
@@ -192,8 +192,9 @@ export default function Checkout() {
   const { basePrice, feeAmount, total } = breakdown;
   const seller = product.students || {};
   const qrAmount = total > 0 ? total : 1;
-  const upiPayload = `upi://pay?pa=${encodeURIComponent(UPI_ID)}&pn=GVL%20Polymart&am=${qrAmount}&tn=${encodeURIComponent(product.title || 'Order')}`;
-  const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(upiPayload)}`;
+  const hasUpi = Boolean(UPI_ID);
+  const upiPayload = hasUpi ? `upi://pay?pa=${encodeURIComponent(UPI_ID)}&pn=GVL%20Polymart&am=${qrAmount}&tn=${encodeURIComponent(product.title || 'Order')}` : '';
+  const qrUrl = hasUpi ? `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(upiPayload)}` : '';
 
   return (
     <div className="min-h-screen bg-gray-50 py-6 sm:py-8 px-4 sm:px-6 lg:px-8">
@@ -277,16 +278,22 @@ export default function Checkout() {
 
             <div className="bg-white rounded-xl border border-gray-200 p-5">
               <div className="flex flex-col items-center">
-                <div
-                  className={`p-2 bg-white rounded-lg border border-gray-200 inline-block ${isGuestRestricted ? 'blur-sm pointer-events-none select-none' : ''}`}
-                  aria-hidden={isGuestRestricted}
-                >
-                  <img src={qrUrl} alt="Pay with UPI" className="w-40 h-40 object-contain" />
-                </div>
-                <p className={`mt-3 text-lg font-bold text-indigo-600 ${isGuestRestricted ? 'blur-sm select-none' : ''}`}>
-                  {total > 0 ? `₹${total}` : 'FREE'}
-                </p>
-                <p className={`text-xs text-gray-400 mt-1 ${isGuestRestricted ? 'blur-sm select-none' : ''}`}>{UPI_ID}</p>
+                {hasUpi ? (
+                  <>
+                    <div
+                      className={`p-2 bg-white rounded-lg border border-gray-200 inline-block ${isGuestRestricted ? 'blur-sm pointer-events-none select-none' : ''}`}
+                      aria-hidden={isGuestRestricted}
+                    >
+                      <img src={qrUrl} alt="Pay with UPI" className="w-40 h-40 object-contain" />
+                    </div>
+                    <p className={`mt-3 text-lg font-bold text-indigo-600 ${isGuestRestricted ? 'blur-sm select-none' : ''}`}>
+                      {total > 0 ? `₹${total}` : 'FREE'}
+                    </p>
+                    <p className={`text-xs text-gray-400 mt-1 ${isGuestRestricted ? 'blur-sm select-none' : ''}`}>{UPI_ID}</p>
+                  </>
+                ) : (
+                  <p className="text-sm text-gray-500 text-center">Set VITE_UPI_ID in your environment to show UPI payment.</p>
+                )}
               </div>
             </div>
           </div>

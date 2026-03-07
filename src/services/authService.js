@@ -8,13 +8,13 @@ import { supabase } from './supabaseClient';
 
 /**
  * Get the base URL for email redirects (e.g. after email confirmation or password reset).
- * Uses VITE_APP_URL if set, otherwise current origin in browser (so local dev works), else production URL.
+ * Set VITE_APP_URL in .env / Vercel; no hardcoded fallback in repo.
  */
 const getBaseUrl = () => {
   const envUrl = import.meta.env.VITE_APP_URL;
   if (envUrl) return envUrl;
   if (typeof window !== 'undefined' && window.location?.origin) return window.location.origin;
-  return 'https://gvlpolymart.app';
+  return '';
 };
 
 
