@@ -1,9 +1,10 @@
 import { Link } from "react-router";
 
-const PHONE = "9392668228";
-const EMAIL = "gandhamprakashtech@gmail.com";
-const PHONE_LINK = `tel:+91${PHONE}`;
-const EMAIL_LINK = `mailto:${EMAIL}`;
+// Set in .env / Vercel: VITE_CONTACT_PHONE, VITE_CONTACT_EMAIL (no fallbacks in repo for security)
+const PHONE = import.meta.env.VITE_CONTACT_PHONE ?? "";
+const EMAIL = import.meta.env.VITE_CONTACT_EMAIL ?? "";
+const PHONE_LINK = PHONE ? `tel:+91${PHONE.replace(/\D/g, "").slice(-10)}` : "";
+const EMAIL_LINK = EMAIL ? `mailto:${EMAIL}` : "";
 
 const COLLEGE_ADDRESS = {
   name: "A.A.N.M. & V.V.R.S.R. Polytechnic",
@@ -69,12 +70,14 @@ export default function ContactUs() {
           </p>
         </header>
 
-        {/* Primary contact */}
+        {/* Primary contact - requires VITE_CONTACT_PHONE, VITE_CONTACT_EMAIL in env */}
         <section className="mb-12">
           <h2 className="text-sm font-semibold uppercase tracking-wider text-gray-500 mb-4">
             Primary contact
           </h2>
+          {(PHONE || EMAIL) ? (
           <div className="grid sm:grid-cols-2 gap-4">
+            {PHONE && (
             <a
               href={PHONE_LINK}
               className="group flex items-center gap-4 bg-white rounded-xl border border-gray-100 p-5 shadow-sm hover:shadow-md hover:border-indigo-100 transition-all"
@@ -87,6 +90,8 @@ export default function ContactUs() {
                 <p className="text-sm sm:text-base font-semibold text-gray-900 truncate">{PHONE}</p>
               </div>
             </a>
+            )}
+            {EMAIL && (
             <a
               href={EMAIL_LINK}
               className="group flex items-center gap-4 bg-white rounded-xl border border-gray-100 p-5 shadow-sm hover:shadow-md hover:border-indigo-100 transition-all"
@@ -99,7 +104,11 @@ export default function ContactUs() {
                 <p className="text-sm sm:text-base font-semibold text-gray-900 truncate">{EMAIL}</p>
               </div>
             </a>
+            )}
           </div>
+          ) : (
+          <p className="text-sm text-gray-500">Set VITE_CONTACT_PHONE and VITE_CONTACT_EMAIL in your environment.</p>
+          )}
         </section>
 
         {/* College address */}
