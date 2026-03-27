@@ -163,6 +163,7 @@ export default function Checkout() {
       amount: amount * 100, // paise
       currency: 'INR',
       receipt: `gvl-${product.id}-${Date.now()}`,
+      productId: product.id,
       notes: {
         productId: product.id,
         buyerPin: student.pin_number,
