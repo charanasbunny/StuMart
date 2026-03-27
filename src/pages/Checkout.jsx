@@ -162,7 +162,8 @@ export default function Checkout() {
     const gatewayOrder = await createGatewayOrder({
       amount: amount * 100, // paise
       currency: 'INR',
-      receipt: `gvl-${product.id}-${Date.now()}`,
+      // Razorpay receipt max length is 40 chars.
+      receipt: `gvl-${String(product.id).slice(0, 12)}-${Date.now().toString().slice(-10)}`,
       productId: product.id,
       notes: {
         productId: product.id,
