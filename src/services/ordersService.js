@@ -2,6 +2,38 @@ import { supabase } from './supabaseClient';
 import { getCurrentUser } from './authService';
 
 /**
+ * Create a payment order on server (gateway secret stays server-side).
+ */
+export async function createGatewayOrder({ amount, currency = 'INR', receipt, notes = {} }) {
+  try {
+    const { data, error } = await supabase.functions.invoke('razorpay-create-order', {
+      body: { amount, currency, receipt, notes },
+    });
+    if (error) return { success: false, data: null, error: error.message || 'Failed to create payment order' };
+    if (data?.error) return { success: false, data: null, error: data.error };
+    return { success: true, data, error: null };
+  } catch (e) {
+    return { success: false, data: null, error: e.message || 'Failed to create payment order' };
+  }
+}
+
+/**
+ * Verify payment signature on server.
+ */
+export async function verifyGatewayPayment({ razorpay_order_id, razorpay_payment_id, razorpay_signature }) {
+  try {
+    const { data, error } = await supabase.functions.invoke('razorpay-verify-payment', {
+      body: { razorpay_order_id, razorpay_payment_id, razorpay_signature },
+    });
+    if (error) return { success: false, data: null, error: error.message || 'Payment verification failed' };
+    if (data?.error) return { success: false, data: null, error: data.error };
+    return { success: true, data, error: null };
+  } catch (e) {
+    return { success: false, data: null, error: e.message || 'Payment verification failed' };
+  }
+}
+
+/**
  * Create an order (buyer submits payment details after paying via QR).
  * Requires logged-in student; buyer_student_pin must match current student.
  */
