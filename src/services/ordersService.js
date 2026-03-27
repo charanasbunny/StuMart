@@ -4,10 +4,10 @@ import { getCurrentUser } from './authService';
 /**
  * Create a payment order on server (gateway secret stays server-side).
  */
-export async function createGatewayOrder({ amount, currency = 'INR', receipt, notes = {} }) {
+export async function createGatewayOrder({ amount, currency = 'INR', receipt, notes = {}, productId = null }) {
   try {
     const { data, error } = await supabase.functions.invoke('create-razorpay-order', {
-      body: { amount, currency, receipt, notes },
+      body: { amount, currency, receipt, notes, productId },
     });
     if (error) return { success: false, data: null, error: error.message || 'Failed to create payment order' };
     if (data?.error) return { success: false, data: null, error: data.error };
