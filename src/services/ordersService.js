@@ -6,7 +6,7 @@ import { getCurrentUser } from './authService';
  */
 export async function createGatewayOrder({ amount, currency = 'INR', receipt, notes = {} }) {
   try {
-    const { data, error } = await supabase.functions.invoke('razorpay-create-order', {
+    const { data, error } = await supabase.functions.invoke('create-razorpay-order', {
       body: { amount, currency, receipt, notes },
     });
     if (error) return { success: false, data: null, error: error.message || 'Failed to create payment order' };
@@ -22,7 +22,7 @@ export async function createGatewayOrder({ amount, currency = 'INR', receipt, no
  */
 export async function verifyGatewayPayment({ razorpay_order_id, razorpay_payment_id, razorpay_signature }) {
   try {
-    const { data, error } = await supabase.functions.invoke('razorpay-verify-payment', {
+    const { data, error } = await supabase.functions.invoke('verify-razorpay-payment', {
       body: { razorpay_order_id, razorpay_payment_id, razorpay_signature },
     });
     if (error) return { success: false, data: null, error: error.message || 'Payment verification failed' };
